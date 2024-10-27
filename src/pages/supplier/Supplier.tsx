@@ -20,6 +20,8 @@ const Supplier = () => {
     const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
     const [form] = Form.useForm();
 
+    console.log(newRegistrationList);
+
     useEffect(() => {
         loadTableData();
     }, []);
@@ -83,10 +85,14 @@ const Supplier = () => {
     }
 
     function handleSave(data: ValueForm[]) {
+        console.log(data);
         const dataToSave = data.map(
-            data => {
+            supplier => {
                 return {
-                    // ...
+                    id: isNewRegistration ? null : selectedRows[0].key,
+                    cpfOrCnpj: supplier.cpfOrCnpj,
+                    description: supplier.name,
+                    phone: supplier.phone
                 }
             }
         );
@@ -120,6 +126,16 @@ const Supplier = () => {
         form.resetFields();
         setIsModalVisible(false);
     };
+
+    function handleIncludeModal(data: ValueForm) {
+        console.log(data);
+        if (isNewRegistration) {
+            setNewRegistrationList([...newRegistrationList, data]);
+        } else {
+            handleSave([data]);
+        }
+        form.resetFields();
+    }
 
     function handleDelete() {
         api.delete(`/suppliers?ids=${selectedRowKeys}`)
@@ -159,6 +175,9 @@ const Supplier = () => {
                 newRegistrationList={newRegistrationList}
                 handleSave={handleSave}
                 handleCancel={handleCloseModal}
+                form={form}
+                handleSubmit={handleIncludeModal}
+                setNewRegistrationList={setNewRegistrationList}
             />
             <SupplierTable
                 loading={loadingTableData}
