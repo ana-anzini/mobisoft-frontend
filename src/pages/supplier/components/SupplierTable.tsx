@@ -7,11 +7,10 @@ import { DataType } from '../ISupplier';
 interface ISupplierTable {
     loading: boolean;
     tableData: DataType[];
+    rowSelection: TableRowSelection<DataType>;
 }
 
-const SupplierTable = ({ loading, tableData }: ISupplierTable) => {
-
-    const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+const SupplierTable = ({ loading, tableData, rowSelection }: ISupplierTable) => {
 
     const columns = [
         {
@@ -21,24 +20,15 @@ const SupplierTable = ({ loading, tableData }: ISupplierTable) => {
         },
         {
             title: 'CNPJ',
-            dataIndex: 'cnpj',
-            key: 'cnpj',
+            dataIndex: 'cpfOrCnpj',
+            key: 'cpfOrCnpj',
         },
         {
             title: 'Tipo',
-            dataIndex: 'type',
-            key: 'type',
+            dataIndex: 'supplierType',
+            key: 'supplierType',
         },
     ];
-
-    const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
-        setSelectedRowKeys(newSelectedRowKeys);
-    };
-
-    const rowSelection: TableRowSelection<DataType> = {
-        selectedRowKeys,
-        onChange: onSelectChange,
-    };
 
     return (
         <div>

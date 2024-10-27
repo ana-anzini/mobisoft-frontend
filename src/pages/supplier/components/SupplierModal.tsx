@@ -1,20 +1,17 @@
 import React, { useState } from 'react';
 import { Button, Checkbox, Form, FormProps, Input, Modal } from 'antd';
+import { Notification } from '../../../components/notification/Notification';
+import { DataType, ValueForm } from '../ISupplier';
 
-const SupplierModal = () => {
-    const [isModalOpen, setIsModalOpen] = useState(false);
+interface ISupplierModal {
+    isModalVisible: boolean;
+    isNewRegistration: boolean;
+    newRegistrationList: ValueForm[];
+    handleSave: (data: ValueForm[]) => void;
+    handleCancel: () => void;
+}
 
-    const showModal = () => {
-        setIsModalOpen(true);
-    };
-
-    const handleOk = () => {
-        setIsModalOpen(false);
-    };
-
-    const handleCancel = () => {
-        setIsModalOpen(false);
-    };
+const SupplierModal = ({ isModalVisible, isNewRegistration, newRegistrationList, handleSave, handleCancel }: ISupplierModal) => {
 
     type FieldType = {
         username?: string;
@@ -32,12 +29,26 @@ const SupplierModal = () => {
 
     return (
         <>
-            <Button type="primary" onClick={showModal}>
-                Open Modal
-            </Button>
-            <Modal title="Basic Modal" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+            <Modal
+                title="Basic Modal"
+                open={isModalVisible}
+                onOk={() => {
+                    if (isNewRegistration) {
+                        if (newRegistrationList.length > 0) {
+                            handleSave(newRegistrationList);
+                        } else {
+                            Notification({
+                                type: 'warning',
+                                message: 'Nenhum item adicionado a lista.'
+                            })
+                        }
+                    }
+                }}
+                onCancel={handleCancel}
+                okButtonProps={!isNewRegistration ? { htmlType: "submit", form: "new-form" } : {}}
+            >
                 <Form
-                    name="basic"
+                    name="new-form"
                     labelCol={{ span: 8 }}
                     wrapperCol={{ span: 16 }}
                     style={{ maxWidth: 600 }}
@@ -76,7 +87,7 @@ const SupplierModal = () => {
                         </Button>
                     </Form.Item>
                 </Form>
-            </Modal>
+            </Modal >
         </>
     );
 };

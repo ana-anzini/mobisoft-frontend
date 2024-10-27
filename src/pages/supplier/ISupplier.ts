@@ -5,3 +5,8 @@ export interface DataType {
     cnpj: number;
     type: string;
 }
+
+export type ValueForm = {
+    description: string;
+    type: String;
+}

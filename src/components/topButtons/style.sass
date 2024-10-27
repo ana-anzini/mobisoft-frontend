@@ -1,0 +1,54 @@
+.main-header
+    display: flex
+    flex-direction: column
+    gap: 25px
+    margin-bottom: 15px
+    h2
+        margin: 0
+        font-weight: 500
+        color: #041F39
+    .top-buttons
+        display: flex
+        align-items: center
+        justify-content: space-between
+        .top-buttons-left
+            display: flex
+            align-items: center
+            gap: 5px
+        .tp-main-button
+            background-color: #0377EB
+            height: 40px
+            color: white
+            display: flex
+            align-items: center
+            gap: 5px
+            svg
+                font-size: 18px
+
+.top-tool-buttons
+    margin-left: 5px
+    border: none
+    box-shadow: none
+    &:disabled
+        background: #fff
+    svg
+        font-size: 22px
+    .ant-btn:focus
+        color: rgba(0, 0, 0, 0.85)
+    button
+        border: none
+        box-shadow: none
+        &:disabled
+            background: #fff
+
+    .edit,
+    span.trash, 
+    button.trash
+        transition: all 0s
+        &:focus
+            color: rgba(0, 0, 0, 0.85)
+
+    .edit:not(:disabled):hover,
+    button.trash:hover
+        svg
+            color: rgba(0, 0, 0, 0.85)
