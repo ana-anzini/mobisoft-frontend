@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Checkbox, Col, Form, FormProps, Input, Modal, Row } from 'antd';
+import { Button, Checkbox, Col, Form, FormProps, Input, Modal, Row, Select } from 'antd';
 import { Notification } from '../../../components/notification/Notification';
 import { DataType, ValueForm } from '../ISupplier';
 import { Icon } from '@iconify/react';
@@ -13,9 +13,10 @@ interface ISupplierModal {
     form: any;
     handleSubmit: (data: any) => void;
     setNewRegistrationList: (data: ValueForm[]) => void;
+    categoryList: any;
 }
 
-const SupplierModal = ({ isModalVisible, isNewRegistration, newRegistrationList, handleSave, handleCancel, form, handleSubmit, setNewRegistrationList }: ISupplierModal) => {
+const SupplierModal = ({ isModalVisible, isNewRegistration, newRegistrationList, handleSave, handleCancel, form, handleSubmit, setNewRegistrationList, categoryList }: ISupplierModal) => {
 
     const modalTitle = isNewRegistration ? "Novo fornecedor" : "Editar fornecedor";
     const [editDisebled, setEditDisebled] = useState(false);
@@ -56,6 +57,13 @@ const SupplierModal = ({ isModalVisible, isNewRegistration, newRegistrationList,
             cpfOrCnpj: supplier.cpfOrCnpj,
             name: supplier.name,
             phone: supplier.phone,
+            categoryId: supplier.categoryId,
+            email: supplier.email,
+            cep: supplier.cep,
+            address: supplier.address,
+            number: supplier.number,
+            neighborhood: supplier.neighborhood,
+            additional: supplier.additional
         })
         handleDeleteListItem(supplier.cpfOrCnpj);
     }
@@ -128,7 +136,76 @@ const SupplierModal = ({ isModalVisible, isNewRegistration, newRegistrationList,
                                 label="Telefone"
                                 rules={[{ required: true, message: "Campo obrigatório" }]}
                             >
-                                <Input value={value} onChange={handleInputChange} />
+                                <Input />
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col span={7} style={{ marginRight: 20 }}>
+                            <Form.Item
+                                name="categoryId"
+                                label="Categoria"
+                                rules={[{ required: true, message: "Campo obrigatório" }]}
+                            >
+                                <Select defaultValue="Selecione" options={categoryList} />
+                            </Form.Item>
+                        </Col>
+                        <Col span={9} style={{ marginRight: 20 }}>
+                            <Form.Item
+                                name="email"
+                                label="E-mail"
+                                rules={[{ required: true, message: "Campo obrigatório" }, { type: 'email', message: 'E-mail inválido' }]}
+                            >
+                                <Input />
+                            </Form.Item>
+                        </Col>
+
+                        <Col span={6}>
+                            <Form.Item
+                                name="cep"
+                                label="CEP"
+                                rules={[{ required: true, message: "Campo obrigatório" }]}
+                            >
+                                <Input />
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col span={12} style={{ marginRight: 20 }}>
+                            <Form.Item
+                                name="address"
+                                label="Endereço"
+                                rules={[{ required: true, message: "Campo obrigatório" }]}
+                            >
+                                <Input />
+                            </Form.Item>
+                        </Col>
+                        <Col span={5} style={{ marginRight: 20 }}>
+                            <Form.Item
+                                name="number"
+                                label="Número"
+                                rules={[{ required: true, message: "Campo obrigatório" }]}
+                            >
+                                <Input type="number" />
+                            </Form.Item>
+                        </Col>
+                        <Col span={5} style={{ marginRight: 20 }}>
+                            <Form.Item
+                                name="neighborhood"
+                                label="Bairro"
+                                rules={[{ required: true, message: "Campo obrigatório" }]}
+                            >
+                                <Input />
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col span={23} style={{ marginRight: 20 }}>
+                            <Form.Item
+                                name="additional"
+                                label="Complemento"
+                            >
+                                <Input />
                             </Form.Item>
                         </Col>
                     </Row>
@@ -188,7 +265,7 @@ const SupplierModal = ({ isModalVisible, isNewRegistration, newRegistrationList,
                         </div>
                     )
                 }
-            </Modal>
+            </Modal >
         </>
     );
 };

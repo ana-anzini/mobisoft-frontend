@@ -18,12 +18,14 @@ const Supplier = () => {
     const [isNewRegistration, setIsNewRegistration] = useState<boolean>(true);
     const [newRegistrationList, setNewRegistrationList] = useState<ValueForm[]>([]);
     const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+    const [categoryList, setCategoryList] = useState([]);
     const [form] = Form.useForm();
 
     console.log(newRegistrationList);
 
     useEffect(() => {
         loadTableData();
+        loadCategories();
     }, []);
 
     const onSelectChange = (newSelectedRowKeys: React.Key[], newSelectedRows: DataType[]) => {
@@ -44,10 +46,19 @@ const Supplier = () => {
             setNewRegistrationList([]);
             form.resetFields();
         } else {
-            /*form.setFieldsValue({
-                description: selectedRows[0].description,
-                type: selectedRows[0].type,
-            });*/
+            console.log(selectedRows[0].categoryId);
+            form.setFieldsValue({
+                cpfOrCnpj: selectedRows[0].cpfOrCnpj,
+                name: selectedRows[0].name,
+                phone: selectedRows[0].phone,
+                categoryId: selectedRows[0].categoryId,
+                email: selectedRows[0].email,
+                cep: selectedRows[0].cep,
+                address: selectedRows[0].address,
+                number: selectedRows[0].number,
+                neighborhood: selectedRows[0].neighborhood,
+                additional: selectedRows[0].additional
+            });
             setIsNewRegistration(false);
         }
         setIsModalVisible(true);
@@ -91,13 +102,21 @@ const Supplier = () => {
                 return {
                     id: isNewRegistration ? null : selectedRows[0].key,
                     cpfOrCnpj: supplier.cpfOrCnpj,
-                    description: supplier.name,
-                    phone: supplier.phone
+                    name: supplier.name,
+                    phone: supplier.phone,
+                    categoryId: supplier.categoryId,
+                    email: supplier.email,
+                    cep: supplier.cep,
+                    address: supplier.address,
+                    number: supplier.number,
+                    neighborhood: supplier.neighborhood,
+                    additional: supplier.additional
                 }
             }
         );
 
         if (isNewRegistration) {
+            console.log(dataToSave);
             api.post("/suppliers", dataToSave)
                 .then((response) => {
                     setLoadingTableData(true);
@@ -117,7 +136,6 @@ const Supplier = () => {
 
         setIsModalVisible(false);
         setLoadingTableData(true);
-
     }
 
     function handleCloseModal() {
@@ -157,6 +175,25 @@ const Supplier = () => {
         loadTableData();
     };
 
+    function loadCategories() {
+        api.get("/categories/findAll")
+            .then((response) => {
+                if (response.status = 200) {
+                    const categorias = response.data.map((item: any) => {
+                        return {
+                            key: item.id,
+                            value: item.id,
+                            label: item.description
+                        }
+                    })
+
+                    setCategoryList(categorias);
+                }
+            }).catch((err) => {
+                console.log("Erro")
+            })
+    }
+
     return (
         <div>
             <TopButtons
@@ -178,6 +215,7 @@ const Supplier = () => {
                 form={form}
                 handleSubmit={handleIncludeModal}
                 setNewRegistrationList={setNewRegistrationList}
+                categoryList={categoryList}
             />
             <SupplierTable
                 loading={loadingTableData}

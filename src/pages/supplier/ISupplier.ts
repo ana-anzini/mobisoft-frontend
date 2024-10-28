@@ -2,12 +2,20 @@
 export interface DataType {
     key: React.Key;
     name: string;
-    cnpj: number;
+    cpfOrCnpj: number;
     type: string;
+    phone: string;
+    categoryId: number;
+    email: string;
+    cep: string;
+    address: string;
+    number: number;
+    neighborhood: string;
+    additional?: string;
 }
 
 export type ValueForm = {
-    supplierType: string;
+    categoryId: number;
     name: string;
     cpfOrCnpj: string;
     phone: string;
