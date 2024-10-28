@@ -25,8 +25,18 @@ const SupplierTable = ({ loading, tableData, rowSelection }: ISupplierTable) => 
         },
         {
             title: 'Tipo',
-            dataIndex: 'supplierType',
-            key: 'supplierType',
+            dataIndex: 'categoryId',
+            key: 'categoryId',
+        },
+        {
+            title: 'E-mail',
+            dataIndex: 'email',
+            key: 'email',
+        },
+        {
+            title: 'Telefone',
+            dataIndex: 'phone',
+            key: 'phone',
         },
     ];
 
