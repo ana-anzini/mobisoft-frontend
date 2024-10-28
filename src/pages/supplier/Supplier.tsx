@@ -21,8 +21,6 @@ const Supplier = () => {
     const [categoryList, setCategoryList] = useState([]);
     const [form] = Form.useForm();
 
-    console.log(newRegistrationList);
-
     useEffect(() => {
         loadTableData();
         loadCategories();
@@ -46,7 +44,6 @@ const Supplier = () => {
             setNewRegistrationList([]);
             form.resetFields();
         } else {
-            console.log(selectedRows[0].categoryId);
             form.setFieldsValue({
                 cpfOrCnpj: selectedRows[0].cpfOrCnpj,
                 name: selectedRows[0].name,
@@ -70,7 +67,7 @@ const Supplier = () => {
                 const dataTable = response.data.map((item: any) => {
                     return {
                         key: item.id,
-                        supplierType: item.supplierType,
+                        categoryId: item.category.id,
                         name: item.name,
                         cpfOrCnpj: item.cpfOrCnpj,
                         phone: item.phone,
@@ -96,7 +93,7 @@ const Supplier = () => {
     }
 
     function handleSave(data: ValueForm[]) {
-        console.log(data);
+        form.resetFields();
         const dataToSave = data.map(
             supplier => {
                 return {
@@ -116,7 +113,6 @@ const Supplier = () => {
         );
 
         if (isNewRegistration) {
-            console.log(dataToSave);
             api.post("/suppliers", dataToSave)
                 .then((response) => {
                     setLoadingTableData(true);
@@ -124,11 +120,13 @@ const Supplier = () => {
                     onSave(response);
                 });
         } else {
-            api.put("/suppliers", dataToSave[0]).then((response) => {
-                setLoadingTableData(true);
-                loadTableData();
-                onSave(response);
-            })
+            const supplierId = dataToSave[0].id;
+            api.put(`/suppliers/${supplierId}`, dataToSave[0])
+                .then((response) => {
+                    setLoadingTableData(true);
+                    loadTableData();
+                    onSave(response);
+                })
         }
 
         setSelectedRowKeys([]);
@@ -146,7 +144,6 @@ const Supplier = () => {
     };
 
     function handleIncludeModal(data: ValueForm) {
-        console.log(data);
         if (isNewRegistration) {
             setNewRegistrationList([...newRegistrationList, data]);
         } else {
