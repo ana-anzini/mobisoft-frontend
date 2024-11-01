@@ -153,12 +153,17 @@ const Supplier = () => {
     }
 
     function handleDelete() {
-        api.delete(`/suppliers?ids=${selectedRowKeys}`)
+        const ids = selectedRowKeys.join(',');
+        api.delete(`/suppliers?ids=${ids}`)
             .then((response) => {
                 setLoadingTableData(true);
                 onDelete(response);
             })
+            .catch((error) => {
+                console.error('Erro ao deletar fornecedores:', error);
+            });
     }
+
 
     function onDelete(response: any) {
         if (response) {
@@ -192,34 +197,36 @@ const Supplier = () => {
     }
 
     return (
-        <div>
-            <TopButtons
-                pageTittle='Fornecedores'
-                mainButtonTitle="Novo Fornecedor"
-                handleNew={() => handleOpenModal(true)}
-                handleEdit={() => handleOpenModal(false)}
-                handleDelete={handleDelete}
-                // handleSearch={onChangeSearch}
-                isEditable={selectedRows.length === 1}
-                isDeletable={selectedRows.length > 0}
-            />
-            <SupplierModal
-                isModalVisible={isModalVisible}
-                isNewRegistration={isNewRegistration}
-                newRegistrationList={newRegistrationList}
-                handleSave={handleSave}
-                handleCancel={handleCloseModal}
-                form={form}
-                handleSubmit={handleIncludeModal}
-                setNewRegistrationList={setNewRegistrationList}
-                categoryList={categoryList}
-            />
-            <SupplierTable
-                loading={loadingTableData}
-                tableData={tableData}
-                rowSelection={rowSelection}
-            />
-        </div>
+        <main id="main">
+            <div className='main-container'>
+                <TopButtons
+                    pageTittle='Fornecedores'
+                    mainButtonTitle="Novo Fornecedor"
+                    handleNew={() => handleOpenModal(true)}
+                    handleEdit={() => handleOpenModal(false)}
+                    handleDelete={handleDelete}
+                    // handleSearch={onChangeSearch}
+                    isEditable={selectedRows.length === 1}
+                    isDeletable={selectedRows.length > 0}
+                />
+                <SupplierModal
+                    isModalVisible={isModalVisible}
+                    isNewRegistration={isNewRegistration}
+                    newRegistrationList={newRegistrationList}
+                    handleSave={handleSave}
+                    handleCancel={handleCloseModal}
+                    form={form}
+                    handleSubmit={handleIncludeModal}
+                    setNewRegistrationList={setNewRegistrationList}
+                    categoryList={categoryList}
+                />
+                <SupplierTable
+                    loading={loadingTableData}
+                    tableData={tableData}
+                    rowSelection={rowSelection}
+                />
+            </div>
+        </main>
     )
 }
 
