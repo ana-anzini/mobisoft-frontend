@@ -196,6 +196,7 @@ const Supplier = () => {
                     mainButtonTitle="Novo Fornecedor"
                     handleNew={() => handleOpenModal(true)}
                     handleEdit={() => handleOpenModal(false)}
+                    hasSelection={selectedRowKeys.length > 0}
                 />
                 <SupplierModal
                     isModalVisible={isModalVisible}
