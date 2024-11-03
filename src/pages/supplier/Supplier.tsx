@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import SupplierModal from './components/SupplierModal';
 import SupplierTable from './components/SupplierTable';
-import axios from 'axios';
 import { DataType, ValueForm } from './ISupplier';
 import TopButtons from '../../components/topButtons/TopButtons';
 import { TableRowSelection } from 'antd/es/table/interface';
-import { Form, Modal, message } from 'antd';
+import { Form, Modal } from 'antd';
 import api from '../../service/api';
 import { Notification } from '../../components/notification/Notification';
 
@@ -18,12 +17,26 @@ const Supplier = () => {
     const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
     const [categoryList, setCategoryList] = useState([]);
     const [editingSupplierId, setEditingSupplierId] = useState<React.Key | null>(null);
+    const [filteredData, setFilteredData] = useState<DataType[]>([]);
     const [form] = Form.useForm();
 
     useEffect(() => {
         loadTableData();
         loadCategories();
     }, []);
+
+    useEffect(() => {
+        setFilteredData(tableData);
+    }, [tableData]);
+
+    const handleSearch = (value: string) => {
+        const searchValue = value.toLowerCase();
+        const filtered = tableData.filter(item =>
+            item.name.toLowerCase().includes(searchValue) ||
+            item.email.toLowerCase().includes(searchValue)
+        );
+        setFilteredData(filtered);
+    };
 
     const onSelectChange = (newSelectedRowKeys: React.Key[], newSelectedRows: DataType[]) => {
         setSelectedRows(newSelectedRows);
@@ -198,6 +211,7 @@ const Supplier = () => {
                     handleEdit={() => handleOpenModal(false)}
                     hasSelection={selectedRowKeys.length > 0}
                     handleDelete={handleDelete}
+                    onSearch={handleSearch}
                 />
                 <SupplierModal
                     isModalVisible={isModalVisible}
@@ -209,7 +223,7 @@ const Supplier = () => {
                 />
                 <SupplierTable
                     loading={loadingTableData}
-                    tableData={tableData}
+                    tableData={filteredData}
                     rowSelection={rowSelection}
                     onDelete={handleDelete}
                     handleEdit={(record) => handleOpenModal(false, record)}

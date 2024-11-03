@@ -5,4 +5,5 @@ export interface ITopButtons {
     handleEdit?: (arg: any) => void;
     handleDelete: () => void;
     hasSelection?: boolean;
+    onSearch: (value: string) => void;
 }

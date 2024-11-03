@@ -1,7 +1,9 @@
 import "./style.sass";
-import { Button } from 'antd';
+import { Button, Input } from 'antd';
 import { ITopButtons } from './ITopButtons';
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
+
+const { Search } = Input;
 
 const TopButtons = ({
     pageTitle,
@@ -9,6 +11,7 @@ const TopButtons = ({
     mainButtonTitle,
     hasSelection,
     handleDelete,
+    onSearch,
 }: ITopButtons) => {
     return (
         <div className='main-header'>
@@ -22,6 +25,12 @@ const TopButtons = ({
                             className="tp-delete-button"
                         />
                     )}
+                    <Search
+                        placeholder="Buscar"
+                        onChange={(e) => onSearch(e.target.value)}
+                        className="tp-search-input"
+                        style={{ width: 200, marginRight: '10px' }}
+                    />
                     <Button
                         icon={<PlusOutlined />}
                         onClick={handleNew}
