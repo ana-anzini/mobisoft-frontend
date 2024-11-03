@@ -3,6 +3,6 @@ export interface ITopButtons {
     mainButtonTitle: string;
     handleNew?: (arg: any) => void;
     handleEdit?: (arg: any) => void;
-    handleDelete?: (arg: any) => void;
+    handleDelete: () => void;
     hasSelection?: boolean;
 }

@@ -8,6 +8,7 @@ const TopButtons = ({
     handleNew,
     mainButtonTitle,
     hasSelection,
+    handleDelete,
 }: ITopButtons) => {
     return (
         <div className='main-header'>
@@ -17,7 +18,7 @@ const TopButtons = ({
                     {hasSelection && (
                         <Button
                             icon={<DeleteOutlined />}
-                            //onClick={handleDeleteSelected}
+                            onClick={() => handleDelete()}
                             className="tp-delete-button"
                         />
                     )}

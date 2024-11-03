@@ -197,6 +197,7 @@ const Supplier = () => {
                     handleNew={() => handleOpenModal(true)}
                     handleEdit={() => handleOpenModal(false)}
                     hasSelection={selectedRowKeys.length > 0}
+                    handleDelete={handleDelete}
                 />
                 <SupplierModal
                     isModalVisible={isModalVisible}
