@@ -1,7 +1,7 @@
 import { CSSProperties, ReactNode } from "react";
 
 export interface ITopButtons {
-    pageTittle: string;
+    pageTitle: string;
     mainButtonIcon?: ReactNode;
     mainButtonTitle: string;
     handleNew?: (arg: any) => void;

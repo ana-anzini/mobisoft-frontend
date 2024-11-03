@@ -192,13 +192,10 @@ const Supplier = () => {
         <main id="main">
             <div className='main-container'>
                 <TopButtons
-                    pageTittle='Fornecedores'
+                    pageTitle='Fornecedores'
                     mainButtonTitle="Novo Fornecedor"
                     handleNew={() => handleOpenModal(true)}
                     handleEdit={() => handleOpenModal(false)}
-                    handleDelete={() => handleDelete()}
-                    isEditable={selectedRows.length === 1}
-                    isDeletable={selectedRows.length > 0}
                 />
                 <SupplierModal
                     isModalVisible={isModalVisible}
