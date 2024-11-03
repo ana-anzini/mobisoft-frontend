@@ -20,13 +20,14 @@ const SupplierModal = ({ isModalVisible, isNewRegistration, handleSave, handleCa
                 width={800}
                 title="Fornecedores"
                 open={isModalVisible}
-                okButtonProps={!isNewRegistration ? { htmlType: "submit", form: "new-form" } : {}}
+                okButtonProps={{ htmlType: "submit", form: "new-form" }}
                 onCancel={handleCancel}
                 className="gs-modal"
                 cancelText="Cancelar"
                 okText="Salvar"
                 centered
             >
+
                 <Form
                     form={form}
                     name="new-form"
