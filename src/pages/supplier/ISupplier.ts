@@ -1,6 +1,7 @@
 
 export interface DataType {
     key: React.Key;
+    id: string;
     name: string;
     cpfOrCnpj: number;
     type: string;

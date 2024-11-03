@@ -1,24 +1,23 @@
-import React, { useEffect, useState } from 'react'
-import SupplierModal from './components/SupplierModal'
-import SupplierTable from './components/SupplierTable'
+import React, { useEffect, useState } from 'react';
+import SupplierModal from './components/SupplierModal';
+import SupplierTable from './components/SupplierTable';
 import axios from 'axios';
 import { DataType, ValueForm } from './ISupplier';
 import TopButtons from '../../components/topButtons/TopButtons';
 import { TableRowSelection } from 'antd/es/table/interface';
-import { Form } from 'antd';
+import { Form, Modal, message } from 'antd';
 import api from '../../service/api';
 import { Notification } from '../../components/notification/Notification';
 
 const Supplier = () => {
-
     const [loadingTableData, setLoadingTableData] = useState(true);
     const [tableData, setTableData] = useState<DataType[]>([]);
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
     const [selectedRows, setSelectedRows] = useState<DataType[]>([]);
     const [isNewRegistration, setIsNewRegistration] = useState<boolean>(true);
-    const [newRegistrationList, setNewRegistrationList] = useState<ValueForm[]>([]);
     const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
     const [categoryList, setCategoryList] = useState([]);
+    const [editingSupplierId, setEditingSupplierId] = useState<React.Key | null>(null);
     const [form] = Form.useForm();
 
     useEffect(() => {
@@ -36,25 +35,24 @@ const Supplier = () => {
         onChange: onSelectChange,
     };
 
-    function handleOpenModal(isNew: boolean) {
+    function handleOpenModal(isNew: boolean, supplier?: DataType) {
         if (isNew) {
             setIsNewRegistration(true);
-            setSelectedRowKeys([]);
-            setSelectedRows([]);
-            setNewRegistrationList([]);
+            setEditingSupplierId(null);
             form.resetFields();
-        } else {
+        } else if (supplier) {
+            setEditingSupplierId(supplier.key);
             form.setFieldsValue({
-                cpfOrCnpj: selectedRows[0].cpfOrCnpj,
-                name: selectedRows[0].name,
-                phone: selectedRows[0].phone,
-                categoryId: selectedRows[0].categoryId,
-                email: selectedRows[0].email,
-                cep: selectedRows[0].cep,
-                address: selectedRows[0].address,
-                number: selectedRows[0].number,
-                neighborhood: selectedRows[0].neighborhood,
-                additional: selectedRows[0].additional
+                cpfOrCnpj: supplier.cpfOrCnpj,
+                name: supplier.name,
+                phone: supplier.phone,
+                categoryId: supplier.categoryId,
+                email: supplier.email,
+                cep: supplier.cep,
+                address: supplier.address,
+                number: supplier.number,
+                neighborhood: supplier.neighborhood,
+                additional: supplier.additional
             });
             setIsNewRegistration(false);
         }
@@ -63,77 +61,78 @@ const Supplier = () => {
 
     function loadTableData() {
         api.get("/suppliers").then((response) => {
-            if (response.status = 200) {
-                const dataTable = response.data.map((item: any) => {
-                    return {
-                        key: item.id,
-                        categoryId: item.category.id,
-                        name: item.name,
-                        cpfOrCnpj: item.cpfOrCnpj,
-                        phone: item.phone,
-                        email: item.email,
-                        cep: item.cep,
-                        address: item.address,
-                        number: item.number,
-                        neighborhood: item.neighborhood,
-                        additional: item.additional
-                    }
-                })
-
+            if (response.status === 200) {
+                const dataTable = response.data.map((item: any) => ({
+                    key: item.id,
+                    categoryId: item.category.id,
+                    name: item.name,
+                    cpfOrCnpj: item.cpfOrCnpj,
+                    phone: item.phone,
+                    email: item.email,
+                    cep: item.cep,
+                    address: item.address,
+                    number: item.number,
+                    neighborhood: item.neighborhood,
+                    additional: item.additional
+                }));
                 setTableData(dataTable);
                 setLoadingTableData(false);
             }
         }).catch((err) => {
-            console.log("Erro")
-        })
+            console.error("Erro ao carregar dados");
+        });
     }
 
-    function onSave(data: any) {
-
+    function onSave(response: any) {
+        if (response) {
+            Notification({
+                type: "success",
+                message: "Salvo com sucesso",
+            });
+        }
+        loadTableData();
     }
 
-    function handleSave(data: ValueForm[]) {
+    function handleSave(data: ValueForm) {
         form.resetFields();
-        const dataToSave = data.map(
-            supplier => {
-                return {
-                    id: isNewRegistration ? null : selectedRows[0].key,
-                    cpfOrCnpj: supplier.cpfOrCnpj,
-                    name: supplier.name,
-                    phone: supplier.phone,
-                    categoryId: supplier.categoryId,
-                    email: supplier.email,
-                    cep: supplier.cep,
-                    address: supplier.address,
-                    number: supplier.number,
-                    neighborhood: supplier.neighborhood,
-                    additional: supplier.additional
-                }
-            }
-        );
+        const dataToSave = {
+            id: isNewRegistration ? null : editingSupplierId,
+            cpfOrCnpj: data.cpfOrCnpj,
+            name: data.name,
+            phone: data.phone,
+            categoryId: data.categoryId,
+            email: data.email,
+            cep: data.cep,
+            address: data.address,
+            number: data.number,
+            neighborhood: data.neighborhood,
+            additional: data.additional,
+        };
+
+        console.log(dataToSave);
 
         if (isNewRegistration) {
             api.post("/suppliers", dataToSave)
                 .then((response) => {
-                    setLoadingTableData(true);
-                    loadTableData();
-                    onSave(response);
-                });
-        } else {
-            const supplierId = dataToSave[0].id;
-            api.put(`/suppliers/${supplierId}`, dataToSave[0])
-                .then((response) => {
-                    setLoadingTableData(true);
-                    loadTableData();
                     onSave(response);
                 })
+                .catch((error) => {
+                    console.error("Erro ao salvar o fornecedor:", error);
+                });
+        } else {
+            const supplierId = dataToSave.id;
+            api.put(`/suppliers/${supplierId}`, dataToSave)
+                .then((response) => {
+                    onSave(response);
+                })
+                .catch((error) => {
+                    console.error("Erro ao atualizar o fornecedor:", error);
+                });
         }
 
         setSelectedRowKeys([]);
         setSelectedRows([]);
-
         setIsModalVisible(false);
-        setLoadingTableData(true);
     }
 
     function handleCloseModal() {
@@ -141,59 +140,52 @@ const Supplier = () => {
         setSelectedRows([]);
         form.resetFields();
         setIsModalVisible(false);
-    };
-
-    function handleIncludeModal(data: ValueForm) {
-        if (isNewRegistration) {
-            setNewRegistrationList([...newRegistrationList, data]);
-        } else {
-            handleSave([data]);
-        }
-        form.resetFields();
     }
 
-    function handleDelete() {
-        const ids = selectedRowKeys.join(',');
-        api.delete(`/suppliers?ids=${ids}`)
-            .then((response) => {
-                setLoadingTableData(true);
-                onDelete(response);
-            })
-            .catch((error) => {
-                console.error('Erro ao deletar fornecedores:', error);
-            });
-    }
+    function handleDelete(ids?: string) {
+        const idsToDelete = ids || selectedRowKeys.join(',');
 
+        Modal.confirm({
+            title: 'Excluir fornecedor',
+            content: 'Você tem certeza que deseja excluir o fornecedor selecionado?',
+            okText: 'Sim',
+            cancelText: 'Não',
+            onOk: () => {
+                api.delete(`/suppliers?ids=${idsToDelete}`)
+                    .then((response) => {
+                        onDelete(response);
+                    })
+                    .catch((error) => {
+                        console.error('Erro ao deletar fornecedores:', error);
+                    });
+            }
+        });
+    }
 
     function onDelete(response: any) {
         if (response) {
             Notification({
                 type: "success",
-                message: "Deletado com sucesso",
+                message: "Fornecedor(es) deletado(s) com sucesso",
             });
         }
-
-        setLoadingTableData(true);
         loadTableData();
-    };
+    }
 
     function loadCategories() {
         api.get("/categories/findAll")
             .then((response) => {
-                if (response.status = 200) {
-                    const categorias = response.data.map((item: any) => {
-                        return {
-                            key: item.id,
-                            value: item.id,
-                            label: item.description
-                        }
-                    })
-
+                if (response.status === 200) {
+                    const categorias = response.data.map((item: any) => ({
+                        key: item.id,
+                        value: item.id,
+                        label: item.description
+                    }));
                     setCategoryList(categorias);
                 }
             }).catch((err) => {
-                console.log("Erro")
-            })
+                console.error("Erro ao carregar categorias");
+            });
     }
 
     return (
@@ -204,30 +196,28 @@ const Supplier = () => {
                     mainButtonTitle="Novo Fornecedor"
                     handleNew={() => handleOpenModal(true)}
                     handleEdit={() => handleOpenModal(false)}
-                    handleDelete={handleDelete}
-                    // handleSearch={onChangeSearch}
+                    handleDelete={() => handleDelete()}
                     isEditable={selectedRows.length === 1}
                     isDeletable={selectedRows.length > 0}
                 />
                 <SupplierModal
                     isModalVisible={isModalVisible}
                     isNewRegistration={isNewRegistration}
-                    newRegistrationList={newRegistrationList}
                     handleSave={handleSave}
                     handleCancel={handleCloseModal}
                     form={form}
-                    handleSubmit={handleIncludeModal}
-                    setNewRegistrationList={setNewRegistrationList}
                     categoryList={categoryList}
                 />
                 <SupplierTable
                     loading={loadingTableData}
                     tableData={tableData}
                     rowSelection={rowSelection}
+                    onDelete={handleDelete}
+                    handleEdit={(record) => handleOpenModal(false, record)}
                 />
             </div>
         </main>
-    )
-}
+    );
+};
 
-export default Supplier
+export default Supplier;

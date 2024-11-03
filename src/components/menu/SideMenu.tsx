@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Icon } from '@iconify/react';
-import type { MenuProps, MenuTheme } from 'antd';
-import { Menu, Switch } from 'antd';
+import { Menu, MenuProps } from 'antd';
 import { Link, useLocation } from 'react-router-dom';
 
 type MenuItem = Required<MenuProps>['items'][number];
@@ -32,16 +31,9 @@ export default function SideMenu() {
 
     const location = useLocation();
     const isIndexPath = location.pathname === '/';
-
-    const [theme, setTheme] = useState<MenuTheme>('light');
     const [current, setCurrent] = useState('1');
 
-    const changeTheme = (value: boolean) => {
-        setTheme(value ? 'dark' : 'light');
-    };
-
     const onClick: MenuProps['onClick'] = (e) => {
-        console.log('click ', e);
         setCurrent(e.key);
     };
 
@@ -49,7 +41,6 @@ export default function SideMenu() {
         <>
             {!isIndexPath &&
                 <Menu
-                    theme={theme}
                     onClick={onClick}
                     style={{ width: 256 }}
                     defaultOpenKeys={['sub1']}
