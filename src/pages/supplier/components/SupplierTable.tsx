@@ -9,7 +9,7 @@ interface ISupplierTable {
     tableData: DataType[];
     rowSelection: TableRowSelection<DataType>;
     onDelete: (id: string) => void;
-    handleEdit?: (supplier: DataType) => void;
+    handleEdit?: (record: DataType) => void;
 }
 
 const SupplierTable = ({
@@ -48,15 +48,15 @@ const SupplierTable = ({
         {
             title: 'Ações',
             key: 'actions',
-            render: (_: string, supplier: DataType) => (
+            render: (_: string, record: DataType) => (
                 <div style={{ display: 'flex', gap: '8px' }}>
                     <Button
                         icon={<EditOutlined />}
-                        onClick={() => handleEdit && handleEdit(supplier)}
+                        onClick={() => handleEdit && handleEdit(record)}
                     />
                     <Button
                         icon={<DeleteOutlined />}
-                        onClick={() => onDelete(String(supplier.key))}
+                        onClick={() => onDelete(String(record.key))}
                         style={{
                             color: '#FF0000'
                         }}
