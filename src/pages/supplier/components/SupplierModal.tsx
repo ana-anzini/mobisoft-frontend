@@ -2,17 +2,17 @@ import React, { useState, useEffect } from 'react';
 import { Button, Col, Form, Input, Modal, Row, Select } from 'antd';
 import { ValueForm } from '../ISupplier';
 import ZipCodeSearch from '../../../components/CEPSearch';
+import MaskedInput from '../../../components/MaskedInput';
 
 interface ISupplierModal {
     isModalVisible: boolean;
-    isNewRegistration: boolean;
     handleSave: (data: ValueForm) => void;
     handleCancel: () => void;
     form: any;
     categoryList: any;
 }
 
-const SupplierModal = ({ isModalVisible, isNewRegistration, handleSave, handleCancel, form, categoryList }: ISupplierModal) => {
+const SupplierModal = ({ isModalVisible, handleSave, handleCancel, form, categoryList }: ISupplierModal) => {
     const [editDisabled, setEditDisabled] = useState(false);
     const [cep, setCep] = useState('');
 
@@ -54,7 +54,7 @@ const SupplierModal = ({ isModalVisible, isNewRegistration, handleSave, handleCa
                                 label="CPF/CNPJ"
                                 rules={[{ required: true, message: "Campo obrigatório" }]}
                             >
-                                <Input />
+                                <MaskedInput maskType="cpfCnpj" placeholder="Digite o CPF ou CNPJ" />
                             </Form.Item>
                         </Col>
                         <Col span={8} style={{ marginRight: 20 }}>
@@ -72,7 +72,7 @@ const SupplierModal = ({ isModalVisible, isNewRegistration, handleSave, handleCa
                                 label="Telefone"
                                 rules={[{ required: true, message: "Campo obrigatório" }]}
                             >
-                                <Input />
+                                <MaskedInput maskType="telefone" placeholder="Digite o telefone" />
                             </Form.Item>
                         </Col>
                     </Row>

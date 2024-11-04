@@ -217,7 +217,6 @@ const Supplier = () => {
                 />
                 <SupplierModal
                     isModalVisible={isModalVisible}
-                    isNewRegistration={isNewRegistration}
                     handleSave={handleSave}
                     handleCancel={handleCloseModal}
                     form={form}
