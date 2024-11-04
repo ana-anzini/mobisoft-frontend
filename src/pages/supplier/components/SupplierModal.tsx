@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Col, Form, Input, Modal, Row, Select } from 'antd';
 import { ValueForm } from '../ISupplier';
+import ZipCodeSearch from '../../../components/CEPSearch';
 
 interface ISupplierModal {
     isModalVisible: boolean;
@@ -13,6 +14,17 @@ interface ISupplierModal {
 
 const SupplierModal = ({ isModalVisible, isNewRegistration, handleSave, handleCancel, form, categoryList }: ISupplierModal) => {
     const [editDisabled, setEditDisabled] = useState(false);
+    const [cep, setCep] = useState('');
+
+    const handleAddressChange = (address: string, neighborhood: string) => {
+        form.setFieldsValue({ address, neighborhood });
+    };
+
+    useEffect(() => {
+        if (isModalVisible) {
+            setCep(form.getFieldValue('cep') || '');
+        }
+    }, [isModalVisible, form]);
 
     return (
         <>
@@ -27,7 +39,6 @@ const SupplierModal = ({ isModalVisible, isNewRegistration, handleSave, handleCa
                 okText="Salvar"
                 centered
             >
-
                 <Form
                     form={form}
                     name="new-form"
@@ -84,14 +95,17 @@ const SupplierModal = ({ isModalVisible, isNewRegistration, handleSave, handleCa
                                 <Input />
                             </Form.Item>
                         </Col>
-
                         <Col span={6}>
                             <Form.Item
                                 name="cep"
                                 label="CEP"
                                 rules={[{ required: true, message: "Campo obrigatório" }]}
                             >
-                                <Input />
+                                <ZipCodeSearch
+                                    onAddressChange={handleAddressChange}
+                                    value={form.getFieldValue('cep')}
+                                    onChange={(cep) => form.setFieldsValue({ cep })}
+                                />
                             </Form.Item>
                         </Col>
                     </Row>
