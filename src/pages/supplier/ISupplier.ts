@@ -7,6 +7,7 @@ export interface DataType {
     type: string;
     phone: string;
     categoryId: number;
+    categoryDescription: string;
     email: string;
     cep: string;
     address: string;

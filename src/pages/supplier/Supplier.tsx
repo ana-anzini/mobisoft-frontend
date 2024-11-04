@@ -60,6 +60,7 @@ const Supplier = () => {
                 name: supplier.name,
                 phone: supplier.phone,
                 categoryId: supplier.categoryId,
+                categoryDescription: supplier.categoryDescription,
                 email: supplier.email,
                 cep: supplier.cep,
                 address: supplier.address,
@@ -77,7 +78,8 @@ const Supplier = () => {
             if (response.status === 200) {
                 const dataTable = response.data.map((item: any) => ({
                     key: item.id,
-                    categoryId: item.category.id,
+                    categoryId: item.categoryId,
+                    categoryDescription: item.categoryDescription,
                     name: item.name,
                     cpfOrCnpj: item.cpfOrCnpj,
                     phone: item.phone,
@@ -160,7 +162,7 @@ const Supplier = () => {
 
         Modal.confirm({
             title: 'Excluir fornecedor',
-            content: 'Você tem certeza que deseja excluir o fornecedor selecionado?',
+            content: 'Você tem certeza que deseja excluir o(s) fornecedor(es) selecionado(s)?',
             okText: 'Sim',
             cancelText: 'Não',
             onOk: () => {

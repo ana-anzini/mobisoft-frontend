@@ -32,8 +32,8 @@ const SupplierTable = ({
         },
         {
             title: 'Tipo',
-            dataIndex: 'categoryId',
-            key: 'categoryId',
+            dataIndex: 'categoryDescription',
+            key: 'categoryDescription',
         },
         {
             title: 'E-mail',
