@@ -1,9 +1,9 @@
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import './App.css';
-import "./App.sass"
+import "./App.sass";
 import Supplier from './pages/supplier/Supplier';
-import SideMenu from "./components/menu/SideMenu";
 import Navbar from "./components/navbar/NavBar";
+import SideMenu from "./components/menu/SideMenu";
 
 function App() {
   return (
@@ -12,9 +12,7 @@ function App() {
       <div id="main-container">
         <SideMenu />
         <Routes>
-          <Route path="/">
-            <Route path="suppliers" element={<Supplier />} />
-          </Route>
+          <Route path="/suppliers" element={<Supplier />} />
         </Routes>
       </div>
     </BrowserRouter>
