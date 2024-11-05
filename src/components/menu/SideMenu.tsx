@@ -5,29 +5,23 @@ import { Link, useLocation } from 'react-router-dom';
 const items: MenuProps['items'] = [
     {
         type: 'group',
-        label: 'CADASTROS',
+        label: 'Cadastros',
         children: [
             {
                 key: '/suppliers',
                 label: (
                     <Link to="/suppliers" className="rounded-item">
-                        <Icon icon="carbon:enterprise" style={{ fontSize: '20px', marginRight: '8px' }} />
+                        <Icon icon="mingcute:box-3-fill" style={{ fontSize: '20px', marginRight: '8px' }} />
                         Fornecedores
                     </Link>
                 ),
             },
-        ],
-    },
-    {
-        type: 'group',
-        label: 'NOVO',
-        children: [
             {
-                key: '/new',
+                key: '/categories',
                 label: (
-                    <Link to="/new" className="rounded-item">
-                        <Icon icon="carbon:enterprise" style={{ fontSize: '20px', marginRight: '8px' }} />
-                        Novo
+                    <Link to="/categories" className="rounded-item">
+                        <Icon icon="tabler:tags-filled" style={{ fontSize: '20px', marginRight: '8px' }} />
+                        Categorias
                     </Link>
                 ),
             },
