@@ -1,9 +1,9 @@
 import { Button, Table } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
-import { DataType } from '../ISupplier';
+import { DataType } from '../ICategory';
 import { TableRowSelection } from 'antd/es/table/interface';
 
-interface ISupplierTable {
+interface ICategoryTable {
     loading: boolean;
     tableData: DataType[];
     rowSelection: TableRowSelection<DataType>;
@@ -11,42 +11,23 @@ interface ISupplierTable {
     handleEdit?: (record: DataType) => void;
 }
 
-const SupplierTable = ({
+const CategoryTable = ({
     loading,
     tableData,
     rowSelection,
     onDelete,
     handleEdit
-}: ISupplierTable) => {
+}: ICategoryTable) => {
     const columns = [
         {
-            title: 'Nome',
-            dataIndex: 'name',
-            key: 'name',
-        },
-        {
-            title: 'CPF/CNPJ',
-            dataIndex: 'cpfOrCnpj',
-            key: 'cpfOrCnpj',
-        },
-        {
-            title: 'Tipo',
-            dataIndex: 'categoryDescription',
-            key: 'categoryDescription',
-        },
-        {
-            title: 'E-mail',
-            dataIndex: 'email',
-            key: 'email',
-        },
-        {
-            title: 'Telefone',
-            dataIndex: 'phone',
-            key: 'phone',
+            title: 'Descrição',
+            dataIndex: 'description',
+            key: 'description',
         },
         {
             title: 'Ações',
             key: 'actions',
+            width: 300,
             render: (_: string, record: DataType) => (
                 <div style={{ display: 'flex', gap: '8px' }}>
                     <Button
@@ -78,4 +59,4 @@ const SupplierTable = ({
     );
 };
 
-export default SupplierTable;
+export default CategoryTable;

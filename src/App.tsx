@@ -4,6 +4,7 @@ import "./App.sass";
 import Supplier from './pages/supplier/Supplier';
 import Navbar from "./components/navbar/NavBar";
 import SideMenu from "./components/menu/SideMenu";
+import Category from "./pages/category/Category";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <SideMenu />
         <Routes>
           <Route path="/suppliers" element={<Supplier />} />
+          <Route path="/categories" element={<Category />} />
         </Routes>
       </div>
     </BrowserRouter>
