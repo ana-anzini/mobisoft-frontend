@@ -25,6 +25,15 @@ const items: MenuProps['items'] = [
                     </Link>
                 ),
             },
+            {
+                key: '/products',
+                label: (
+                    <Link to="/products" className="rounded-item">
+                        <Icon icon="fluent:box-edit-20-filled" style={{ fontSize: '20px', marginRight: '8px' }} />
+                        Produtos
+                    </Link>
+                ),
+            },
         ],
     },
 ];

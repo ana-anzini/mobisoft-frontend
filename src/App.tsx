@@ -5,6 +5,7 @@ import Supplier from './pages/supplier/Supplier';
 import Navbar from "./components/navbar/NavBar";
 import SideMenu from "./components/menu/SideMenu";
 import Category from "./pages/category/Category";
+import Product from "./pages/product/Product";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Routes>
           <Route path="/suppliers" element={<Supplier />} />
           <Route path="/categories" element={<Category />} />
+          <Route path="/products" element={<Product />} />
         </Routes>
       </div>
     </BrowserRouter>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import CategoryModal from './components/CategoryModal';
-import CategoryTable from './components/CategoryTable';
-import { DataType, ValueForm } from './ICategory';
+import ProductModal from './components/ProductModal';
+import ProductTable from './components/ProductTable';
+import { DataType, ValueForm } from './IProduct';
 import TopButtons from '../../components/topButtons/TopButtons';
 import { TableRowSelection } from 'antd/es/table/interface';
 import { Form, Modal } from 'antd';
@@ -15,12 +15,16 @@ const Supplier = () => {
     const [selectedRows, setSelectedRows] = useState<DataType[]>([]);
     const [isNewRegistration, setIsNewRegistration] = useState<boolean>(true);
     const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
-    const [editingCategoryId, setEditingCategoryId] = useState<React.Key | null>(null);
+    const [editingProductId, setEditingProductId] = useState<React.Key | null>(null);
     const [filteredData, setFilteredData] = useState<DataType[]>([]);
+    const [categoryList, setCategoryList] = useState([]);
+    const [supplierList, setSupplierList] = useState([]);
     const [form] = Form.useForm();
 
     useEffect(() => {
         loadTableData();
+        loadCategories();
+        loadSuppliers();
     }, []);
 
     useEffect(() => {
@@ -45,15 +49,20 @@ const Supplier = () => {
         onChange: onSelectChange,
     };
 
-    function handleOpenModal(isNew: boolean, category?: DataType) {
+    function handleOpenModal(isNew: boolean, product?: DataType) {
         if (isNew) {
             setIsNewRegistration(true);
-            setEditingCategoryId(null);
+            setEditingProductId(null);
             form.resetFields();
-        } else if (category) {
-            setEditingCategoryId(category.key);
+        } else if (product) {
+            setEditingProductId(product.key);
             form.setFieldsValue({
-                description: category.description
+                description: product.description,
+                categoryId: product.categoryId,
+                categoryDescription: product.categoryDescription,
+                supplierId: product.supplierId,
+                supplierDescription: product.supplierDescription,
+                quantity: product.quantity,
             });
             setIsNewRegistration(false);
         }
@@ -61,11 +70,14 @@ const Supplier = () => {
     }
 
     function loadTableData() {
-        api.get("/categories/findAll").then((response) => {
+        api.get("/products").then((response) => {
             if (response.status === 200) {
                 const dataTable = response.data.map((item: any) => ({
                     key: item.id,
-                    description: item.description
+                    description: item.description,
+                    supplierId: item.supplier.name,
+                    categoryId: item.category.description,
+                    quantity: item.quantity,
                 }));
                 setTableData(dataTable);
                 setLoadingTableData(false);
@@ -73,6 +85,38 @@ const Supplier = () => {
         }).catch((err) => {
             console.error("Erro ao carregar dados");
         });
+    }
+
+    function loadCategories() {
+        api.get("/categories/findAll")
+            .then((response) => {
+                if (response.status === 200) {
+                    const categorias = response.data.map((item: any) => ({
+                        key: item.id,
+                        value: item.id,
+                        label: item.description
+                    }));
+                    setCategoryList(categorias);
+                }
+            }).catch((err) => {
+                console.error("Erro ao carregar categorias");
+            });
+    }
+
+    function loadSuppliers() {
+        api.get("/suppliers")
+            .then((response) => {
+                if (response.status === 200) {
+                    const suppliers = response.data.map((item: any) => ({
+                        key: item.id,
+                        value: item.id,
+                        label: item.name
+                    }));
+                    setSupplierList(suppliers);
+                }
+            }).catch((err) => {
+                console.error("Erro ao carregar fornecedores");
+            });
     }
 
     function onSave(response: any) {
@@ -88,26 +132,29 @@ const Supplier = () => {
     function handleSave(data: ValueForm) {
         form.resetFields();
         const dataToSave = {
-            id: isNewRegistration ? null : editingCategoryId,
+            id: isNewRegistration ? null : editingProductId,
             description: data.description,
+            categoryId: data.categoryId,
+            supplierId: data.supplierId,
+            quantity: data.quantity,
         };
 
         if (isNewRegistration) {
-            api.post("/categories", dataToSave)
+            api.post("/products", dataToSave)
                 .then((response) => {
                     onSave(response);
                 })
                 .catch((error) => {
-                    console.error("Erro ao salvar o categoria:", error);
+                    console.error("Erro ao salvar o produto:", error);
                 });
         } else {
-            const categoryId = dataToSave.id;
-            api.put(`/categories/${categoryId}`, dataToSave)
+            const productId = dataToSave.id;
+            api.put(`/products/${productId}`, dataToSave)
                 .then((response) => {
                     onSave(response);
                 })
                 .catch((error) => {
-                    console.error("Erro ao atualizar o categoria:", error);
+                    console.error("Erro ao atualizar o produto:", error);
                 });
         }
 
@@ -127,8 +174,8 @@ const Supplier = () => {
         const idsToDelete = ids || selectedRowKeys.join(',');
 
         Modal.confirm({
-            title: 'Excluir categoria',
-            content: 'Você tem certeza que deseja excluir a(s) categoria(s) selecionada(s)?',
+            title: 'Excluir produto',
+            content: 'Você tem certeza que deseja excluir a(s) produto(s) selecionada(s)?',
             okText: 'Sim',
             cancelText: 'Não',
             onOk: () => {
@@ -136,7 +183,7 @@ const Supplier = () => {
                     .then((response) => {
                         const message = response.data;
 
-                        if (message === "Categoria(s) deletada(s) com sucesso.") {
+                        if (message === "Produto(s) deletada(s) com sucesso.") {
                             Notification({
                                 type: "success",
                                 message: message,
@@ -164,7 +211,7 @@ const Supplier = () => {
         if (response) {
             Notification({
                 type: "success",
-                message: "Categoria(s) deletada(s) com sucesso",
+                message: "Produto(s) deletada(s) com sucesso",
             });
         }
         loadTableData();
@@ -174,21 +221,23 @@ const Supplier = () => {
         <main id="main">
             <div className='main-container'>
                 <TopButtons
-                    pageTitle='Categorias'
-                    mainButtonTitle="Nova Categoria"
+                    pageTitle='Produtos'
+                    mainButtonTitle="Novo Produto"
                     handleNew={() => handleOpenModal(true)}
                     handleEdit={() => handleOpenModal(false)}
                     hasSelection={selectedRowKeys.length > 0}
                     handleDelete={handleDelete}
                     onSearch={handleSearch}
                 />
-                <CategoryModal
+                <ProductModal
                     isModalVisible={isModalVisible}
                     handleSave={handleSave}
                     handleCancel={handleCloseModal}
                     form={form}
+                    categoryList={categoryList}
+                    supplierList={supplierList}
                 />
-                <CategoryTable
+                <ProductTable
                     loading={loadingTableData}
                     tableData={filteredData}
                     rowSelection={rowSelection}
