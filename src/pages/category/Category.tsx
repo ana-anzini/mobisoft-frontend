@@ -92,15 +92,13 @@ const Supplier = () => {
             description: data.description,
         };
 
-        console.log(dataToSave);
-
         if (isNewRegistration) {
             api.post("/categories", dataToSave)
                 .then((response) => {
                     onSave(response);
                 })
                 .catch((error) => {
-                    console.error("Erro ao salvar o fornecedor:", error);
+                    console.error("Erro ao salvar o categoria:", error);
                 });
         } else {
             const categoryId = dataToSave.id;
@@ -109,7 +107,7 @@ const Supplier = () => {
                     onSave(response);
                 })
                 .catch((error) => {
-                    console.error("Erro ao atualizar o fornecedor:", error);
+                    console.error("Erro ao atualizar o categoria:", error);
                 });
         }
 
@@ -129,27 +127,44 @@ const Supplier = () => {
         const idsToDelete = ids || selectedRowKeys.join(',');
 
         Modal.confirm({
-            title: 'Excluir fornecedor',
-            content: 'Você tem certeza que deseja excluir o(s) fornecedor(es) selecionado(s)?',
+            title: 'Excluir categoria',
+            content: 'Você tem certeza que deseja excluir a(s) categoria(s) selecionada(s)?',
             okText: 'Sim',
             cancelText: 'Não',
             onOk: () => {
                 api.delete(`/categories?ids=${idsToDelete}`)
                     .then((response) => {
-                        onDelete(response);
+                        const message = response.data;
+
+                        if (message === "Categoria(s) deletada(s) com sucesso.") {
+                            Notification({
+                                type: "success",
+                                message: message,
+                            });
+                            onDelete(response);
+                        } else {
+                            Notification({
+                                type: "error",
+                                message: message,
+                            });
+                        }
                     })
-                    .catch((error) => {
-                        console.error('Erro ao deletar fornecedores:', error);
+                    .catch(() => {
+                        Notification({
+                            type: "error",
+                            message: "Erro ao deletar",
+                        });
                     });
             }
         });
     }
 
+
     function onDelete(response: any) {
         if (response) {
             Notification({
                 type: "success",
-                message: "Fornecedor(es) deletado(s) com sucesso",
+                message: "Categoria(s) deletada(s) com sucesso",
             });
         }
         loadTableData();
