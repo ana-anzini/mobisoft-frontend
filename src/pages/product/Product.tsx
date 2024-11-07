@@ -181,15 +181,11 @@ const Supplier = () => {
             okText: 'Sim',
             cancelText: 'Não',
             onOk: () => {
-                api.delete(`/categories?ids=${idsToDelete}`)
+                api.delete(`/products?ids=${idsToDelete}`)
                     .then((response) => {
                         const message = response.data;
 
                         if (message === "Produto(s) deletada(s) com sucesso.") {
-                            Notification({
-                                type: "success",
-                                message: message,
-                            });
                             onDelete(response);
                         } else {
                             Notification({

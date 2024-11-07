@@ -26,13 +26,13 @@ const ProductTable = ({
         },
         {
             title: 'Fornecedor',
-            dataIndex: 'supplierId',
-            key: 'supplierId',
+            dataIndex: 'supplierName',
+            key: 'supplierName',
         },
         {
             title: 'Categoria',
-            dataIndex: 'categoryId',
-            key: 'categoryId',
+            dataIndex: 'categoryDescription',
+            key: 'categoryDescription',
         },
         {
             title: 'Quantidade disponível',

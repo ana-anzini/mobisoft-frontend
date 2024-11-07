@@ -159,7 +159,6 @@ const Supplier = () => {
         });
     }
 
-
     function onDelete(response: any) {
         if (response) {
             Notification({
