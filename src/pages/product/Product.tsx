@@ -61,7 +61,7 @@ const Supplier = () => {
                 categoryId: product.categoryId,
                 categoryDescription: product.categoryDescription,
                 supplierId: product.supplierId,
-                supplierDescription: product.supplierDescription,
+                supplierName: product.supplierDescription,
                 quantity: product.quantity,
             });
             setIsNewRegistration(false);
@@ -75,8 +75,10 @@ const Supplier = () => {
                 const dataTable = response.data.map((item: any) => ({
                     key: item.id,
                     description: item.description,
-                    supplierId: item.supplier.name,
-                    categoryId: item.category.description,
+                    supplierId: item.supplier.id,
+                    supplierName: item.supplier.name,
+                    categoryId: item.category.id,
+                    categoryDescription: item.category.description,
                     quantity: item.quantity,
                 }));
                 setTableData(dataTable);
