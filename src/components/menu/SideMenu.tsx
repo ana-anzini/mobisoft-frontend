@@ -34,6 +34,15 @@ const items: MenuProps['items'] = [
                     </Link>
                 ),
             },
+            {
+                key: '/employees',
+                label: (
+                    <Link to="/employees" className="rounded-item">
+                        <Icon icon="ion:people" style={{ fontSize: '20px', marginRight: '8px' }} />
+                        Colaboradores
+                    </Link>
+                ),
+            },
         ],
     },
 ];

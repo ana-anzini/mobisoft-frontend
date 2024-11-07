@@ -6,6 +6,7 @@ import Navbar from "./components/navbar/NavBar";
 import SideMenu from "./components/menu/SideMenu";
 import Category from "./pages/category/Category";
 import Product from "./pages/product/Product";
+import Employees from "./pages/employees/Employees";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route path="/suppliers" element={<Supplier />} />
           <Route path="/categories" element={<Category />} />
           <Route path="/products" element={<Product />} />
+          <Route path="/employees" element={<Employees />} />
         </Routes>
       </div>
     </BrowserRouter>
