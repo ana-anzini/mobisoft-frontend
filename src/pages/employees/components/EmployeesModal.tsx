@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Col, Form, Input, Modal, Row, Select } from 'antd';
 import { EmployeesType, ValueForm } from '../IEmployees';
 import ZipCodeSearch from '../../../components/CEPSearch';
+import { employeesTypeLabels } from './EmployeesTable';
 
 interface IEmployeesModal {
     isModalVisible: boolean;
@@ -92,7 +93,7 @@ const EmployeesModal = ({ isModalVisible, handleSave, handleCancel, form }: IEmp
                                 <Select placeholder="Selecione um tipo">
                                     {Object.values(EmployeesType).map((type) => (
                                         <Select.Option key={type} value={type}>
-                                            {type}
+                                            {employeesTypeLabels[type]}
                                         </Select.Option>
                                     ))}
                                 </Select>

@@ -1,6 +1,6 @@
 import { Button, Table } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
-import { DataType } from '../IEmployees';
+import { DataType, EmployeesType } from '../IEmployees';
 import { TableRowSelection } from 'antd/es/table/interface';
 
 interface IEmployeesTable {
@@ -10,6 +10,12 @@ interface IEmployeesTable {
     onDelete: (id: string) => void;
     handleEdit?: (record: DataType) => void;
 }
+
+export const employeesTypeLabels: { [key in EmployeesType]: string } = {
+    [EmployeesType.SALESPERSON]: 'Vendedor',
+    [EmployeesType.PROJECT_DESIGNER]: 'Projetista',
+    [EmployeesType.ASSEMBLER]: 'Montador',
+};
 
 const EmployeesTable = ({
     loading,
@@ -33,6 +39,7 @@ const EmployeesTable = ({
             title: 'Tipo',
             dataIndex: 'employeesType',
             key: 'employeesType',
+            render: (type: EmployeesType) => employeesTypeLabels[type] || type,
         },
         {
             title: 'Telefone',

@@ -119,8 +119,8 @@ const Supplier = () => {
             pis: data.pis,
             ctps: data.ctps,
             salary: data.salary,
-            admission: moment(new Date(data.admission).toString()).format("DD-MM-YYYY"),
-            dismissional: moment(new Date(data.dismissional).toString()).format("DD-MM-YYYY"),
+            admission: moment(data.admission).format("YYYY-MM-DD"),
+            dismissional: data.dismissional ? moment(data.dismissional).format("YYYY-MM-DD") : null,
         };
 
         if (isNewRegistration) {
