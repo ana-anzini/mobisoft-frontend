@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import EmployeesModal from './components/EmployeesModal';
-import EmployeesTable from './components/EmployeesTable';
-import { DataType, ValueForm } from './IEmployees';
+import CostumerModal from './components/CostumerModal';
+import CostumerTable from './components/CostumerTable';
+import { DataType, ValueForm } from './ICostumer';
 import TopButtons from '../../components/topButtons/TopButtons';
 import { TableRowSelection } from 'antd/es/table/interface';
 import { Form, Modal } from 'antd';
@@ -9,14 +9,14 @@ import api from '../../service/api';
 import { Notification } from '../../components/notification/Notification';
 import moment from 'moment';
 
-const Employees = () => {
+const Costumer = () => {
     const [loadingTableData, setLoadingTableData] = useState(true);
     const [tableData, setTableData] = useState<DataType[]>([]);
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
     const [selectedRows, setSelectedRows] = useState<DataType[]>([]);
     const [isNewRegistration, setIsNewRegistration] = useState<boolean>(true);
     const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
-    const [editingEmployeesId, setEditingEmployeesId] = useState<React.Key | null>(null);
+    const [editingCostumerId, setEditingCostumerId] = useState<React.Key | null>(null);
     const [filteredData, setFilteredData] = useState<DataType[]>([]);
     const [form] = Form.useForm();
 
@@ -49,27 +49,25 @@ const Employees = () => {
     function handleOpenModal(isNew: boolean, employees?: DataType) {
         if (isNew) {
             setIsNewRegistration(true);
-            setEditingEmployeesId(null);
+            setEditingCostumerId(null);
             form.resetFields();
         } else if (employees) {
-            setEditingEmployeesId(employees.key);
+            setEditingCostumerId(employees.key);
             form.setFieldsValue({
                 name: employees.name,
                 cpfOrCnpj: employees.cpfOrCnpj,
                 phone: employees.phone,
                 email: employees.email,
                 cep: employees.cep,
-                employeesType: employees.employeesType,
+                personType: employees.personType,
+                networkType: employees.networkType,
                 address: employees.address,
                 number: employees.number,
                 neighborhood: employees.neighborhood,
                 additional: employees.additional,
                 rg: employees.rg,
-                pis: employees.pis,
-                ctps: employees.ctps,
-                salary: employees.salary,
-                admission: moment(employees.admission),
-                dismissional: moment(employees.dismissional),
+                birthday: moment(employees.birthday).format("YYYY-MM-DD"),
+                notes: employees.notes,
             });
             setIsNewRegistration(false);
         }
@@ -77,7 +75,7 @@ const Employees = () => {
     }
 
     function loadTableData() {
-        api.get("/employees/findAll").then((response) => {
+        api.get("/costumers").then((response) => {
             if (response.status === 200) {
                 const dataTable = response.data.map((item: any) => ({
                     key: item.id,
@@ -104,27 +102,25 @@ const Employees = () => {
     function handleSave(data: ValueForm) {
         form.resetFields();
         const dataToSave = {
-            id: isNewRegistration ? null : editingEmployeesId,
+            id: isNewRegistration ? null : editingCostumerId,
             name: data.name,
             cpfOrCnpj: data.cpfOrCnpj,
             phone: data.phone,
             email: data.email,
-            employeesType: data.employeesType,
+            personType: data.personType,
+            networkType: data.networkType,
             cep: data.cep,
             address: data.address,
             number: data.number,
             neighborhood: data.neighborhood,
             additional: data.additional,
             rg: data.rg,
-            pis: data.pis,
-            ctps: data.ctps,
-            salary: data.salary,
-            admission: moment(data.admission).format("YYYY-MM-DD"),
-            dismissional: data.dismissional ? moment(data.dismissional).format("YYYY-MM-DD") : null,
+            birthday: moment(data.birthday),
+            notes: data.notes,
         };
 
         if (isNewRegistration) {
-            api.post("/employees", dataToSave)
+            api.post("/costumers", dataToSave)
                 .then((response) => {
                     onSave(response);
                 })
@@ -133,7 +129,7 @@ const Employees = () => {
                 });
         } else {
             const employeesId = dataToSave.id;
-            api.put(`/employees/${employeesId}`, dataToSave)
+            api.put(`/costumers/${employeesId}`, dataToSave)
                 .then((response) => {
                     onSave(response);
                 })
@@ -158,57 +154,51 @@ const Employees = () => {
         const idsToDelete = ids || selectedRowKeys.join(',');
 
         Modal.confirm({
-            title: 'Excluir funcionário',
-            content: 'Você tem certeza que deseja excluir o(s) funcionário(s) selecionado(s)?',
+            title: 'Excluir cliente',
+            content: 'Você tem certeza que deseja excluir o(s) cliente(es) selecionado(s)?',
             okText: 'Sim',
             cancelText: 'Não',
             onOk: () => {
-                api.delete(`/employees?ids=${idsToDelete}`)
+                api.delete(`/costumers?ids=${idsToDelete}`)
                     .then((response) => {
-                        const message = response.data;
-
-                        if (message === "Funcionário(s) deletada(s) com sucesso.") {
-                            Notification({
-                                type: "success",
-                                message: message,
-                            });
-                            loadTableData();
-                        } else {
-                            Notification({
-                                type: "error",
-                                message: message,
-                            });
-                        }
+                        onDelete(response);
                     })
-                    .catch(() => {
-                        Notification({
-                            type: "error",
-                            message: "Erro ao deletar",
-                        });
+                    .catch((error) => {
+                        console.error('Erro ao deletar cliente:', error);
                     });
             }
         });
+    }
+
+    function onDelete(response: any) {
+        if (response) {
+            Notification({
+                type: "success",
+                message: "Cliente(es) deletado(s) com sucesso",
+            });
+        }
+        loadTableData();
     }
 
     return (
         <main id="main">
             <div className='main-container'>
                 <TopButtons
-                    pageTitle='Colaboradores'
-                    mainButtonTitle="Novo Colaborador"
+                    pageTitle='Clientes'
+                    mainButtonTitle="Novo Cliente"
                     handleNew={() => handleOpenModal(true)}
                     handleEdit={() => handleOpenModal(false)}
                     hasSelection={selectedRowKeys.length > 0}
                     handleDelete={handleDelete}
                     onSearch={handleSearch}
                 />
-                <EmployeesModal
+                <CostumerModal
                     isModalVisible={isModalVisible}
                     handleSave={handleSave}
                     handleCancel={handleCloseModal}
                     form={form}
                 />
-                <EmployeesTable
+                <CostumerTable
                     loading={loadingTableData}
                     tableData={filteredData}
                     rowSelection={rowSelection}
@@ -220,4 +210,4 @@ const Employees = () => {
     );
 };
 
-export default Employees;
+export default Costumer;

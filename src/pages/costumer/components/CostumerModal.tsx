@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Col, Form, Input, Modal, Row, Select } from 'antd';
-import { EmployeesType, ValueForm } from '../IEmployees';
+import { NetworkType, PersonType, ValueForm } from '../ICostumer';
 import ZipCodeSearch from '../../../components/CEPSearch';
-import { employeesTypeLabels } from './EmployeesTable';
+import { networkTypeLabels, personTypeLabels } from './CostumerTable';
 import MaskedInput from '../../../components/MaskedInput';
 
 interface IEmployeesModal {
@@ -69,6 +69,15 @@ const EmployeesModal = ({ isModalVisible, handleSave, handleCancel, form }: IEmp
                         </Col>
                         <Col span={6}>
                             <Form.Item
+                                name="rg"
+                                label="RG"
+                                rules={[{ required: true, message: "Campo obrigatório" }]}
+                            >
+                                <Input />
+                            </Form.Item>
+                        </Col>
+                        <Col span={6}>
+                            <Form.Item
                                 name="phone"
                                 label="Telefone"
                                 rules={[{ required: true, message: "Campo obrigatório" }]}
@@ -76,7 +85,16 @@ const EmployeesModal = ({ isModalVisible, handleSave, handleCancel, form }: IEmp
                                 <Input />
                             </Form.Item>
                         </Col>
-                        <Col span={8}>
+                        <Col span={6}>
+                            <Form.Item
+                                name="birthday"
+                                label="Data de Aniversário"
+                                rules={[{ required: true, message: "Campo obrigatório" }]}
+                            >
+                                <Input type="date" />
+                            </Form.Item>
+                        </Col>
+                        <Col span={12}>
                             <Form.Item
                                 name="email"
                                 label="Email"
@@ -85,16 +103,31 @@ const EmployeesModal = ({ isModalVisible, handleSave, handleCancel, form }: IEmp
                                 <Input />
                             </Form.Item>
                         </Col>
-                        <Col span={4}>
+                        <Col span={5}>
                             <Form.Item
-                                name="employeesType"
+                                name="personType"
                                 label="Tipo"
                                 rules={[{ required: true, message: "Campo obrigatório" }]}
                             >
                                 <Select placeholder="Selecione um tipo">
-                                    {Object.values(EmployeesType).map((type) => (
+                                    {Object.values(PersonType).map((type) => (
                                         <Select.Option key={type} value={type}>
-                                            {employeesTypeLabels[type]}
+                                            {personTypeLabels[type]}
+                                        </Select.Option>
+                                    ))}
+                                </Select>
+                            </Form.Item>
+                        </Col>
+                        <Col span={5}>
+                            <Form.Item
+                                name="networkType"
+                                label="Conheceu por"
+                                rules={[{ required: true, message: "Campo obrigatório" }]}
+                            >
+                                <Select placeholder="Selecione um tipo">
+                                    {Object.values(NetworkType).map((type) => (
+                                        <Select.Option key={type} value={type}>
+                                            {networkTypeLabels[type]}
                                         </Select.Option>
                                     ))}
                                 </Select>
@@ -113,7 +146,7 @@ const EmployeesModal = ({ isModalVisible, handleSave, handleCancel, form }: IEmp
                                 />
                             </Form.Item>
                         </Col>
-                        <Col span={8}>
+                        <Col span={10}>
                             <Form.Item
                                 name="address"
                                 label="Endereço"
@@ -140,7 +173,7 @@ const EmployeesModal = ({ isModalVisible, handleSave, handleCancel, form }: IEmp
                                 <Input />
                             </Form.Item>
                         </Col>
-                        <Col span={10}>
+                        <Col span={7}>
                             <Form.Item
                                 name="additional"
                                 label="Complemento"
@@ -148,57 +181,12 @@ const EmployeesModal = ({ isModalVisible, handleSave, handleCancel, form }: IEmp
                                 <Input />
                             </Form.Item>
                         </Col>
-                        <Col span={5}>
+                        <Col span={8}>
                             <Form.Item
-                                name="rg"
-                                label="RG"
-                                rules={[{ required: true, message: "Campo obrigatório" }]}
+                                name="notes"
+                                label="Notas"
                             >
                                 <Input />
-                            </Form.Item>
-                        </Col>
-                        <Col span={4}>
-                            <Form.Item
-                                name="pis"
-                                label="PIS"
-                                rules={[{ required: true, message: "Campo obrigatório" }]}
-                            >
-                                <Input />
-                            </Form.Item>
-                        </Col>
-                        <Col span={4}>
-                            <Form.Item
-                                name="ctps"
-                                label="CTPS"
-                                rules={[{ required: true, message: "Campo obrigatório" }]}
-                            >
-                                <Input />
-                            </Form.Item>
-                        </Col>
-                        <Col span={4}>
-                            <Form.Item
-                                name="salary"
-                                label="Salário"
-                                rules={[{ required: true, message: "Campo obrigatório" }]}
-                            >
-                                <Input type="number" />
-                            </Form.Item>
-                        </Col>
-                        <Col span={6}>
-                            <Form.Item
-                                name="admission"
-                                label="Admissão"
-                                rules={[{ required: true, message: "Campo obrigatório" }]}
-                            >
-                                <Input type="date" />
-                            </Form.Item>
-                        </Col>
-                        <Col span={6}>
-                            <Form.Item
-                                name="dismissional"
-                                label="Demissão"
-                            >
-                                <Input type="date" />
                             </Form.Item>
                         </Col>
                     </Row>

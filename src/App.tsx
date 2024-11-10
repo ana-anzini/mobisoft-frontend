@@ -7,6 +7,7 @@ import SideMenu from "./components/menu/SideMenu";
 import Category from "./pages/category/Category";
 import Product from "./pages/product/Product";
 import Employees from "./pages/employees/Employees";
+import Costumer from "./pages/costumer/Costumer";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path="/categories" element={<Category />} />
           <Route path="/products" element={<Product />} />
           <Route path="/employees" element={<Employees />} />
+          <Route path="/costumers" element={<Costumer />} />
         </Routes>
       </div>
     </BrowserRouter>
