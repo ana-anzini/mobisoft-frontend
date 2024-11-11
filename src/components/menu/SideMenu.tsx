@@ -54,6 +54,21 @@ const items: MenuProps['items'] = [
             },
         ],
     },
+    {
+        type: 'group',
+        label: 'Projetos',
+        children: [
+            {
+                key: '/deliveries',
+                label: (
+                    <Link to="/deliveries" className="rounded-item">
+                        <Icon icon="iconamoon:delivery-fill" style={{ fontSize: '20px', marginRight: '8px' }} />
+                        Entregas Agendadas
+                    </Link>
+                ),
+            },
+        ],
+    },
 ];
 
 export default function SideMenu() {

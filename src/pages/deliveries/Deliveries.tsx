@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import SupplierModal from './components/SupplierModal';
-import SupplierTable from './components/SupplierTable';
-import { DataType, ValueForm } from './ISupplier';
+import DeliveriesModal from './components/DeliveriesModal';
+import DeliveriesTable from './components/DeliveriesTable';
+import { DataType, ValueForm } from './IDeliveries';
 import TopButtons from '../../components/topButtons/TopButtons';
 import { TableRowSelection } from 'antd/es/table/interface';
 import { Form, Modal } from 'antd';
@@ -15,14 +15,12 @@ const Supplier = () => {
     const [selectedRows, setSelectedRows] = useState<DataType[]>([]);
     const [isNewRegistration, setIsNewRegistration] = useState<boolean>(true);
     const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
-    const [categoryList, setCategoryList] = useState([]);
-    const [editingSupplierId, setEditingSupplierId] = useState<React.Key | null>(null);
+    const [editingDeliveries, setDeliveriesId] = useState<React.Key | null>(null);
     const [filteredData, setFilteredData] = useState<DataType[]>([]);
     const [form] = Form.useForm();
 
     useEffect(() => {
         loadTableData();
-        loadCategories();
     }, []);
 
     useEffect(() => {
@@ -32,8 +30,7 @@ const Supplier = () => {
     const handleSearch = (value: string) => {
         const searchValue = value.toLowerCase();
         const filtered = tableData.filter(item =>
-            item.name.toLowerCase().includes(searchValue) ||
-            item.email.toLowerCase().includes(searchValue)
+            item.address.toLowerCase().includes(searchValue)
         );
         setFilteredData(filtered);
     };
@@ -48,25 +45,15 @@ const Supplier = () => {
         onChange: onSelectChange,
     };
 
-    function handleOpenModal(isNew: boolean, supplier?: DataType) {
+    function handleOpenModal(isNew: boolean, category?: DataType) {
         if (isNew) {
             setIsNewRegistration(true);
-            setEditingSupplierId(null);
+            setDeliveriesId(null);
             form.resetFields();
-        } else if (supplier) {
-            setEditingSupplierId(supplier.key);
+        } else if (category) {
+            setDeliveriesId(category.key);
             form.setFieldsValue({
-                cpfOrCnpj: supplier.cpfOrCnpj,
-                name: supplier.name,
-                phone: supplier.phone,
-                categoryId: supplier.categoryId,
-                categoryDescription: supplier.categoryDescription,
-                email: supplier.email,
-                cep: supplier.cep,
-                address: supplier.address,
-                number: supplier.number,
-                neighborhood: supplier.neighborhood,
-                additional: supplier.additional
+                //description: category.description
             });
             setIsNewRegistration(false);
         }
@@ -74,21 +61,11 @@ const Supplier = () => {
     }
 
     function loadTableData() {
-        api.get("/suppliers").then((response) => {
+        api.get("/categories/findAll").then((response) => {
             if (response.status === 200) {
                 const dataTable = response.data.map((item: any) => ({
                     key: item.id,
-                    categoryId: item.categoryId,
-                    categoryDescription: item.categoryDescription,
-                    name: item.name,
-                    cpfOrCnpj: item.cpfOrCnpj,
-                    phone: item.phone,
-                    email: item.email,
-                    cep: item.cep,
-                    address: item.address,
-                    number: item.number,
-                    neighborhood: item.neighborhood,
-                    additional: item.additional
+                    description: item.description
                 }));
                 setTableData(dataTable);
                 setLoadingTableData(false);
@@ -111,37 +88,26 @@ const Supplier = () => {
     function handleSave(data: ValueForm) {
         form.resetFields();
         const dataToSave = {
-            id: isNewRegistration ? null : editingSupplierId,
-            cpfOrCnpj: data.cpfOrCnpj,
-            name: data.name,
-            phone: data.phone,
-            categoryId: data.categoryId,
-            email: data.email,
-            cep: data.cep,
-            address: data.address,
-            number: data.number,
-            neighborhood: data.neighborhood,
-            additional: data.additional,
+            id: isNewRegistration ? null : editingDeliveries,
+            //description: data.description,
         };
 
-        console.log(dataToSave);
-
         if (isNewRegistration) {
-            api.post("/suppliers", dataToSave)
+            api.post("/categories", dataToSave)
                 .then((response) => {
                     onSave(response);
                 })
                 .catch((error) => {
-                    console.error("Erro ao salvar o fornecedor:", error);
+                    console.error("Erro ao salvar o categoria:", error);
                 });
         } else {
-            const supplierId = dataToSave.id;
-            api.put(`/suppliers/${supplierId}`, dataToSave)
+            const categoryId = dataToSave.id;
+            api.put(`/categories/${categoryId}`, dataToSave)
                 .then((response) => {
                     onSave(response);
                 })
                 .catch((error) => {
-                    console.error("Erro ao atualizar o fornecedor:", error);
+                    console.error("Erro ao atualizar o categoria:", error);
                 });
         }
 
@@ -161,17 +127,33 @@ const Supplier = () => {
         const idsToDelete = ids || selectedRowKeys.join(',');
 
         Modal.confirm({
-            title: 'Excluir fornecedor',
-            content: 'Você tem certeza que deseja excluir o(s) fornecedor(es) selecionado(s)?',
+            title: 'Excluir categoria',
+            content: 'Você tem certeza que deseja excluir a(s) categoria(s) selecionada(s)?',
             okText: 'Sim',
             cancelText: 'Não',
             onOk: () => {
-                api.delete(`/suppliers?ids=${idsToDelete}`)
+                api.delete(`/categories?ids=${idsToDelete}`)
                     .then((response) => {
-                        onDelete(response);
+                        const message = response.data;
+
+                        if (message === "Categoria(s) deletada(s) com sucesso.") {
+                            Notification({
+                                type: "success",
+                                message: message,
+                            });
+                            onDelete(response);
+                        } else {
+                            Notification({
+                                type: "error",
+                                message: message,
+                            });
+                        }
                     })
-                    .catch((error) => {
-                        console.error('Erro ao deletar fornecedores:', error);
+                    .catch(() => {
+                        Notification({
+                            type: "error",
+                            message: "Erro ao deletar",
+                        });
                     });
             }
         });
@@ -181,49 +163,32 @@ const Supplier = () => {
         if (response) {
             Notification({
                 type: "success",
-                message: "Fornecedor(es) deletado(s) com sucesso",
+                message: "Categoria(s) deletada(s) com sucesso",
             });
         }
         loadTableData();
-    }
-
-    function loadCategories() {
-        api.get("/categories/findAll")
-            .then((response) => {
-                if (response.status === 200) {
-                    const categorias = response.data.map((item: any) => ({
-                        key: item.id,
-                        value: item.id,
-                        label: item.description
-                    }));
-                    setCategoryList(categorias);
-                }
-            }).catch((err) => {
-                console.error("Erro ao carregar categorias");
-            });
     }
 
     return (
         <main id="main">
             <div className='main-container'>
                 <TopButtons
-                    pageTitle='Fornecedores'
-                    mainButtonTitle="Novo Fornecedor"
+                    pageTitle='Entregas Agendadas'
+                    mainButtonTitle=""
                     handleNew={() => handleOpenModal(true)}
                     handleEdit={() => handleOpenModal(false)}
                     hasSelection={selectedRowKeys.length > 0}
                     handleDelete={handleDelete}
                     onSearch={handleSearch}
-                    showButton={true}
+                    showButton={false}
                 />
-                <SupplierModal
+                <DeliveriesModal
                     isModalVisible={isModalVisible}
                     handleSave={handleSave}
                     handleCancel={handleCloseModal}
                     form={form}
-                    categoryList={categoryList}
                 />
-                <SupplierTable
+                <DeliveriesTable
                     loading={loadingTableData}
                     tableData={filteredData}
                     rowSelection={rowSelection}

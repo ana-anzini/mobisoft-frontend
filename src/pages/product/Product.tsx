@@ -226,6 +226,7 @@ const Supplier = () => {
                     hasSelection={selectedRowKeys.length > 0}
                     handleDelete={handleDelete}
                     onSearch={handleSearch}
+                    showButton={true}
                 />
                 <ProductModal
                     isModalVisible={isModalVisible}

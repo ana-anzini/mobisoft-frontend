@@ -12,6 +12,7 @@ const TopButtons = ({
     hasSelection,
     handleDelete,
     onSearch,
+    showButton,
 }: ITopButtons) => {
     return (
         <div className='main-header'>
@@ -31,13 +32,15 @@ const TopButtons = ({
                         className="tp-search-input"
                         style={{ width: 200, marginRight: '10px' }}
                     />
-                    <Button
-                        icon={<PlusOutlined />}
-                        onClick={handleNew}
-                        className="tp-main-button"
-                    >
-                        {mainButtonTitle}
-                    </Button>
+                    {showButton && (
+                        <Button
+                            icon={<PlusOutlined />}
+                            onClick={handleNew}
+                            className="tp-main-button"
+                        >
+                            {mainButtonTitle}
+                        </Button>
+                    )}
                 </div>
             </div>
         </div>
