@@ -1,6 +1,6 @@
 import { Button, Table } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
-import { DataType } from '../IDeliveries';
+import { DataType, StatusType } from '../IDeliveries';
 import { TableRowSelection } from 'antd/es/table/interface';
 
 interface IDeliveriesTable {
@@ -10,6 +10,14 @@ interface IDeliveriesTable {
     onDelete: (id: string) => void;
     handleEdit?: (record: DataType) => void;
 }
+
+export const statusTypeLabels: { [key in StatusType]: string } = {
+    [StatusType.PENDING]: 'Pendente',
+    [StatusType.PROCESSING]: 'Em processamento',
+    [StatusType.SHIPPED]: 'Enviado',
+    [StatusType.DELIVERED]: 'Entregue',
+    [StatusType.CANCELLED]: 'Cancelado',
+};
 
 const DeliveriesTable = ({
     loading,
@@ -21,8 +29,19 @@ const DeliveriesTable = ({
     const columns = [
         {
             title: 'Projeto',
-            dataIndex: 'projectId',
-            key: 'projectId',
+            dataIndex: 'projectDescription',
+            key: 'projectDescription',
+        },
+        {
+            title: 'Data de Entrega',
+            dataIndex: 'deliveryDateFormat',
+            key: 'deliveryDateFormat',
+        },
+        {
+            title: 'Status',
+            dataIndex: 'statusType',
+            key: 'statusType',
+            render: (type: StatusType) => statusTypeLabels[type] || type,
         },
         {
             title: 'Ações',

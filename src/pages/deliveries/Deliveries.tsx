@@ -7,6 +7,7 @@ import { TableRowSelection } from 'antd/es/table/interface';
 import { Form, Modal } from 'antd';
 import api from '../../service/api';
 import { Notification } from '../../components/notification/Notification';
+import moment from 'moment';
 
 const Supplier = () => {
     const [loadingTableData, setLoadingTableData] = useState(true);
@@ -45,15 +46,23 @@ const Supplier = () => {
         onChange: onSelectChange,
     };
 
-    function handleOpenModal(isNew: boolean, category?: DataType) {
+    function handleOpenModal(isNew: boolean, delivery?: DataType) {
         if (isNew) {
             setIsNewRegistration(true);
             setDeliveriesId(null);
             form.resetFields();
-        } else if (category) {
-            setDeliveriesId(category.key);
+        } else if (delivery) {
+            setDeliveriesId(delivery.key);
+            console.log(delivery.deliveryDate);
             form.setFieldsValue({
-                //description: category.description
+                projectDescription: delivery.projectDescription,
+                cep: delivery.cep,
+                address: delivery.address,
+                number: delivery.number,
+                neighborhood: delivery.neighborhood,
+                additional: delivery.additional,
+                deliveryDate: moment(delivery.deliveryDate).format("YYYY-MM-DD"),
+                statusType: delivery.statusType,
             });
             setIsNewRegistration(false);
         }
@@ -61,11 +70,14 @@ const Supplier = () => {
     }
 
     function loadTableData() {
-        api.get("/categories/findAll").then((response) => {
+        api.get("/deliveries").then((response) => {
             if (response.status === 200) {
                 const dataTable = response.data.map((item: any) => ({
                     key: item.id,
-                    description: item.description
+                    projectId: item.project.id,
+                    projectDescription: item.project.description,
+                    deliveryDateFormat: moment(item.deliveryDate).format('DD/MM/YYYY'),
+                    ...item,
                 }));
                 setTableData(dataTable);
                 setLoadingTableData(false);
@@ -89,25 +101,31 @@ const Supplier = () => {
         form.resetFields();
         const dataToSave = {
             id: isNewRegistration ? null : editingDeliveries,
-            //description: data.description,
+            cep: data.cep,
+            address: data.address,
+            number: data.number,
+            neighborhood: data.neighborhood,
+            additional: data.additional,
+            deliveryDate: data.deliveryDate,
+            statusType: data.statusType,
         };
 
         if (isNewRegistration) {
-            api.post("/categories", dataToSave)
+            api.post("/deliveries", dataToSave)
                 .then((response) => {
                     onSave(response);
                 })
                 .catch((error) => {
-                    console.error("Erro ao salvar o categoria:", error);
+                    console.error("Erro ao salvar a entrega:", error);
                 });
         } else {
             const categoryId = dataToSave.id;
-            api.put(`/categories/${categoryId}`, dataToSave)
+            api.put(`/deliveries/${categoryId}`, dataToSave)
                 .then((response) => {
                     onSave(response);
                 })
                 .catch((error) => {
-                    console.error("Erro ao atualizar o categoria:", error);
+                    console.error("Erro ao atualizar a entrega:", error);
                 });
         }
 
@@ -127,16 +145,16 @@ const Supplier = () => {
         const idsToDelete = ids || selectedRowKeys.join(',');
 
         Modal.confirm({
-            title: 'Excluir categoria',
-            content: 'Você tem certeza que deseja excluir a(s) categoria(s) selecionada(s)?',
+            title: 'Excluir entrega',
+            content: 'Você tem certeza que deseja excluir a(s) entrega(s) selecionada(s)?',
             okText: 'Sim',
             cancelText: 'Não',
             onOk: () => {
-                api.delete(`/categories?ids=${idsToDelete}`)
+                api.delete(`/deliveries?ids=${idsToDelete}`)
                     .then((response) => {
                         const message = response.data;
 
-                        if (message === "Categoria(s) deletada(s) com sucesso.") {
+                        if (message === "Entrega(s) deletada(s) com sucesso.") {
                             Notification({
                                 type: "success",
                                 message: message,
@@ -163,7 +181,7 @@ const Supplier = () => {
         if (response) {
             Notification({
                 type: "success",
-                message: "Categoria(s) deletada(s) com sucesso",
+                message: "Entrega(s) deletada(s) com sucesso",
             });
         }
         loadTableData();
@@ -187,6 +205,7 @@ const Supplier = () => {
                     handleSave={handleSave}
                     handleCancel={handleCloseModal}
                     form={form}
+                    projectList={null}
                 />
                 <DeliveriesTable
                     loading={loadingTableData}
