@@ -9,6 +9,8 @@ import Product from "./pages/product/Product";
 import Employees from "./pages/employees/Employees";
 import Costumer from "./pages/costumer/Costumer";
 import Deliveries from "./pages/deliveries/Deliveries";
+import Project from "./pages/project/Project";
+import NewProject from "./pages/project/NewProject";
 
 function App() {
   return (
@@ -23,6 +25,8 @@ function App() {
           <Route path="/employees" element={<Employees />} />
           <Route path="/costumers" element={<Costumer />} />
           <Route path="/deliveries" element={<Deliveries />} />
+          <Route path="/projects" element={<Project />} />
+          <Route path="/new-project" element={<NewProject />} />
         </Routes>
       </div>
     </BrowserRouter>

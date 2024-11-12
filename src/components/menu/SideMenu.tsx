@@ -47,7 +47,7 @@ const items: MenuProps['items'] = [
                 key: '/costumers',
                 label: (
                     <Link to="/costumers" className="rounded-item">
-                        <Icon icon="ion:people" style={{ fontSize: '20px', marginRight: '8px' }} />
+                        <Icon icon="tabler:user-filled" style={{ fontSize: '20px', marginRight: '8px' }} />
                         Clientes
                     </Link>
                 ),
@@ -67,6 +67,15 @@ const items: MenuProps['items'] = [
                     </Link>
                 ),
             },
+            {
+                key: '/projects',
+                label: (
+                    <Link to="/projects" className="rounded-item">
+                        <Icon icon="fluent:table-edit-28-filled" style={{ fontSize: '20px', marginRight: '8px' }} />
+                        Projetos
+                    </Link>
+                ),
+            },
         ],
     },
 ];
@@ -78,7 +87,7 @@ export default function SideMenu() {
         <Menu
             style={{ width: 256 }}
             mode="inline"
-            selectedKeys={[location.pathname]}
+            selectedKeys={location.pathname.startsWith('/projects') || location.pathname.startsWith('/new-project') ? ['/projects'] : [location.pathname]}
             items={items}
             id="main-menu"
         />
