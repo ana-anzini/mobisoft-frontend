@@ -3,7 +3,6 @@ import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { DataType } from '../IProject';
 import { TableRowSelection } from 'antd/es/table/interface';
 import { StatusType } from '../../deliveries/IDeliveries';
-import { useNavigate } from 'react-router-dom';
 
 interface IProjectTable {
     loading: boolean;
@@ -28,16 +27,6 @@ const ProjectTable = ({
     onDelete,
     handleEdit
 }: IProjectTable) => {
-    const navigate = useNavigate();
-
-    const onEdit = (record: DataType) => {
-        if (handleEdit) {
-            handleEdit(record);
-        }
-        // Navegar para a página de edição, ajustando o caminho conforme necessário
-        navigate(`/edit-project/${record.key}`);
-    };
-
     const columns = [
         {
             title: 'Descrição',
@@ -74,7 +63,7 @@ const ProjectTable = ({
                 <div style={{ display: 'flex', gap: '8px' }}>
                     <Button
                         icon={<EditOutlined />}
-                        onClick={() => onEdit(record)}
+                        onClick={() => handleEdit && handleEdit(record)}
                     />
                     <Button
                         icon={<DeleteOutlined />}

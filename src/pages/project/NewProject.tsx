@@ -1,22 +1,17 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Form, Input, Button, Tabs, Col, Row, Select, Checkbox } from 'antd';
-import { useLocation } from 'react-router-dom';
 import "./style.sass";
 import FormFields from './components/FormFields';
 import ProductsTable from './components/ProductsTable';
 
 const { TabPane } = Tabs;
 
+interface INewProject {
+    supplierList: any;
+}
+
 const NewProject = () => {
     const [form] = Form.useForm();
-    const location = useLocation();
-    const projectData = location.state?.projectData;
-
-    useEffect(() => {
-        if (projectData) {
-            form.setFieldsValue(projectData); // Preenche o formulário com os dados do projeto
-        }
-    }, [projectData, form]);
 
     const handleSave = (values: any) => {
         console.log("Dados do novo projeto:", values);
@@ -25,7 +20,7 @@ const NewProject = () => {
     return (
         <main id="main">
             <div className='new-project-container'>
-                <h2>{projectData ? 'Editar Projeto' : 'Novo Projeto'}</h2>
+                <h2>Novo Projeto</h2>
                 <Tabs defaultActiveKey="1">
                     <TabPane tab="Informações" key="1">
                         <Form form={form} onFinish={handleSave} layout="vertical">
