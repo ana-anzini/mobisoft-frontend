@@ -22,8 +22,6 @@ const Project = () => {
 
     useEffect(() => {
         loadTableData();
-        loadCategories();
-        loadProjects();
     }, []);
 
     useEffect(() => {
@@ -65,38 +63,6 @@ const Project = () => {
         }).catch((err) => {
             console.error("Erro ao carregar dados");
         });
-    }
-
-    function loadCategories() {
-        api.get("/categories/findAll")
-            .then((response) => {
-                if (response.status === 200) {
-                    const categorias = response.data.map((item: any) => ({
-                        key: item.id,
-                        value: item.id,
-                        label: item.description
-                    }));
-                    setCategoryList(categorias);
-                }
-            }).catch((err) => {
-                console.error("Erro ao carregar categorias");
-            });
-    }
-
-    function loadProjects() {
-        api.get("/projects")
-            .then((response) => {
-                if (response.status === 200) {
-                    const projects = response.data.map((item: any) => ({
-                        key: item.id,
-                        value: item.id,
-                        label: item.name
-                    }));
-                    setProjectList(projects);
-                }
-            }).catch((err) => {
-                console.error("Erro ao carregar fornecedores");
-            });
     }
 
     function handleDelete(ids?: string) {
