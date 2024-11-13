@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Form, Input, Button, Tabs, Col, Row, Select, Checkbox } from 'antd';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import "./style.sass";
 import FormFields from './components/FormFields';
 import ProductsTable from './components/ProductsTable';
@@ -11,6 +11,7 @@ const NewProject = () => {
     const [form] = Form.useForm();
     const location = useLocation();
     const projectData = location.state?.projectData;
+    const { id } = useParams<{ id: string }>();
 
     useEffect(() => {
         if (projectData) {
