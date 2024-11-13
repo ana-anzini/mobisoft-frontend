@@ -7,6 +7,7 @@ import { Form, Modal } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import api from '../../service/api';
 import { Notification } from '../../components/notification/Notification';
+import moment from 'moment';
 
 const Project = () => {
     const [loadingTableData, setLoadingTableData] = useState(true);
@@ -52,6 +53,8 @@ const Project = () => {
             if (response.status === 200) {
                 const dataTable = response.data.map((item: any) => ({
                     key: item.id,
+                    costumerName: item.costumer.name,
+                    referenceDateFormat: moment(item.referenceDate).format("DD/MM/YYYY"),
                     ...item,
                 }));
                 setTableData(dataTable);

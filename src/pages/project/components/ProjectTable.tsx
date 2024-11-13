@@ -25,19 +25,24 @@ const ProjectTable = ({
             key: 'description',
         },
         {
-            title: 'Fornecedor',
-            dataIndex: 'supplierName',
-            key: 'supplierName',
+            title: 'Cliente',
+            dataIndex: 'costumerName',
+            key: 'costumerName',
         },
         {
-            title: 'Categoria',
-            dataIndex: 'categoryDescription',
-            key: 'categoryDescription',
+            title: 'Data de Competência',
+            dataIndex: 'referenceDateFormat',
+            key: 'referenceDateFormat',
         },
         {
-            title: 'Quantidade disponível',
-            dataIndex: 'quantity',
-            key: 'quantity',
+            title: 'Status Financeiro',
+            dataIndex: 'financialStatus',
+            key: 'financialStatus',
+        },
+        {
+            title: 'Status Entrega',
+            dataIndex: 'deliveryStatus',
+            key: 'deliveryStatus',
         },
         {
             title: 'Ações',

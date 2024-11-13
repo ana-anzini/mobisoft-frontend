@@ -1,8 +1,14 @@
 import React from 'react';
-import { Form, Input, Button, Collapse, Col, Row } from 'antd';
+import { Form, Input, Button, Tabs, Col, Row, Select, Checkbox } from 'antd';
 import "./style.sass";
+import FormFields from './components/FormFields';
+import ProductsTable from './components/ProductsTable';
 
-const { Panel } = Collapse;
+const { TabPane } = Tabs;
+
+interface INewProject {
+    supplierList: any;
+}
 
 const NewProject = () => {
     const [form] = Form.useForm();
@@ -15,28 +21,26 @@ const NewProject = () => {
         <main id="main">
             <div className='new-project-container'>
                 <h2>Novo Projeto</h2>
-                <Collapse defaultActiveKey={['1']} accordion>
-                    <Panel header="Informações" key="1">
+                <Tabs defaultActiveKey="1">
+                    <TabPane tab="Informações" key="1">
                         <Form form={form} onFinish={handleSave} layout="vertical">
-                            <Row gutter={16}>
-                                <Col span={6}>
-                                    <Form.Item
-                                        label="Descrição"
-                                        name="description"
-                                        rules={[{ required: true, message: 'Campo obrigatório' }]}
-                                    >
-                                        <Input />
-                                    </Form.Item>
-                                </Col>
-                            </Row>
-                            <Form.Item>
-                                <Button type="primary" htmlType="submit">
-                                    Salvar
-                                </Button>
-                            </Form.Item>
+                            <FormFields form={form} />
                         </Form>
-                    </Panel>
-                </Collapse>
+                    </TabPane>
+                    <TabPane tab="Ambientes" key="2">
+                        <ProductsTable />
+                    </TabPane>
+                    <TabPane tab="Financeiro" key="3">
+                        {/* Adicione aqui o conteúdo dos produtos */}
+                    </TabPane>
+                    <TabPane tab="Entregas" key="4">
+                        <Form.Item>
+                            <Button type="primary" htmlType="submit">
+                                Salvar
+                            </Button>
+                        </Form.Item>
+                    </TabPane>
+                </Tabs>
             </div>
         </main>
     );
