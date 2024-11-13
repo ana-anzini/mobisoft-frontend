@@ -2,6 +2,7 @@ import { Button, Table } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { DataType } from '../IProject';
 import { TableRowSelection } from 'antd/es/table/interface';
+import { StatusType } from '../../deliveries/IDeliveries';
 
 interface IProjectTable {
     loading: boolean;
@@ -10,6 +11,14 @@ interface IProjectTable {
     onDelete: (id: string) => void;
     handleEdit?: (record: DataType) => void;
 }
+
+export const statusTypeLabels: { [key in StatusType]: string } = {
+    [StatusType.PENDING]: 'Pendente',
+    [StatusType.PROCESSING]: 'Em processamento',
+    [StatusType.SHIPPED]: 'Enviado',
+    [StatusType.DELIVERED]: 'Entregue',
+    [StatusType.CANCELLED]: 'Cancelado',
+};
 
 const ProjectTable = ({
     loading,
@@ -38,11 +47,13 @@ const ProjectTable = ({
             title: 'Status Financeiro',
             dataIndex: 'financialStatus',
             key: 'financialStatus',
+            render: (type: StatusType) => statusTypeLabels[type] || type,
         },
         {
             title: 'Status Entrega',
             dataIndex: 'deliveryStatus',
             key: 'deliveryStatus',
+            render: (type: StatusType) => statusTypeLabels[type] || type,
         },
         {
             title: 'Ações',
