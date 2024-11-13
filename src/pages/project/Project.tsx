@@ -36,6 +36,10 @@ const Project = () => {
         setFilteredData(filtered);
     };
 
+    function handleEdit(record: DataType) {
+        navigate('/edit-project', { state: { projectData: record } });
+    }
+
     const onSelectChange = (newSelectedRowKeys: React.Key[], newSelectedRows: DataType[]) => {
         setSelectedRows(newSelectedRows);
         setSelectedRowKeys(newSelectedRowKeys);
@@ -114,7 +118,7 @@ const Project = () => {
                     pageTitle='Projetos'
                     mainButtonTitle="Novo Projeto"
                     handleNew={() => navigate('/new-project')} // Alterado para redirecionar
-                    handleEdit={() => navigate('/edit-project')}
+                    handleEdit={handleEdit}
                     hasSelection={selectedRowKeys.length > 0}
                     handleDelete={handleDelete}
                     onSearch={handleSearch}
