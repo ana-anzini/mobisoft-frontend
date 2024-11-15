@@ -27,7 +27,6 @@ function App() {
           <Route path="/deliveries" element={<Deliveries />} />
           <Route path="/projects" element={<Project />} />
           <Route path="/new-project" element={<NewProject />} />
-          <Route path="/edit-project/:id" element={<NewProject />} />
         </Routes>
       </div>
     </BrowserRouter>
