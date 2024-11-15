@@ -1,12 +1,16 @@
 import React from 'react';
 import { Form, Input, Select, Col, Row, Checkbox } from 'antd';
+import { StatusType } from '../IProject';
+import { statusTypeLabels } from './ProjectTable';
 
 interface IFormFieldsProps {
     form: any;
     costumerList: { value: string; label: string }[];
+    projectDesignersList: { value: string; label: string }[];
+    salespersonList: { value: string; label: string }[];
 }
 
-const FormFields: React.FC<IFormFieldsProps> = ({ form, costumerList }) => {
+const FormFields: React.FC<IFormFieldsProps> = ({ form, costumerList, projectDesignersList, salespersonList }) => {
     return (
         <Row gutter={16}>
             <Col span={6}>
@@ -30,17 +34,24 @@ const FormFields: React.FC<IFormFieldsProps> = ({ form, costumerList }) => {
                         filterOption={(input, option) =>
                             (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
                         }
-                        options={costumerList}
+                        options={projectDesignersList}
                     />
                 </Form.Item>
             </Col>
             <Col span={6}>
                 <Form.Item
                     name="projectDesignerId"
-                    label="Arquiteto"
+                    label="Projetista"
                     rules={[{ required: true, message: "Campo obrigatório" }]}
                 >
-                    <Select placeholder="Selecione" />
+                    <Select
+                        placeholder="Selecione"
+                        showSearch
+                        filterOption={(input, option) =>
+                            (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                        }
+                        options={costumerList}
+                    />
                 </Form.Item>
             </Col>
             <Col span={6}>
@@ -49,7 +60,14 @@ const FormFields: React.FC<IFormFieldsProps> = ({ form, costumerList }) => {
                     label="Vendedor"
                     rules={[{ required: true, message: "Campo obrigatório" }]}
                 >
-                    <Select placeholder="Selecione" />
+                    <Select
+                        placeholder="Selecione"
+                        showSearch
+                        filterOption={(input, option) =>
+                            (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                        }
+                        options={salespersonList}
+                    />
                 </Form.Item>
             </Col>
             <Col span={4}>
@@ -67,7 +85,13 @@ const FormFields: React.FC<IFormFieldsProps> = ({ form, costumerList }) => {
                     label="Status Financeiro"
                     rules={[{ required: true, message: "Campo obrigatório" }]}
                 >
-                    <Select placeholder="Selecione" />
+                    <Select placeholder="Selecione um tipo">
+                        {Object.values(StatusType).map((type) => (
+                            <Select.Option key={type} value={type}>
+                                {statusTypeLabels[type]}
+                            </Select.Option>
+                        ))}
+                    </Select>
                 </Form.Item>
             </Col>
             <Col span={6}>
@@ -76,7 +100,13 @@ const FormFields: React.FC<IFormFieldsProps> = ({ form, costumerList }) => {
                     label="Status Entrega"
                     rules={[{ required: true, message: "Campo obrigatório" }]}
                 >
-                    <Select placeholder="Selecione" />
+                    <Select placeholder="Selecione um tipo">
+                        {Object.values(StatusType).map((type) => (
+                            <Select.Option key={type} value={type}>
+                                {statusTypeLabels[type]}
+                            </Select.Option>
+                        ))}
+                    </Select>
                 </Form.Item>
             </Col>
             <Col span={6} className="checkbox-container">

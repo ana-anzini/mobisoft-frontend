@@ -4,14 +4,31 @@ import "./style.sass";
 import FormFields from './components/FormFields';
 import ProductsTable from './components/ProductsTable';
 import api from '../../service/api';
+import { StatusType } from './IProject';
 
 const { TabPane } = Tabs;
+
+export const statusTypeLabels: { [key in StatusType]: string } = {
+    [StatusType.PENDING]: 'Pendente',
+    [StatusType.PROCESSING]: 'Em processamento',
+    [StatusType.SHIPPED]: 'Enviado',
+    [StatusType.DELIVERED]: 'Entregue',
+    [StatusType.CANCELLED]: 'Cancelado',
+};
 
 const NewProject: React.FC = () => {
     const [form] = Form.useForm();
     const [costumerList, setCostumerList] = useState([]);
+    const [projectDesignersList, setProjectDesignersList] = useState([]);
+    const [salespersonList, setSalespersonList] = useState([]);
 
     useEffect(() => {
+        loadCostumers();
+        loadProjectDesigners();
+        loadSalesperson();
+    }, []);
+
+    function loadCostumers() {
         api.get("/costumers")
             .then((response) => {
                 if (response.status === 200) {
@@ -25,7 +42,40 @@ const NewProject: React.FC = () => {
             .catch((err) => {
                 console.error("Erro ao carregar clientes:", err);
             });
-    }, []);
+    }
+
+
+    function loadProjectDesigners() {
+        api.get("employees/findByType?type=PROJECT_DESIGNER")
+            .then((response) => {
+                if (response.status === 200) {
+                    const projectDesigners = response.data.map((item: any) => ({
+                        value: item.id,
+                        label: item.name,
+                    }));
+                    setProjectDesignersList(projectDesigners);
+                }
+            })
+            .catch((err) => {
+                console.error("Erro ao carregar projetistas:", err);
+            });
+    }
+
+    function loadSalesperson() {
+        api.get("employees/findByType?type=SALESPERSON")
+            .then((response) => {
+                if (response.status === 200) {
+                    const salespersons = response.data.map((item: any) => ({
+                        value: item.id,
+                        label: item.name,
+                    }));
+                    setSalespersonList(salespersons);
+                }
+            })
+            .catch((err) => {
+                console.error("Erro ao carregar vendedores:", err);
+            });
+    }
 
     const handleSave = (values: any) => {
         console.log("Dados do novo projeto:", values);
@@ -38,7 +88,12 @@ const NewProject: React.FC = () => {
                 <Tabs defaultActiveKey="1">
                     <TabPane tab="Informações" key="1">
                         <Form form={form} onFinish={handleSave} layout="vertical">
-                            <FormFields form={form} costumerList={costumerList} />
+                            <FormFields
+                                form={form}
+                                costumerList={costumerList}
+                                projectDesignersList={projectDesignersList}
+                                salespersonList={salespersonList}
+                            />
                             <Form.Item>
                                 <Button type="primary" htmlType="submit">
                                     Salvar

@@ -1,3 +1,10 @@
+export enum StatusType {
+    PENDING = 'PENDING',
+    PROCESSING = 'PROCESSING',
+    SHIPPED = 'SHIPPED',
+    DELIVERED = 'DELIVERED',
+    CANCELLED = 'CANCELLED',
+}
 
 export interface DataType {
     key: React.Key;
