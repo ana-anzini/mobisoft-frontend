@@ -15,8 +15,7 @@ const Project = () => {
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
     const [selectedRows, setSelectedRows] = useState<DataType[]>([]);
     const [filteredData, setFilteredData] = useState<DataType[]>([]);
-    const [categoryList, setCategoryList] = useState([]);
-    const [supplierList, setProjectList] = useState([]);
+    const [costumerList, setCostumerList] = useState([]);
     const [form] = Form.useForm();
     const navigate = useNavigate();
 
