@@ -52,8 +52,8 @@ const Project = () => {
                     key: item.id,
                     costumerName: item.costumer.name,
                     referenceDateFormat: moment(item.referenceDate).format("DD/MM/YYYY"),
-                    financialStatus: item.financial.statusType,
-                    deliveryStatus: item.deliveryId.statusType,
+                    financialStatus: item.financialStatus,
+                    deliveryStatus: item.deliveryStatus,
                     ...item,
                 }));
                 setTableData(dataTable);

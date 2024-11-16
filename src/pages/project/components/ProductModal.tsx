@@ -4,9 +4,12 @@ import { ValueFormProduct } from '../IProject';
 
 interface IProductModal {
     isModalVisible: boolean;
+    handleSaveProduct: (data: ValueFormProduct) => void;
+    handleCancel: () => void;
+    form: any;
 }
 
-const ProductModal = ({ isModalVisible }: IProductModal) => {
+const ProductModal = ({ isModalVisible, handleSaveProduct, handleCancel, form }: IProductModal) => {
     const [editDisabled, setEditDisabled] = useState(false);
 
     return (
@@ -16,12 +19,19 @@ const ProductModal = ({ isModalVisible }: IProductModal) => {
                 title="Novo produto"
                 open={isModalVisible}
                 okButtonProps={{ htmlType: "submit", form: "new-form" }}
+                onCancel={handleCancel}
                 className="gs-modal"
                 cancelText="Cancelar"
                 okText="Salvar"
                 centered
             >
                 <Form
+                    form={form}
+                    name="new-form"
+                    onFinish={(data: ValueFormProduct) => {
+                        setEditDisabled(false);
+                        handleSaveProduct(data);
+                    }}
                 >
                     <Row gutter={16}>
                         <Col span={6}>

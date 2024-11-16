@@ -16,6 +16,8 @@ export interface DataType {
     referenceDate: string;
     conclusionPending: boolean;
     notes: string;
+    financialStatus: string;
+    deliveryStatus: string;
 }
 
 export type ValueForm = {
@@ -28,8 +30,9 @@ export type ValueForm = {
     referenceDate: string;
     conclusionPending: boolean;
     notes: string;
+    financialStatus: string;
+    deliveryStatus: string;
 }
-
 
 export interface DataTypeProduct {
     key: React.Key;

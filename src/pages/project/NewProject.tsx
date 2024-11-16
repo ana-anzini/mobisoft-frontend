@@ -4,10 +4,11 @@ import "./style.sass";
 import FormFields from './components/FormFields';
 import ProductsTable from './components/ProductsTable';
 import api from '../../service/api';
-import { DataType, StatusType } from './IProject';
+import { DataType, StatusType, ValueForm, ValueFormProduct } from './IProject';
 import { TableRowSelection } from 'antd/es/table/interface';
 import { PlusOutlined } from '@ant-design/icons';
 import ProductModal from './components/ProductModal';
+import { Notification } from '../../components/notification/Notification';
 
 const { TabPane } = Tabs;
 
@@ -28,6 +29,10 @@ const NewProject: React.FC = () => {
     const [filteredData, setFilteredData] = useState<DataType[]>([]);
     const [selectedRows, setSelectedRows] = useState<DataType[]>([]);
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+    const [tableData, setTableData] = useState<DataType[]>([]);
+    const [isNewRegistration, setIsNewRegistration] = useState<boolean>(true);
+    const [editingCategoryId, setEditingCategoryId] = useState<React.Key | null>(null);
+    const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
 
     useEffect(() => {
         loadCostumers();
@@ -95,9 +100,105 @@ const NewProject: React.FC = () => {
             });
     }
 
-    const handleSave = (values: any) => {
-        console.log("Dados do novo projeto:", values);
-    };
+    function loadTableData() {
+        api.get("/categories/findAll").then((response) => {
+            if (response.status === 200) {
+                const dataTable = response.data.map((item: any) => ({
+                    key: item.id,
+                    description: item.description
+                }));
+                setTableData(dataTable);
+                setLoadingTableData(false);
+            }
+        }).catch((err) => {
+            console.error("Erro ao carregar dados");
+        });
+    }
+
+    function onSave(response: any) {
+        if (response) {
+            Notification({
+                type: "success",
+                message: "Salvo com sucesso",
+            });
+        }
+        loadTableData();
+    }
+
+    function handleSave(data: ValueForm) {
+        form.resetFields();
+        const dataToSave = {
+            id: isNewRegistration ? null : editingCategoryId,
+            description: data.description,
+            costumerId: data.costumerId,
+            projectDesignerId: data.projectDesignerId,
+            sellerId: data.sellerId,
+            referenceDate: data.referenceDate,
+            financialStatus: data.financialStatus,
+            deliveryStatus: data.deliveryStatus,
+        };
+
+        if (isNewRegistration) {
+            api.post("/projects", dataToSave)
+                .then((response) => {
+                    onSave(response);
+                })
+                .catch((error) => {
+                    console.error("Erro ao salvar o categoria:", error);
+                });
+        } else {
+            const categoryId = dataToSave.id;
+            api.put(`/projects/${categoryId}`, dataToSave)
+                .then((response) => {
+                    onSave(response);
+                })
+                .catch((error) => {
+                    console.error("Erro ao atualizar o categoria:", error);
+                });
+        }
+
+        setSelectedRowKeys([]);
+        setSelectedRows([]);
+        setIsModalVisible(false);
+    }
+
+    function handleSaveProject(data: ValueFormProduct) {
+        form.resetFields();
+        const dataToSave = {
+            id: isNewRegistration ? null : editingCategoryId,
+            description: data.description,
+        };
+
+        if (isNewRegistration) {
+            api.post("/categories", dataToSave)
+                .then((response) => {
+                    onSave(response);
+                })
+                .catch((error) => {
+                    console.error("Erro ao salvar o categoria:", error);
+                });
+        } else {
+            const categoryId = dataToSave.id;
+            api.put(`/categories/${categoryId}`, dataToSave)
+                .then((response) => {
+                    onSave(response);
+                })
+                .catch((error) => {
+                    console.error("Erro ao atualizar o categoria:", error);
+                });
+        }
+
+        setSelectedRowKeys([]);
+        setSelectedRows([]);
+        setIsModalVisible(false);
+    }
+
+    function handleCloseModal() {
+        setSelectedRowKeys([]);
+        setSelectedRows([]);
+        form.resetFields();
+        setIsModalVisible(false);
+    }
 
     return (
         <main id="main">
@@ -112,6 +213,11 @@ const NewProject: React.FC = () => {
                                 projectDesignersList={projectDesignersList}
                                 salespersonList={salespersonList}
                             />
+                            <Form.Item>
+                                <Button type="primary" htmlType="submit">
+                                    Salvar
+                                </Button>
+                            </Form.Item>
                         </Form>
                     </TabPane>
                     <TabPane tab="Ambientes" key="2">
@@ -119,6 +225,7 @@ const NewProject: React.FC = () => {
                             <Button
                                 icon={<PlusOutlined />}
                                 className="tp-main-button"
+                                onClick={() => setIsModalVisible(true)}
                             >
                                 {"Novo Ambiente"}
                             </Button>
@@ -128,7 +235,10 @@ const NewProject: React.FC = () => {
                                 rowSelection={rowSelection}
                             />
                             <ProductModal
-                                isModalVisible={false}
+                                isModalVisible={isModalVisible}
+                                handleSaveProduct={handleSaveProject}
+                                handleCancel={handleCloseModal}
+                                form={form}
                             />
                         </div>
                     </TabPane>

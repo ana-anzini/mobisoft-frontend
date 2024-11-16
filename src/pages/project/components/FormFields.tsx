@@ -34,7 +34,7 @@ const FormFields: React.FC<IFormFieldsProps> = ({ form, costumerList, projectDes
                         filterOption={(input, option) =>
                             (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
                         }
-                        options={projectDesignersList}
+                        options={costumerList}
                     />
                 </Form.Item>
             </Col>
@@ -50,7 +50,7 @@ const FormFields: React.FC<IFormFieldsProps> = ({ form, costumerList, projectDes
                         filterOption={(input, option) =>
                             (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
                         }
-                        options={costumerList}
+                        options={projectDesignersList}
                     />
                 </Form.Item>
             </Col>
@@ -81,7 +81,7 @@ const FormFields: React.FC<IFormFieldsProps> = ({ form, costumerList, projectDes
             </Col>
             <Col span={6}>
                 <Form.Item
-                    name="statusType"
+                    name="financialStatus"
                     label="Status Financeiro"
                     rules={[{ required: true, message: "Campo obrigatório" }]}
                 >
