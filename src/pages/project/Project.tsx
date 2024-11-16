@@ -112,7 +112,7 @@ const Project = () => {
                 <TopButtons
                     pageTitle='Projetos'
                     mainButtonTitle="Novo Projeto"
-                    handleNew={() => navigate('/new-project')} // Alterado para redirecionar
+                    handleNew={() => navigate('/new-project')}
                     handleEdit={() => navigate('/edit-project')}
                     hasSelection={selectedRowKeys.length > 0}
                     handleDelete={handleDelete}

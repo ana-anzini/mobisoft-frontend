@@ -73,6 +73,7 @@ const ProductModal = ({ isModalVisible, handleSave, handleCancel, form, category
                                     min={0}
                                     style={{ width: "100%" }}
                                     precision={2}
+                                    step={0.01}
                                     placeholder="Digite o valor"
                                 />
                             </Form.Item>

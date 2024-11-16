@@ -6,6 +6,7 @@ import ProductsTable from './components/ProductsTable';
 import api from '../../service/api';
 import { DataType, StatusType } from './IProject';
 import { TableRowSelection } from 'antd/es/table/interface';
+import { PlusOutlined } from '@ant-design/icons';
 
 const { TabPane } = Tabs;
 
@@ -113,11 +114,19 @@ const NewProject: React.FC = () => {
                         </Form>
                     </TabPane>
                     <TabPane tab="Ambientes" key="2">
-                        <ProductsTable
-                            loading={loadingTableData}
-                            tableData={filteredData}
-                            rowSelection={rowSelection}
-                        />
+                        <div className="top-buttons">
+                            <Button
+                                icon={<PlusOutlined />}
+                                className="tp-main-button"
+                            >
+                                {"Novo Ambiente"}
+                            </Button>
+                            <ProductsTable
+                                loading={loadingTableData}
+                                tableData={filteredData}
+                                rowSelection={rowSelection}
+                            />
+                        </div>
                     </TabPane>
                     <TabPane tab="Financeiro" key="3">
                     </TabPane>
