@@ -62,7 +62,7 @@ const Supplier = () => {
                 categoryDescription: product.categoryDescription,
                 supplierId: product.supplierId,
                 supplierName: product.supplierDescription,
-                quantity: product.quantity,
+                productValue: product.productValue,
             });
             setIsNewRegistration(false);
         }
@@ -79,7 +79,7 @@ const Supplier = () => {
                     supplierName: item.supplier.name,
                     categoryId: item.category.id,
                     categoryDescription: item.category.description,
-                    quantity: item.quantity,
+                    productValue: item.productValue,
                 }));
                 setTableData(dataTable);
                 setLoadingTableData(false);
@@ -138,7 +138,7 @@ const Supplier = () => {
             description: data.description,
             categoryId: data.categoryId,
             supplierId: data.supplierId,
-            quantity: data.quantity,
+            productValue: data.productValue,
         };
 
         if (isNewRegistration) {

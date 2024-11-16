@@ -35,9 +35,9 @@ const ProductTable = ({
             key: 'categoryDescription',
         },
         {
-            title: 'Quantidade disponível',
-            dataIndex: 'quantity',
-            key: 'quantity',
+            title: 'Valor de custo (R$)',
+            dataIndex: 'productValue',
+            key: 'productValue',
         },
         {
             title: 'Ações',

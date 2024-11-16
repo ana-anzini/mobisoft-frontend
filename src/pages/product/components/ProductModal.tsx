@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Col, Form, Input, Modal, Row, Select } from 'antd';
+import { Col, Form, Input, InputNumber, Modal, Row, Select } from 'antd';
 import { ValueForm } from '../IProduct';
 
 interface IProductModal {
@@ -35,8 +35,8 @@ const ProductModal = ({ isModalVisible, handleSave, handleCancel, form, category
                         handleSave(data);
                     }}
                 >
-                    <Row>
-                        <Col span={6} style={{ marginRight: 20 }}>
+                    <Row gutter={16}>
+                        <Col span={6}>
                             <Form.Item
                                 name="description"
                                 label="Descrição"
@@ -45,7 +45,7 @@ const ProductModal = ({ isModalVisible, handleSave, handleCancel, form, category
                                 <Input />
                             </Form.Item>
                         </Col>
-                        <Col span={6} style={{ marginRight: 20 }}>
+                        <Col span={6}>
                             <Form.Item
                                 name="categoryId"
                                 label="Categoria"
@@ -54,7 +54,7 @@ const ProductModal = ({ isModalVisible, handleSave, handleCancel, form, category
                                 <Select placeholder="Selecione" options={categoryList} />
                             </Form.Item>
                         </Col>
-                        <Col span={6} style={{ marginRight: 20 }}>
+                        <Col span={6}>
                             <Form.Item
                                 name="supplierId"
                                 label="Fornecedor"
@@ -63,13 +63,18 @@ const ProductModal = ({ isModalVisible, handleSave, handleCancel, form, category
                                 <Select placeholder="Selecione" options={supplierList} />
                             </Form.Item>
                         </Col>
-                        <Col span={3} style={{ marginRight: 20 }}>
+                        <Col span={6}>
                             <Form.Item
-                                name="quantity"
-                                label="Quantidade"
+                                name="productValue"
+                                label="Valor de Custo (R$)"
                                 rules={[{ required: true, message: "Campo obrigatório" }]}
                             >
-                                <Input type="number" />
+                                <InputNumber
+                                    min={0}
+                                    style={{ width: "100%" }}
+                                    precision={2}
+                                    placeholder="Digite o valor"
+                                />
                             </Form.Item>
                         </Col>
                     </Row>

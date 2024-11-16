@@ -4,9 +4,15 @@ import { DataType } from '../IProject';
 import { TableRowSelection } from 'antd/es/table/interface';
 
 interface IProjectTable {
+    loading: boolean;
+    tableData: DataType[];
+    rowSelection: TableRowSelection<DataType>;
 }
 
 const ProjectTable = ({
+    loading,
+    tableData,
+    rowSelection,
 }: IProjectTable) => {
     const columns = [
         {
@@ -39,7 +45,9 @@ const ProjectTable = ({
     return (
         <div>
             <Table
-
+                dataSource={tableData}
+                rowSelection={rowSelection}
+                columns={columns}
             />
         </div>
     );

@@ -4,7 +4,8 @@ import "./style.sass";
 import FormFields from './components/FormFields';
 import ProductsTable from './components/ProductsTable';
 import api from '../../service/api';
-import { StatusType } from './IProject';
+import { DataType, StatusType } from './IProject';
+import { TableRowSelection } from 'antd/es/table/interface';
 
 const { TabPane } = Tabs;
 
@@ -21,12 +22,27 @@ const NewProject: React.FC = () => {
     const [costumerList, setCostumerList] = useState([]);
     const [projectDesignersList, setProjectDesignersList] = useState([]);
     const [salespersonList, setSalespersonList] = useState([]);
+    const [loadingTableData, setLoadingTableData] = useState(true);
+    const [filteredData, setFilteredData] = useState<DataType[]>([]);
+    const [selectedRows, setSelectedRows] = useState<DataType[]>([]);
+    const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
 
     useEffect(() => {
         loadCostumers();
         loadProjectDesigners();
         loadSalesperson();
     }, []);
+
+    const onSelectChange = (newSelectedRowKeys: React.Key[], newSelectedRows: DataType[]) => {
+        setSelectedRows(newSelectedRows);
+        setSelectedRowKeys(newSelectedRowKeys);
+    };
+
+
+    const rowSelection: TableRowSelection<DataType> = {
+        selectedRowKeys,
+        onChange: onSelectChange,
+    };
 
     function loadCostumers() {
         api.get("/costumers")
@@ -94,19 +110,23 @@ const NewProject: React.FC = () => {
                                 projectDesignersList={projectDesignersList}
                                 salespersonList={salespersonList}
                             />
-                            <Form.Item>
-                                <Button type="primary" htmlType="submit">
-                                    Salvar
-                                </Button>
-                            </Form.Item>
                         </Form>
                     </TabPane>
                     <TabPane tab="Ambientes" key="2">
-                        <ProductsTable />
+                        <ProductsTable
+                            loading={loadingTableData}
+                            tableData={filteredData}
+                            rowSelection={rowSelection}
+                        />
                     </TabPane>
                     <TabPane tab="Financeiro" key="3">
                     </TabPane>
                     <TabPane tab="Entregas" key="4">
+                        <Form.Item>
+                            <Button type="primary" htmlType="submit">
+                                Salvar
+                            </Button>
+                        </Form.Item>
                     </TabPane>
                 </Tabs>
             </div>
