@@ -7,6 +7,7 @@ import api from '../../service/api';
 import { DataType, StatusType } from './IProject';
 import { TableRowSelection } from 'antd/es/table/interface';
 import { PlusOutlined } from '@ant-design/icons';
+import ProductModal from './components/ProductModal';
 
 const { TabPane } = Tabs;
 
@@ -125,6 +126,9 @@ const NewProject: React.FC = () => {
                                 loading={loadingTableData}
                                 tableData={filteredData}
                                 rowSelection={rowSelection}
+                            />
+                            <ProductModal
+                                isModalVisible={false}
                             />
                         </div>
                     </TabPane>

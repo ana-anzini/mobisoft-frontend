@@ -29,3 +29,22 @@ export type ValueForm = {
     conclusionPending: boolean;
     notes: string;
 }
+
+
+export interface DataTypeProduct {
+    key: React.Key;
+    id: string;
+    description: string;
+    productValue: number;
+    categoryId: number;
+    supplierId: number;
+    categoryDescription: string;
+    supplierDescription: string;
+}
+
+export type ValueFormProduct = {
+    categoryId: number;
+    supplierId: number;
+    description: string;
+    productValue: number;
+}
