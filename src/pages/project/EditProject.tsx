@@ -137,7 +137,6 @@ const EditProject: React.FC = () => {
     }
 
     function handleSaveProject(data: ValueForm) {
-        form.resetFields();
         const dataToSave = {
             description: data.description,
             costumerId: data.costumerId,
