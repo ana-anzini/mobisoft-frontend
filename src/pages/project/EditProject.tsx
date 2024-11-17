@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Form, Button, Tabs } from 'antd';
 import api from '../../service/api';
 import FormFields from './components/FormFields';
 import { PlusOutlined } from '@ant-design/icons';
 import "./style.sass";
-import { DataTypeProduct, ValueFormProduct } from './IProject';
+import { DataTypeProduct, ValueForm, ValueFormProduct } from './IProject';
 import { Notification } from '../../components/notification/Notification';
 import { TableRowSelection } from 'antd/es/table/interface';
 import ProductsTable from './components/ProductsTable';
 import ProductModal from './components/ProductModal';
+import moment from 'moment';
 
 const { TabPane } = Tabs;
 
@@ -19,7 +20,6 @@ const EditProject: React.FC = () => {
     const [projectData, setProjectData] = useState<any>(null);
     const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
     const [isNewRegistration, setIsNewRegistration] = useState<boolean>(true);
-    const [editingCategoryId, setEditingCategoryId] = useState<React.Key | null>(null);
     const [tableData, setTableData] = useState<DataTypeProduct[]>([]);
     const [loadingTableData, setLoadingTableData] = useState(true);
     const [selectedRows, setSelectedRows] = useState<DataTypeProduct[]>([]);
@@ -28,6 +28,7 @@ const EditProject: React.FC = () => {
     const [costumerList, setCostumerList] = useState([]);
     const [projectDesignersList, setProjectDesignersList] = useState([]);
     const [salespersonList, setSalespersonList] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (id) {
@@ -45,10 +46,11 @@ const EditProject: React.FC = () => {
                     const project = response.data;
 
                     const treatedData = {
-                        costumerId: project.costumer.name,
-                        projectDesignerId: project.projectDesigner.name,
-                        sellerId: project.seller.name,
+                        costumerId: project.costumer.id,
+                        projectDesignerId: project.projectDesigner.id,
+                        sellerId: project.seller.id,
                         ...project,
+                        referenceDate: moment(project.referenceDate).format("YYYY-MM-DD"),
                     };
 
                     setProjectData(treatedData);
@@ -134,57 +136,27 @@ const EditProject: React.FC = () => {
         });
     }
 
-    const handleUpdate = (values: any) => {
-        api.put(`/projects/${id}`, values)
+    function handleSaveProject(data: ValueForm) {
+        form.resetFields();
+        const dataToSave = {
+            description: data.description,
+            costumerId: data.costumerId,
+            projectDesignerId: data.projectDesignerId,
+            sellerId: data.sellerId,
+            referenceDate: moment(data.referenceDate),
+            financialStatus: data.financialStatus,
+            deliveryStatus: data.deliveryStatus,
+        };
+
+        api.put(`/projects/${id}`, dataToSave)
             .then((response) => {
                 if (response.status === 200) {
-                    console.log("Projeto atualizado com sucesso!");
+                    Notification({ type: "success", message: "Projeto atualizado com sucesso!" });
                 }
             })
             .catch((error) => {
                 console.error("Erro ao atualizar o projeto:", error);
             });
-    };
-
-    function onSave(response: any) {
-        if (response) {
-            Notification({
-                type: "success",
-                message: "Salvo com sucesso",
-            });
-        }
-        loadTableData();
-    }
-
-    function handleSaveProject(data: ValueFormProduct) {
-        form.resetFields();
-        const dataToSave = {
-            id: isNewRegistration ? null : editingCategoryId,
-            description: data.description,
-        };
-
-        if (isNewRegistration) {
-            api.post("/categories", dataToSave)
-                .then((response) => {
-                    onSave(response);
-                })
-                .catch((error) => {
-                    console.error("Erro ao salvar o categoria:", error);
-                });
-        } else {
-            const categoryId = dataToSave.id;
-            api.put(`/categories/${categoryId}`, dataToSave)
-                .then((response) => {
-                    onSave(response);
-                })
-                .catch((error) => {
-                    console.error("Erro ao atualizar o categoria:", error);
-                });
-        }
-
-        setSelectedRowKeys([]);
-        setSelectedRows([]);
-        setIsModalVisible(false);
     }
 
     function handleCloseModal() {
@@ -200,7 +172,7 @@ const EditProject: React.FC = () => {
                 <h2>Editar Projeto</h2>
                 <Tabs defaultActiveKey="1">
                     <TabPane tab="Informações" key="1">
-                        <Form form={form} onFinish={handleUpdate} layout="vertical">
+                        <Form form={form} onFinish={handleSaveProject} layout="vertical">
                             <FormFields
                                 form={form}
                                 costumerList={costumerList}
@@ -230,7 +202,6 @@ const EditProject: React.FC = () => {
                             />
                             <ProductModal
                                 isModalVisible={isModalVisible}
-                                handleSaveProduct={handleSaveProject}
                                 handleCancel={handleCloseModal}
                                 form={form}
                             />

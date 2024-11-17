@@ -4,12 +4,11 @@ import { ValueFormProduct } from '../IProject';
 
 interface IProductModal {
     isModalVisible: boolean;
-    handleSaveProduct: (data: ValueFormProduct) => void;
     handleCancel: () => void;
     form: any;
 }
 
-const ProductModal = ({ isModalVisible, handleSaveProduct, handleCancel, form }: IProductModal) => {
+const ProductModal = ({ isModalVisible, handleCancel, form }: IProductModal) => {
     const [editDisabled, setEditDisabled] = useState(false);
 
     return (
@@ -30,7 +29,6 @@ const ProductModal = ({ isModalVisible, handleSaveProduct, handleCancel, form }:
                     name="new-form"
                     onFinish={(data: ValueFormProduct) => {
                         setEditDisabled(false);
-                        handleSaveProduct(data);
                     }}
                 >
                     <Row gutter={16}>
