@@ -75,22 +75,10 @@ const Project = () => {
             onOk: () => {
                 api.delete(`/projects?ids=${idsToDelete}`)
                     .then((response) => {
-                        const message = response.data;
-
-                        if (message === "Produto(s) deletada(s) com sucesso.") {
-                            onDelete(response);
-                        } else {
-                            Notification({
-                                type: "error",
-                                message: message,
-                            });
-                        }
+                        onDelete(response);
                     })
-                    .catch(() => {
-                        Notification({
-                            type: "error",
-                            message: "Erro ao deletar",
-                        });
+                    .catch((error) => {
+                        console.error('Erro ao deletar projeto:', error);
                     });
             }
         });
@@ -100,7 +88,7 @@ const Project = () => {
         if (response) {
             Notification({
                 type: "success",
-                message: "Produto(s) deletada(s) com sucesso",
+                message: "Projeto(s) deletada(s) com sucesso",
             });
         }
         loadTableData();
