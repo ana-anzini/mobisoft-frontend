@@ -11,6 +11,7 @@ import Costumer from "./pages/costumer/Costumer";
 import Deliveries from "./pages/deliveries/Deliveries";
 import Project from "./pages/project/Project";
 import NewProject from "./pages/project/NewProject";
+import EditProject from "./pages/project/EditProject";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
           <Route path="/deliveries" element={<Deliveries />} />
           <Route path="/projects" element={<Project />} />
           <Route path="/new-project" element={<NewProject />} />
+          <Route path="/edit-project/:id" element={<EditProject />} />
         </Routes>
       </div>
     </BrowserRouter>

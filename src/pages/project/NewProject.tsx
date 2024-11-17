@@ -9,6 +9,7 @@ import { TableRowSelection } from 'antd/es/table/interface';
 import { PlusOutlined } from '@ant-design/icons';
 import ProductModal from './components/ProductModal';
 import { Notification } from '../../components/notification/Notification';
+import { useNavigate } from 'react-router-dom';
 
 const { TabPane } = Tabs;
 
@@ -33,6 +34,7 @@ const NewProject: React.FC = () => {
     const [isNewRegistration, setIsNewRegistration] = useState<boolean>(true);
     const [editingCategoryId, setEditingCategoryId] = useState<React.Key | null>(null);
     const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         loadCostumers();
@@ -141,19 +143,26 @@ const NewProject: React.FC = () => {
         if (isNewRegistration) {
             api.post("/projects", dataToSave)
                 .then((response) => {
-                    onSave(response);
+                    if (response.status === 201) {
+                        const savedProjectId = response.data.id;
+                        Notification({ type: "success", message: "Projeto salvo com sucesso!" });
+                        navigate(`/edit-project/${savedProjectId}`);
+                    }
                 })
                 .catch((error) => {
-                    console.error("Erro ao salvar o categoria:", error);
+                    console.error("Erro ao salvar o projeto:", error);
                 });
         } else {
             const categoryId = dataToSave.id;
             api.put(`/projects/${categoryId}`, dataToSave)
                 .then((response) => {
-                    onSave(response);
+                    if (response.status === 200) {
+                        Notification({ type: "success", message: "Projeto atualizado com sucesso!" });
+                        navigate(`/edit-project/${categoryId}`);
+                    }
                 })
                 .catch((error) => {
-                    console.error("Erro ao atualizar o categoria:", error);
+                    console.error("Erro ao atualizar o projeto:", error);
                 });
         }
 
