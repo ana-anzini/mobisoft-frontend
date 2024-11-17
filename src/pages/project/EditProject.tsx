@@ -25,21 +25,86 @@ const EditProject: React.FC = () => {
     const [selectedRows, setSelectedRows] = useState<DataTypeProduct[]>([]);
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
     const [filteredData, setFilteredData] = useState<DataTypeProduct[]>([]);
+    const [costumerList, setCostumerList] = useState([]);
+    const [projectDesignersList, setProjectDesignersList] = useState([]);
+    const [salespersonList, setSalespersonList] = useState([]);
 
     useEffect(() => {
         if (id) {
-            api.get(`/projects/${id}`)
-                .then((response) => {
-                    if (response.status === 200) {
-                        setProjectData(response.data);
-                        form.setFieldsValue(response.data);
-                    }
-                })
-                .catch((error) => {
-                    console.error("Erro ao carregar dados do projeto:", error);
-                });
+            loadFormProject(id);
+            loadCostumers();
+            loadProjectDesigners();
+            loadSalesperson();
         }
     }, [id]);
+
+    function loadFormProject(projectId: string) {
+        api.get(`/projects/${projectId}`)
+            .then((response) => {
+                if (response.status === 200) {
+                    const project = response.data;
+
+                    const treatedData = {
+                        costumerId: project.costumer.name,
+                        project,
+                    };
+
+                    setProjectData(project);
+                    form.setFieldsValue(project);
+                }
+            })
+            .catch((error) => {
+                console.error("Erro ao carregar dados do projeto:", error);
+            });
+    }
+
+    function loadCostumers() {
+        api.get("/costumers")
+            .then((response) => {
+                if (response.status === 200) {
+                    const costumers = response.data.map((item: any) => ({
+                        value: item.id,
+                        label: item.name,
+                    }));
+                    setCostumerList(costumers);
+                }
+            })
+            .catch((err) => {
+                console.error("Erro ao carregar clientes:", err);
+            });
+    }
+
+    function loadProjectDesigners() {
+        api.get("employees/findByType?type=PROJECT_DESIGNER")
+            .then((response) => {
+                if (response.status === 200) {
+                    const projectDesigners = response.data.map((item: any) => ({
+                        value: item.id,
+                        label: item.name,
+                    }));
+                    setProjectDesignersList(projectDesigners);
+                }
+            })
+            .catch((err) => {
+                console.error("Erro ao carregar projetistas:", err);
+            });
+    }
+
+    function loadSalesperson() {
+        api.get("employees/findByType?type=SALESPERSON")
+            .then((response) => {
+                if (response.status === 200) {
+                    const salespersons = response.data.map((item: any) => ({
+                        value: item.id,
+                        label: item.name,
+                    }));
+                    setSalespersonList(salespersons);
+                }
+            })
+            .catch((err) => {
+                console.error("Erro ao carregar vendedores:", err);
+            });
+    }
 
     const onSelectChange = (newSelectedRowKeys: React.Key[], newSelectedRows: DataTypeProduct[]) => {
         setSelectedRows(newSelectedRows);
@@ -134,7 +199,12 @@ const EditProject: React.FC = () => {
                 <Tabs defaultActiveKey="1">
                     <TabPane tab="Informações" key="1">
                         <Form form={form} onFinish={handleUpdate} layout="vertical">
-                            <FormFields form={form} {...projectData} />
+                            <FormFields
+                                form={form}
+                                costumerList={costumerList}
+                                projectDesignersList={projectDesignersList}
+                                salespersonList={salespersonList}
+                            />
                             <Form.Item>
                                 <Button type="primary" htmlType="submit">
                                     Atualizar
