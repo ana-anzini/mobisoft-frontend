@@ -2,12 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Form, Button, Tabs } from 'antd';
 import "./style.sass";
 import FormFields from './components/FormFields';
-import ProductsTable from './components/ProductsTable';
 import api from '../../service/api';
 import { DataType, StatusType, ValueForm, ValueFormProduct } from './IProject';
 import { TableRowSelection } from 'antd/es/table/interface';
 import { PlusOutlined } from '@ant-design/icons';
-import ProductModal from './components/ProductModal';
 import { Notification } from '../../components/notification/Notification';
 import { useNavigate } from 'react-router-dom';
 
@@ -26,11 +24,6 @@ const NewProject: React.FC = () => {
     const [costumerList, setCostumerList] = useState([]);
     const [projectDesignersList, setProjectDesignersList] = useState([]);
     const [salespersonList, setSalespersonList] = useState([]);
-    const [loadingTableData, setLoadingTableData] = useState(true);
-    const [filteredData, setFilteredData] = useState<DataType[]>([]);
-    const [selectedRows, setSelectedRows] = useState<DataType[]>([]);
-    const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
-    const [tableData, setTableData] = useState<DataType[]>([]);
     const [isNewRegistration, setIsNewRegistration] = useState<boolean>(true);
     const [editingCategoryId, setEditingCategoryId] = useState<React.Key | null>(null);
     const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
@@ -41,17 +34,6 @@ const NewProject: React.FC = () => {
         loadProjectDesigners();
         loadSalesperson();
     }, []);
-
-    const onSelectChange = (newSelectedRowKeys: React.Key[], newSelectedRows: DataType[]) => {
-        setSelectedRows(newSelectedRows);
-        setSelectedRowKeys(newSelectedRowKeys);
-    };
-
-
-    const rowSelection: TableRowSelection<DataType> = {
-        selectedRowKeys,
-        onChange: onSelectChange,
-    };
 
     function loadCostumers() {
         api.get("/costumers")
@@ -102,31 +84,6 @@ const NewProject: React.FC = () => {
             });
     }
 
-    function loadTableData() {
-        api.get("/categories/findAll").then((response) => {
-            if (response.status === 200) {
-                const dataTable = response.data.map((item: any) => ({
-                    key: item.id,
-                    description: item.description
-                }));
-                setTableData(dataTable);
-                setLoadingTableData(false);
-            }
-        }).catch((err) => {
-            console.error("Erro ao carregar dados");
-        });
-    }
-
-    function onSave(response: any) {
-        if (response) {
-            Notification({
-                type: "success",
-                message: "Salvo com sucesso",
-            });
-        }
-        loadTableData();
-    }
-
     function handleSave(data: ValueForm) {
         form.resetFields();
         const dataToSave = {
@@ -165,48 +122,6 @@ const NewProject: React.FC = () => {
                     console.error("Erro ao atualizar o projeto:", error);
                 });
         }
-
-        setSelectedRowKeys([]);
-        setSelectedRows([]);
-        setIsModalVisible(false);
-    }
-
-    function handleSaveProject(data: ValueFormProduct) {
-        form.resetFields();
-        const dataToSave = {
-            id: isNewRegistration ? null : editingCategoryId,
-            description: data.description,
-        };
-
-        if (isNewRegistration) {
-            api.post("/categories", dataToSave)
-                .then((response) => {
-                    onSave(response);
-                })
-                .catch((error) => {
-                    console.error("Erro ao salvar o categoria:", error);
-                });
-        } else {
-            const categoryId = dataToSave.id;
-            api.put(`/categories/${categoryId}`, dataToSave)
-                .then((response) => {
-                    onSave(response);
-                })
-                .catch((error) => {
-                    console.error("Erro ao atualizar o categoria:", error);
-                });
-        }
-
-        setSelectedRowKeys([]);
-        setSelectedRows([]);
-        setIsModalVisible(false);
-    }
-
-    function handleCloseModal() {
-        setSelectedRowKeys([]);
-        setSelectedRows([]);
-        form.resetFields();
-        setIsModalVisible(false);
     }
 
     return (
@@ -228,37 +143,6 @@ const NewProject: React.FC = () => {
                                 </Button>
                             </Form.Item>
                         </Form>
-                    </TabPane>
-                    <TabPane tab="Ambientes" key="2">
-                        <div className="top-buttons">
-                            <Button
-                                icon={<PlusOutlined />}
-                                className="tp-main-button"
-                                onClick={() => setIsModalVisible(true)}
-                            >
-                                {"Novo Ambiente"}
-                            </Button>
-                            <ProductsTable
-                                loading={loadingTableData}
-                                tableData={filteredData}
-                                rowSelection={rowSelection}
-                            />
-                            <ProductModal
-                                isModalVisible={isModalVisible}
-                                handleSaveProduct={handleSaveProject}
-                                handleCancel={handleCloseModal}
-                                form={form}
-                            />
-                        </div>
-                    </TabPane>
-                    <TabPane tab="Financeiro" key="3">
-                    </TabPane>
-                    <TabPane tab="Entregas" key="4">
-                        <Form.Item>
-                            <Button type="primary" htmlType="submit">
-                                Salvar
-                            </Button>
-                        </Form.Item>
                     </TabPane>
                 </Tabs>
             </div>

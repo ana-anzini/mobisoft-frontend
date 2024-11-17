@@ -1,12 +1,12 @@
 import { Button, Table } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
-import { DataType } from '../IProject';
+import { DataTypeProduct } from '../IProject';
 import { TableRowSelection } from 'antd/es/table/interface';
 
 interface IProjectTable {
     loading: boolean;
-    tableData: DataType[];
-    rowSelection: TableRowSelection<DataType>;
+    tableData: DataTypeProduct[];
+    rowSelection: TableRowSelection<DataTypeProduct>;
 }
 
 const ProjectTable = ({

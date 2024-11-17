@@ -81,13 +81,17 @@ const items: MenuProps['items'] = [
 ];
 
 export default function SideMenu() {
-    const location = useLocation();
+    const currentLocation = useLocation();
+
+    const isProjectRoute = ['/projects', '/new-project', '/edit-project'].some(route =>
+        currentLocation.pathname.startsWith(route)
+    );
 
     return (
         <Menu
             style={{ width: 256 }}
             mode="inline"
-            selectedKeys={location.pathname.startsWith('/projects') || location.pathname.startsWith('/new-project') ? ['/projects'] : [location.pathname]}
+            selectedKeys={isProjectRoute ? ['/projects'] : [currentLocation.pathname]}
             items={items}
             id="main-menu"
         />
