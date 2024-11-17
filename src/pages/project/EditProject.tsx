@@ -46,11 +46,13 @@ const EditProject: React.FC = () => {
 
                     const treatedData = {
                         costumerId: project.costumer.name,
-                        project,
+                        projectDesignerId: project.projectDesigner.name,
+                        sellerId: project.seller.name,
+                        ...project,
                     };
 
-                    setProjectData(project);
-                    form.setFieldsValue(project);
+                    setProjectData(treatedData);
+                    form.setFieldsValue(treatedData);
                 }
             })
             .catch((error) => {
