@@ -8,13 +8,15 @@ interface IProjectTable {
     tableData: DataTypeProduct[];
     rowSelection: TableRowSelection<DataTypeProduct>;
     handleEdit?: (record: DataTypeProduct) => void;
+    onDelete: (id: string) => void;
 }
 
 const ProjectTable = ({
     loading,
     tableData,
     rowSelection,
-    handleEdit
+    handleEdit,
+    onDelete
 }: IProjectTable) => {
     const columns = [
         {
@@ -44,6 +46,7 @@ const ProjectTable = ({
                     />
                     <Button
                         icon={<DeleteOutlined />}
+                        onClick={() => onDelete(String(record.key))}
                         style={{
                             color: '#FF0000'
                         }}

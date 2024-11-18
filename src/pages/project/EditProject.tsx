@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Form, Button, Tabs } from 'antd';
+import { Form, Button, Tabs, Modal } from 'antd';
 import api from '../../service/api';
 import FormFields from './components/FormFields';
 import { PlusOutlined } from '@ant-design/icons';
@@ -253,6 +253,48 @@ const EditProject: React.FC = () => {
         setIsModalVisible(true);
     }
 
+    function handleDeleteProduct(ids?: string) {
+        const idsToDelete = ids || selectedRowKeys.join(',');
+
+        Modal.confirm({
+            title: 'Excluir produto',
+            content: 'Você tem certeza que deseja excluir a(s) produto(s) do projeto selecionada(s)?',
+            okText: 'Sim',
+            cancelText: 'Não',
+            onOk: () => {
+                api.delete(`/productProjects?ids=${idsToDelete}`)
+                    .then((response) => {
+                        const message = response.data;
+
+                        if (message === "Produto(s) deletada(s) com sucesso.") {
+                            onDelete(response);
+                        } else {
+                            Notification({
+                                type: "error",
+                                message: message,
+                            });
+                        }
+                    })
+                    .catch(() => {
+                        Notification({
+                            type: "error",
+                            message: "Erro ao deletar",
+                        });
+                    });
+            }
+        });
+    }
+
+    function onDelete(response: any) {
+        if (response) {
+            Notification({
+                type: "success",
+                message: "Produto(s) deletada(s) com sucesso",
+            });
+        }
+        loadTableData();
+    }
+
     return (
         <main id="main">
             <div className="edit-project-container">
@@ -287,6 +329,7 @@ const EditProject: React.FC = () => {
                                 tableData={filteredData}
                                 rowSelection={rowSelection}
                                 handleEdit={(record) => handleOpenModal(false, record)}
+                                onDelete={handleDeleteProduct}
                             />
                             <ProductModal
                                 isModalVisible={isModalVisible}
