@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Form, Button, Tabs, Modal } from 'antd';
 import api from '../../service/api';
 import FormFields from './components/FormFields';
+import FormFieldsFinancial from './components/FormFieldsFinancial';
 import { PlusOutlined } from '@ant-design/icons';
 import "./style.sass";
 import { DataTypeProduct, ValueForm, ValueFormProduct } from './IProject';
@@ -342,6 +343,16 @@ const EditProject: React.FC = () => {
                         </div>
                     </TabPane>
                     <TabPane tab="Financeiro" key="3">
+                        <Form form={form} layout="vertical">
+                            <FormFieldsFinancial
+                                form={form}
+                            />
+                            <Form.Item>
+                                <Button type="primary" htmlType="submit">
+                                    Atualizar
+                                </Button>
+                            </Form.Item>
+                        </Form>
                     </TabPane>
                     <TabPane tab="Entregas" key="4">
                         <Form.Item>
