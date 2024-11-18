@@ -20,7 +20,6 @@ const EditProject: React.FC = () => {
     const [formProduct] = Form.useForm();
     const [projectData, setProjectData] = useState<any>(null);
     const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
-    const [isNewRegistration, setIsNewRegistration] = useState<boolean>(true);
     const [isNewProduct, setIsNewProduct] = useState<boolean>(true);
     const [tableData, setTableData] = useState<DataTypeProduct[]>([]);
     const [loadingTableData, setLoadingTableData] = useState(true);
@@ -41,6 +40,7 @@ const EditProject: React.FC = () => {
             loadProjectDesigners();
             loadSalesperson();
             loadCategories();
+            loadTableData();
         }
     }, [id]);
 
@@ -143,11 +143,11 @@ const EditProject: React.FC = () => {
     };
 
     function loadTableData() {
-        api.get("/categories/findAll").then((response) => {
+        api.get(`/productProjects/findByProject/${id}`).then((response) => {
             if (response.status === 200) {
                 const dataTable = response.data.map((item: any) => ({
                     key: item.id,
-                    description: item.description
+                    productValue: item.productValue,
                 }));
                 setTableData(dataTable);
                 setLoadingTableData(false);

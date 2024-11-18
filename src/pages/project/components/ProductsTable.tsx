@@ -16,24 +16,19 @@ const ProjectTable = ({
 }: IProjectTable) => {
     const columns = [
         {
-            title: 'Descrição',
-            dataIndex: 'description',
-            key: 'description',
-        },
-        {
-            title: 'Fornecedor',
-            dataIndex: 'supplierName',
-            key: 'supplierName',
-        },
-        {
             title: 'Categoria',
-            dataIndex: 'categoryDescription',
-            key: 'categoryDescription',
+            dataIndex: 'categoryId',
+            key: 'categoryId',
         },
         {
-            title: 'Quantidade disponível',
-            dataIndex: 'quantity',
-            key: 'quantity',
+            title: 'Produto/Ambiente',
+            dataIndex: 'productId',
+            key: 'productId',
+        },
+        {
+            title: 'Custo (R$)',
+            dataIndex: 'productValue',
+            key: 'productValue',
         },
         {
             title: 'Ações',
