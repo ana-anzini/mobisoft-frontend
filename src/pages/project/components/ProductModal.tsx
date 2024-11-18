@@ -32,28 +32,10 @@ const ProductModal = ({ isModalVisible, handleCancel, form }: IProductModal) => 
                     }}
                 >
                     <Row gutter={16}>
-                        <Col span={6}>
-                            <Form.Item
-                                name="description"
-                                label="Descrição"
-                                rules={[{ required: true, message: "Campo obrigatório" }]}
-                            >
-                                <Input />
-                            </Form.Item>
-                        </Col>
-                        <Col span={6}>
+                        <Col span={10}>
                             <Form.Item
                                 name="categoryId"
-                                label="Categoria"
-                                rules={[{ required: true, message: "Campo obrigatório" }]}
-                            >
-                                <Select placeholder="Selecione" />
-                            </Form.Item>
-                        </Col>
-                        <Col span={6}>
-                            <Form.Item
-                                name="supplierId"
-                                label="Fornecedor"
+                                label="Produto/Ambiente"
                                 rules={[{ required: true, message: "Campo obrigatório" }]}
                             >
                                 <Select placeholder="Selecione" />

@@ -17,6 +17,7 @@ const { TabPane } = Tabs;
 const EditProject: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const [form] = Form.useForm();
+    const [formProduct] = Form.useForm();
     const [projectData, setProjectData] = useState<any>(null);
     const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
     const [isNewRegistration, setIsNewRegistration] = useState<boolean>(true);
@@ -161,8 +162,8 @@ const EditProject: React.FC = () => {
     function handleCloseModal() {
         setSelectedRowKeys([]);
         setSelectedRows([]);
-        form.resetFields();
         setIsModalVisible(false);
+        formProduct.resetFields();
     }
 
     return (
@@ -202,7 +203,7 @@ const EditProject: React.FC = () => {
                             <ProductModal
                                 isModalVisible={isModalVisible}
                                 handleCancel={handleCloseModal}
-                                form={form}
+                                form={formProduct}
                             />
                         </div>
                     </TabPane>
