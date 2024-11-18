@@ -21,6 +21,7 @@ const EditProject: React.FC = () => {
     const [projectData, setProjectData] = useState<any>(null);
     const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
     const [isNewRegistration, setIsNewRegistration] = useState<boolean>(true);
+    const [isNewProduct, setIsNewProduct] = useState<boolean>(true);
     const [tableData, setTableData] = useState<DataTypeProduct[]>([]);
     const [loadingTableData, setLoadingTableData] = useState(true);
     const [selectedRows, setSelectedRows] = useState<DataTypeProduct[]>([]);
@@ -30,6 +31,7 @@ const EditProject: React.FC = () => {
     const [projectDesignersList, setProjectDesignersList] = useState([]);
     const [salespersonList, setSalespersonList] = useState([]);
     const [categoryList, setCategoryList] = useState([]);
+    const [editingProductId, setEditingProductId] = useState<React.Key | null>(null);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -179,20 +181,44 @@ const EditProject: React.FC = () => {
 
     function handleSave(data: ValueFormProduct) {
         const dataToSave = {
-            projectId: data.projectId,
+            id: isNewProduct ? null : editingProductId,
+            projectId: id,
             productId: data.productId,
             productValue: data.productValue,
         };
 
-        api.put(`/productProjects/${id}`, dataToSave)
-            .then((response) => {
-                if (response.status === 200) {
-                    Notification({ type: "success", message: "Projeto atualizado com sucesso!" });
-                }
-            })
-            .catch((error) => {
-                console.error("Erro ao atualizar o projeto:", error);
+        if (isNewProduct) {
+            api.post("/productProjects", dataToSave)
+                .then((response) => {
+                    onSave(response);
+                })
+                .catch((error) => {
+                    console.error("Erro ao salvar o produto:", error);
+                });
+        } else {
+            const productId = dataToSave.id;
+            api.put(`/productProjects/${productId}`, dataToSave)
+                .then((response) => {
+                    onSave(response);
+                })
+                .catch((error) => {
+                    console.error("Erro ao atualizar o produto:", error);
+                });
+        }
+
+        setSelectedRowKeys([]);
+        setSelectedRows([]);
+        setIsModalVisible(false);
+    }
+
+    function onSave(response: any) {
+        if (response) {
+            Notification({
+                type: "success",
+                message: "Salvo com sucesso",
             });
+        }
+        loadTableData();
     }
 
     function handleCloseModal() {
