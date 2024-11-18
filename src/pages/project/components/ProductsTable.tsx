@@ -17,13 +17,13 @@ const ProjectTable = ({
     const columns = [
         {
             title: 'Categoria',
-            dataIndex: 'categoryId',
-            key: 'categoryId',
+            dataIndex: 'categoryDescription',
+            key: 'categoryDescription',
         },
         {
             title: 'Produto/Ambiente',
-            dataIndex: 'productId',
-            key: 'productId',
+            dataIndex: 'productDescription',
+            key: 'productDescription',
         },
         {
             title: 'Custo (R$)',

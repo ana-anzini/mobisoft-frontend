@@ -44,6 +44,10 @@ const EditProject: React.FC = () => {
         }
     }, [id]);
 
+    useEffect(() => {
+        setFilteredData(tableData);
+    }, [tableData]);
+
     function loadFormProject(projectId: string) {
         api.get(`/projects/${projectId}`)
             .then((response) => {
@@ -147,6 +151,8 @@ const EditProject: React.FC = () => {
             if (response.status === 200) {
                 const dataTable = response.data.map((item: any) => ({
                     key: item.id,
+                    categoryDescription: item.product.category.description,
+                    productDescription: item.product.description,
                     productValue: item.productValue,
                 }));
                 setTableData(dataTable);
