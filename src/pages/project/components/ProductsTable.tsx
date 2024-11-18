@@ -7,12 +7,14 @@ interface IProjectTable {
     loading: boolean;
     tableData: DataTypeProduct[];
     rowSelection: TableRowSelection<DataTypeProduct>;
+    handleEdit?: (record: DataTypeProduct) => void;
 }
 
 const ProjectTable = ({
     loading,
     tableData,
     rowSelection,
+    handleEdit
 }: IProjectTable) => {
     const columns = [
         {
@@ -34,6 +36,20 @@ const ProjectTable = ({
             title: 'Ações',
             key: 'actions',
             width: 300,
+            render: (_: string, record: DataTypeProduct) => (
+                <div style={{ display: 'flex', gap: '8px' }}>
+                    <Button
+                        icon={<EditOutlined />}
+                        onClick={() => handleEdit && handleEdit(record)}
+                    />
+                    <Button
+                        icon={<DeleteOutlined />}
+                        style={{
+                            color: '#FF0000'
+                        }}
+                    />
+                </div>
+            ),
         },
     ];
 

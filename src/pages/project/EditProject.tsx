@@ -234,6 +234,23 @@ const EditProject: React.FC = () => {
         formProduct.resetFields();
     }
 
+    function handleOpenModal(isNew: boolean, product?: DataTypeProduct) {
+        if (isNew) {
+            setIsNewProduct(true);
+            setEditingProductId(null);
+            form.resetFields();
+        } else if (product) {
+            setEditingProductId(product.key);
+            form.setFieldsValue({
+                categoryId: product.categoryId,
+                productId: product.productId,
+                productValue: product.productValue,
+            });
+            setIsNewProduct(false);
+        }
+        setIsModalVisible(true);
+    }
+
     return (
         <main id="main">
             <div className="edit-project-container">
@@ -267,6 +284,7 @@ const EditProject: React.FC = () => {
                                 loading={loadingTableData}
                                 tableData={filteredData}
                                 rowSelection={rowSelection}
+                                handleEdit={(record) => handleOpenModal(false, record)}
                             />
                             <ProductModal
                                 isModalVisible={isModalVisible}

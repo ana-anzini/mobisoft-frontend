@@ -37,12 +37,14 @@ export type ValueForm = {
 export interface DataTypeProduct {
     key: React.Key;
     id: string;
+    categoryId: number;
     projectId: number;
     productId: number;
     productValue: number;
 }
 
 export type ValueFormProduct = {
+    categoryId: number;
     projectId: number;
     productId: number;
     productValue: number;
