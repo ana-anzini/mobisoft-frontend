@@ -41,6 +41,9 @@ export interface DataTypeProduct {
     projectId: number;
     productId: number;
     productValue: number;
+    categoryDescription: string;
+    projectDescription: string;
+    productDescription: string;
 }
 
 export type ValueFormProduct = {
@@ -48,4 +51,7 @@ export type ValueFormProduct = {
     projectId: number;
     productId: number;
     productValue: number;
+    categoryDescription: string;
+    projectDescription: string;
+    productDescription: string;
 }

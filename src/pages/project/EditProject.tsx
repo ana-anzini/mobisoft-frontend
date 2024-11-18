@@ -153,6 +153,8 @@ const EditProject: React.FC = () => {
                     key: item.id,
                     categoryDescription: item.product.category.description,
                     productDescription: item.product.description,
+                    categoryId: item.product.category.id,
+                    productId: item.product.id,
                     productValue: item.productValue,
                 }));
                 setTableData(dataTable);
@@ -238,12 +240,12 @@ const EditProject: React.FC = () => {
         if (isNew) {
             setIsNewProduct(true);
             setEditingProductId(null);
-            form.resetFields();
+            formProduct.resetFields();
         } else if (product) {
             setEditingProductId(product.key);
-            form.setFieldsValue({
+            formProduct.setFieldsValue({
                 categoryId: product.categoryId,
-                productId: product.productId,
+                productId: product.productDescription,
                 productValue: product.productValue,
             });
             setIsNewProduct(false);
