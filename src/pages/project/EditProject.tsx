@@ -29,6 +29,7 @@ const EditProject: React.FC = () => {
     const [costumerList, setCostumerList] = useState([]);
     const [projectDesignersList, setProjectDesignersList] = useState([]);
     const [salespersonList, setSalespersonList] = useState([]);
+    const [categoryList, setCategoryList] = useState([]);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -37,6 +38,7 @@ const EditProject: React.FC = () => {
             loadCostumers();
             loadProjectDesigners();
             loadSalesperson();
+            loadCategories();
         }
     }, [id]);
 
@@ -111,6 +113,22 @@ const EditProject: React.FC = () => {
             });
     }
 
+    function loadCategories() {
+        api.get("categories/findAll")
+            .then((response) => {
+                if (response.status === 200) {
+                    const categories = response.data.map((item: any) => ({
+                        value: item.id,
+                        label: item.description,
+                    }));
+                    setCategoryList(categories);
+                }
+            })
+            .catch((err) => {
+                console.error("Erro ao carregar categorias:", err);
+            });
+    }
+
     const onSelectChange = (newSelectedRowKeys: React.Key[], newSelectedRows: DataTypeProduct[]) => {
         setSelectedRows(newSelectedRows);
         setSelectedRowKeys(newSelectedRowKeys);
@@ -149,6 +167,24 @@ const EditProject: React.FC = () => {
         };
 
         api.put(`/projects/${id}`, dataToSave)
+            .then((response) => {
+                if (response.status === 200) {
+                    Notification({ type: "success", message: "Projeto atualizado com sucesso!" });
+                }
+            })
+            .catch((error) => {
+                console.error("Erro ao atualizar o projeto:", error);
+            });
+    }
+
+    function handleSave(data: ValueFormProduct) {
+        const dataToSave = {
+            projectId: data.projectId,
+            productId: data.productId,
+            productValue: data.productValue,
+        };
+
+        api.put(`/productProjects/${id}`, dataToSave)
             .then((response) => {
                 if (response.status === 200) {
                     Notification({ type: "success", message: "Projeto atualizado com sucesso!" });
@@ -203,7 +239,9 @@ const EditProject: React.FC = () => {
                             <ProductModal
                                 isModalVisible={isModalVisible}
                                 handleCancel={handleCloseModal}
+                                handleSave={handleSave}
                                 form={formProduct}
+                                categoryList={categoryList}
                             />
                         </div>
                     </TabPane>

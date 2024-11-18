@@ -5,10 +5,12 @@ import { ValueFormProduct } from '../IProject';
 interface IProductModal {
     isModalVisible: boolean;
     handleCancel: () => void;
+    handleSave: (data: ValueFormProduct) => void;
     form: any;
+    categoryList: any;
 }
 
-const ProductModal = ({ isModalVisible, handleCancel, form }: IProductModal) => {
+const ProductModal = ({ isModalVisible, handleCancel, handleSave, form, categoryList }: IProductModal) => {
     const [editDisabled, setEditDisabled] = useState(false);
 
     return (
@@ -29,19 +31,29 @@ const ProductModal = ({ isModalVisible, handleCancel, form }: IProductModal) => 
                     name="new-form"
                     onFinish={(data: ValueFormProduct) => {
                         setEditDisabled(false);
+                        handleSave(data);
                     }}
                 >
                     <Row gutter={16}>
-                        <Col span={10}>
+                        <Col span={6}>
                             <Form.Item
                                 name="categoryId"
+                                label="Categoria"
+                                rules={[{ required: true, message: "Campo obrigatório" }]}
+                            >
+                                <Select placeholder="Selecione" options={categoryList} />
+                            </Form.Item>
+                        </Col>
+                        <Col span={10}>
+                            <Form.Item
+                                name="productId"
                                 label="Produto/Ambiente"
                                 rules={[{ required: true, message: "Campo obrigatório" }]}
                             >
                                 <Select placeholder="Selecione" />
                             </Form.Item>
                         </Col>
-                        <Col span={6}>
+                        <Col span={8}>
                             <Form.Item
                                 name="productValue"
                                 label="Valor de Custo (R$)"
