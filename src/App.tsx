@@ -12,6 +12,7 @@ import Deliveries from "./pages/deliveries/Deliveries";
 import Project from "./pages/project/Project";
 import NewProject from "./pages/project/NewProject";
 import EditProject from "./pages/project/EditProject";
+import Administration from "./pages/administration/Administration";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
           <Route path="/projects" element={<Project />} />
           <Route path="/new-project" element={<NewProject />} />
           <Route path="/edit-project/:id" element={<EditProject />} />
+          <Route path="/administration" element={<Administration />} />
         </Routes>
       </div>
     </BrowserRouter>

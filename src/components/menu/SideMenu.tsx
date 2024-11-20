@@ -78,6 +78,21 @@ const items: MenuProps['items'] = [
             },
         ],
     },
+    {
+        type: 'group',
+        label: 'Administração',
+        children: [
+            {
+                key: '/administration',
+                label: (
+                    <Link to="/administration" className="rounded-item">
+                        <Icon icon="icon-park-solid:percentage" style={{ fontSize: '20px', marginRight: '8px' }} />
+                        Administração
+                    </Link>
+                ),
+            },
+        ],
+    },
 ];
 
 export default function SideMenu() {

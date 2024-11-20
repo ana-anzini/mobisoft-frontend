@@ -19,6 +19,7 @@ const EditProject: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const [form] = Form.useForm();
     const [formProduct] = Form.useForm();
+    const [formFinancial] = Form.useForm();
     const [projectData, setProjectData] = useState<any>(null);
     const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
     const [isNewProduct, setIsNewProduct] = useState<boolean>(true);
@@ -343,9 +344,9 @@ const EditProject: React.FC = () => {
                         </div>
                     </TabPane>
                     <TabPane tab="Financeiro" key="3">
-                        <Form form={form} layout="vertical">
+                        <Form form={formFinancial} layout="vertical">
                             <FormFieldsFinancial
-                                form={form}
+                                form={formFinancial}
                             />
                             <Form.Item>
                                 <Button type="primary" htmlType="submit">
