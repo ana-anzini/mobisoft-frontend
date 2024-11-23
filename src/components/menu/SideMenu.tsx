@@ -1,8 +1,8 @@
 import { Icon } from '@iconify/react';
 import { Menu, MenuProps } from 'antd';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
-const items: MenuProps['items'] = [
+const items = (handleLogout: () => void): MenuProps['items'] => [
     {
         type: 'group',
         label: 'Cadastros',
@@ -93,21 +93,42 @@ const items: MenuProps['items'] = [
             },
         ],
     },
+    {
+        key: 'divider',
+        type: 'divider',
+        style: { margin: '8px 0' },
+    },
+    {
+        key: 'logout',
+        label: (
+            <span style={{ display: 'flex', alignItems: 'center', color: '#FE5751' }}>
+                <Icon icon="mdi:logout" style={{ fontSize: '20px', marginRight: '8px' }} />
+                Sair
+            </span>
+        ),
+        onClick: handleLogout,
+    }
 ];
 
 export default function SideMenu() {
     const currentLocation = useLocation();
+    const navigate = useNavigate();
 
     const isProjectRoute = ['/projects', '/new-project', '/edit-project'].some(route =>
         currentLocation.pathname.startsWith(route)
     );
+
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        navigate('/');
+    };
 
     return (
         <Menu
             style={{ width: 256 }}
             mode="inline"
             selectedKeys={isProjectRoute ? ['/projects'] : [currentLocation.pathname]}
-            items={items}
+            items={items(handleLogout)}
             id="main-menu"
         />
     );
