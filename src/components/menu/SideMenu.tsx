@@ -119,7 +119,7 @@ export default function SideMenu() {
     );
 
     const handleLogout = () => {
-        localStorage.removeItem('token');
+        sessionStorage.removeItem('token');
         navigate('/');
     };
 

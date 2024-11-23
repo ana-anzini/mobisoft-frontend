@@ -19,7 +19,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const token = localStorage.getItem('token');
+        const token = sessionStorage.getItem('token');
         if (token) {
             api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
             setIsAuthenticated(true);
@@ -27,14 +27,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }, []);
 
     const login = (token: string) => {
-        localStorage.setItem('token', token);
+        sessionStorage.setItem('token', token);
         api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
         setIsAuthenticated(true);
         navigate('/home');
     };
 
     const logout = () => {
-        localStorage.removeItem('token');
+        sessionStorage.removeItem('token');
         delete api.defaults.headers.common['Authorization'];
         setIsAuthenticated(false);
         navigate('/login');

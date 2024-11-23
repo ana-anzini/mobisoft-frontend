@@ -12,7 +12,7 @@ const LoginForm = () => {
                 password: values.password,
             });
 
-            localStorage.setItem('token', response.data.token);
+            sessionStorage.setItem('token', response.data.token);
 
             message.success('Login realizado com sucesso!');
             window.location.href = '/projects';
