@@ -12,7 +12,7 @@ const FormFields: React.FC<IFormFieldsFinancialProps> = ({ form }) => {
         <Row gutter={16}>
             <Col span={4}>
                 <Form.Item
-                    name="totalValue"
+                    name="totalCusts"
                     label="Valor Total dos Produtos (R$)"
                 >
                     <InputNumber

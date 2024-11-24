@@ -33,6 +33,7 @@ const EditProject: React.FC = () => {
     const [salespersonList, setSalespersonList] = useState([]);
     const [categoryList, setCategoryList] = useState([]);
     const [editingProductId, setEditingProductId] = useState<React.Key | null>(null);
+    const [financialData, setFinancialData] = useState<any>(null);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -43,6 +44,7 @@ const EditProject: React.FC = () => {
             loadSalesperson();
             loadCategories();
             loadTableData();
+            loadFormFinancial(id);
         }
     }, [id]);
 
@@ -66,6 +68,20 @@ const EditProject: React.FC = () => {
 
                     setProjectData(treatedData);
                     form.setFieldsValue(treatedData);
+                }
+            })
+            .catch((error) => {
+                console.error("Erro ao carregar dados do projeto:", error);
+            });
+    }
+
+    function loadFormFinancial(projectId: string) {
+        api.get(`/financial/projects/${projectId}`)
+            .then((response) => {
+                if (response.status === 200) {
+                    const financial = response.data;
+                    setFinancialData(financial);
+                    formFinancial.setFieldsValue(financial);
                 }
             })
             .catch((error) => {
