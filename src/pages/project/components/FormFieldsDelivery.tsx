@@ -17,11 +17,11 @@ const FormFieldsDelivery: React.FC<IFormFieldsDeliveryProps> = ({ form }) => {
 
     return (
         <Row gutter={16}>
-            <Col span={4} className="checkbox-container">
+            {/* <Col span={4} className="checkbox-container">
                 <Form.Item name="addressClient" valuePropName="checked">
                     <Checkbox>Endereço mesmo do cliente</Checkbox>
                 </Form.Item>
-            </Col>
+            </Col> */}
             <Col span={4}>
                 <Form.Item
                     name="cep"

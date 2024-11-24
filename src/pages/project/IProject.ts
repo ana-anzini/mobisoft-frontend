@@ -78,3 +78,25 @@ export type ValueFormFinancial = {
     paymentType: string;
     additionalExpenses: number;
 }
+
+export interface DataTypeDelivery {
+    key: React.Key;
+    id: string;
+    cep: string;
+    address: string;
+    number: number;
+    neighborhood: string;
+    additional: string;
+    deliveryDate: string;
+    freight: number;
+}
+
+export type ValueFormDelivery = {
+    cep: string;
+    address: string;
+    number: number;
+    neighborhood: string;
+    additional: string;
+    deliveryDate: string;
+    freight: number;
+}

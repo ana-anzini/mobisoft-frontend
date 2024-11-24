@@ -6,7 +6,7 @@ import FormFields from './components/FormFields';
 import FormFieldsFinancial from './components/FormFieldsFinancial';
 import { PlusOutlined } from '@ant-design/icons';
 import "./style.sass";
-import { DataTypeProduct, ValueForm, ValueFormFinancial, ValueFormProduct } from './IProject';
+import { DataTypeProduct, ValueForm, ValueFormDelivery, ValueFormFinancial, ValueFormProduct } from './IProject';
 import { Notification } from '../../components/notification/Notification';
 import { TableRowSelection } from 'antd/es/table/interface';
 import ProductsTable from './components/ProductsTable';
@@ -25,6 +25,7 @@ const EditProject: React.FC = () => {
     const [projectData, setProjectData] = useState<any>(null);
     const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
     const [isNewProduct, setIsNewProduct] = useState<boolean>(true);
+    const [isNewDelivery, setIsNewDelivery] = useState<boolean>(true);
     const [tableData, setTableData] = useState<DataTypeProduct[]>([]);
     const [loadingTableData, setLoadingTableData] = useState(true);
     const [selectedRows, setSelectedRows] = useState<DataTypeProduct[]>([]);
@@ -35,7 +36,7 @@ const EditProject: React.FC = () => {
     const [salespersonList, setSalespersonList] = useState([]);
     const [categoryList, setCategoryList] = useState([]);
     const [editingProductId, setEditingProductId] = useState<React.Key | null>(null);
-    const [editingFinancialId, setEditingFinancialId] = useState<React.Key | null>(null);
+    const [editingDeliveryId, setEditingDeliveryId] = useState<React.Key | null>(null);
     const [financialData, setFinancialData] = useState<any>(null);
     const navigate = useNavigate();
 
@@ -267,6 +268,39 @@ const EditProject: React.FC = () => {
         setIsModalVisible(false);
     }
 
+    function handleSaveDelivery(data: ValueFormDelivery) {
+        const dataToSave = {
+            id: isNewDelivery ? null : editingDeliveryId,
+            projectId: id,
+            cep: data.cep,
+            address: data.address,
+            number: data.number,
+            neighborhood: data.neighborhood,
+            additional: data.additional,
+            deliveryDate: data.deliveryDate,
+            freight: data.freight,
+        };
+
+        if (isNewDelivery) {
+            api.post("/deliveries", dataToSave)
+                .then((response) => {
+                    onSave(response);
+                })
+                .catch((error) => {
+                    console.error("Erro ao salvar o produto:", error);
+                });
+        } else {
+            const delivery = dataToSave.id;
+            api.put(`/deliveries/${delivery}`, dataToSave)
+                .then((response) => {
+                    onSave(response);
+                })
+                .catch((error) => {
+                    console.error("Erro ao atualizar o produto:", error);
+                });
+        }
+    }
+
     function onSave(response: any) {
         if (response) {
             Notification({
@@ -396,16 +430,16 @@ const EditProject: React.FC = () => {
                         </Form>
                     </TabPane>
                     <TabPane tab="Entrega e Orçamento Final" key="4">
-                        <Form form={formDelivery} layout="vertical">
+                        <Form form={formDelivery} onFinish={handleSaveDelivery} layout="vertical">
                             <FormFieldsDelivery
                                 form={formDelivery}
                             />
+                            <Form.Item>
+                                <Button type="primary" htmlType="submit">
+                                    Atualizar
+                                </Button>
+                            </Form.Item>
                         </Form>
-                        <Form.Item>
-                            <Button type="primary" htmlType="submit">
-                                Salvar
-                            </Button>
-                        </Form.Item>
                     </TabPane>
                 </Tabs>
             </div>
