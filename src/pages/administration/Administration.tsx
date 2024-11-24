@@ -4,38 +4,36 @@ import FormFields from './components/AdministrationFields';
 import api from '../../service/api';
 import { DataType, ValueForm, } from './IAdministration';
 import { Notification } from '../../components/notification/Notification';
+import moment from 'moment';
 
 const NewProject: React.FC = () => {
     const [form] = Form.useForm();
+    const [administrationData, setAdministrationData] = useState<any>(null);
     const [isNewRegistration, setIsNewRegistration] = useState<boolean>(true);
     const [editingAdministrationId, setEditingAdministrationId] = useState<React.Key | null>(null);
 
     useEffect(() => {
-
+        loadFormAdministration();
     }, []);
 
-    /*function loadForm(projectId: string) {
-        api.get(`/projects/${projectId}`)
+    function loadFormAdministration() {
+        api.get(`/administration/`)
             .then((response) => {
                 if (response.status === 200) {
-                    const project = response.data;
+                    const administration = response.data;
 
                     const treatedData = {
-                        costumerId: project.costumer.id,
-                        projectDesignerId: project.projectDesigner.id,
-                        sellerId: project.seller.id,
-                        ...project,
-                        referenceDate: moment(project.referenceDate).format("YYYY-MM-DD"),
+                        ...administration,
                     };
 
-                    setProjectData(treatedData);
-                    form.setFieldsValue(treatedData);
+                    setAdministrationData(administration);
+                    form.setFieldsValue(administration);
                 }
             })
             .catch((error) => {
                 console.error("Erro ao carregar dados do projeto:", error);
             });
-    }*/
+    }
 
     function handleSave(data: ValueForm) {
         form.resetFields();

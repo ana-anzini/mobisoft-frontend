@@ -141,7 +141,7 @@ const Supplier = () => {
                                 type: "success",
                                 message: message,
                             });
-                            onDelete(response);
+                            loadTableData();
                         } else {
                             Notification({
                                 type: "error",
@@ -157,16 +157,6 @@ const Supplier = () => {
                     });
             }
         });
-    }
-
-    function onDelete(response: any) {
-        if (response) {
-            Notification({
-                type: "success",
-                message: "Categoria(s) deletada(s) com sucesso",
-            });
-        }
-        loadTableData();
     }
 
     return (
