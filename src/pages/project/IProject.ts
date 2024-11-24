@@ -6,6 +6,13 @@ export enum StatusType {
     CANCELLED = 'CANCELLED',
 }
 
+export enum PaymentType {
+    CREDIT = 'CREDIT',
+    DEBIT = 'DEBIT',
+    INSTALLMENT_BOOK = 'INSTALLMENT_BOOK',
+    CHECK = 'CHECK',
+}
+
 export interface DataType {
     key: React.Key;
     id: string;

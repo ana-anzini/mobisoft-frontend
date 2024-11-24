@@ -1,11 +1,20 @@
 import React from 'react';
-import { Form, Input, Select, Col, Row, Checkbox, InputNumber } from 'antd';
-import { StatusType } from '../IProject';
+import { Form, Input, Select, Col, Row, Checkbox, InputNumber, Divider, Typography, Button } from 'antd';
+import { PaymentType, StatusType } from '../IProject';
 import { statusTypeLabels } from './ProjectTable';
+
+const { Text } = Typography;
 
 interface IFormFieldsFinancialProps {
     form: any;
 }
+
+export const paymentTypeLabels: { [key in PaymentType]: string } = {
+    [PaymentType.CREDIT]: 'Crédito',
+    [PaymentType.DEBIT]: 'Débito',
+    [PaymentType.INSTALLMENT_BOOK]: 'Carnê',
+    [PaymentType.CHECK]: 'Cheque',
+};
 
 const FormFields: React.FC<IFormFieldsFinancialProps> = ({ form }) => {
     return (
@@ -16,11 +25,8 @@ const FormFields: React.FC<IFormFieldsFinancialProps> = ({ form }) => {
                     label="Valor Total dos Produtos (R$)"
                 >
                     <InputNumber
-                        min={0}
                         style={{ width: "100%" }}
-                        precision={2}
-                        step={0.01}
-                        placeholder="Digite o valor"
+                        readOnly
                         disabled={true}
                     />
                 </Form.Item>
@@ -29,10 +35,17 @@ const FormFields: React.FC<IFormFieldsFinancialProps> = ({ form }) => {
                 <Form.Item
                     name="installmentNumber"
                     label="N. Parcelas"
-                    rules={[{ required: true, message: "Campo obrigatório" }]}
+                    rules={[
+                        { required: true, message: "Campo obrigatório" },
+                        {
+                            type: "integer",
+                            message: "Apenas valores inteiros são permitidos!",
+                        },
+                    ]}
                 >
                     <InputNumber
                         min={0}
+                        max={24}
                         style={{ width: "100%" }}
                         placeholder="Digite o valor"
                     />
@@ -54,65 +67,18 @@ const FormFields: React.FC<IFormFieldsFinancialProps> = ({ form }) => {
                     rules={[{ required: true, message: "Campo obrigatório" }]}
                 >
                     <Select placeholder="Selecione um tipo">
+                        {Object.values(PaymentType).map((type) => (
+                            <Select.Option key={type} value={type}>
+                                {paymentTypeLabels[type]}
+                            </Select.Option>
+                        ))}
                     </Select>
-                </Form.Item>
-            </Col>
-            <Col span={2}>
-                <Form.Item
-                    name="discount"
-                    label="Desconto R$"
-                    rules={[{ required: true, message: "Campo obrigatório" }]}
-                >
-                    <InputNumber
-                        min={0}
-                        style={{ width: "100%" }}
-                        placeholder="Digite o valor"
-                    />
                 </Form.Item>
             </Col>
             <Col span={4}>
                 <Form.Item
                     name="additionalExpenses"
                     label="Despesas Extras R$"
-                    rules={[{ required: true, message: "Campo obrigatório" }]}
-                >
-                    <InputNumber
-                        min={0}
-                        style={{ width: "100%" }}
-                        placeholder="Digite o valor"
-                    />
-                </Form.Item>
-            </Col>
-            <Col span={4}>
-                <Form.Item
-                    name="additionalProjectDesigner"
-                    label="% Projetista"
-                    rules={[{ required: false, message: "Campo obrigatório" }]}
-                >
-                    <InputNumber
-                        min={0}
-                        style={{ width: "100%" }}
-                        placeholder="Digite o valor"
-                    />
-                </Form.Item>
-            </Col>
-            <Col span={4}>
-                <Form.Item
-                    name="additionalSeller"
-                    label="% Vendedor"
-                    rules={[{ required: false, message: "Campo obrigatório" }]}
-                >
-                    <InputNumber
-                        min={0}
-                        style={{ width: "100%" }}
-                        placeholder="Digite o valor"
-                    />
-                </Form.Item>
-            </Col>
-            <Col span={4}>
-                <Form.Item
-                    name="additionalFinancial"
-                    label="% Lucro"
                     rules={[{ required: true, message: "Campo obrigatório" }]}
                 >
                     <InputNumber

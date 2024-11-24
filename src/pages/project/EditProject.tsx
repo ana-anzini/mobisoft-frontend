@@ -12,6 +12,7 @@ import { TableRowSelection } from 'antd/es/table/interface';
 import ProductsTable from './components/ProductsTable';
 import ProductModal from './components/ProductModal';
 import moment from 'moment';
+import FormFieldsDelivery from './components/FormFieldsDelivery';
 
 const { TabPane } = Tabs;
 
@@ -20,6 +21,7 @@ const EditProject: React.FC = () => {
     const [form] = Form.useForm();
     const [formProduct] = Form.useForm();
     const [formFinancial] = Form.useForm();
+    const [formDelivery] = Form.useForm();
     const [projectData, setProjectData] = useState<any>(null);
     const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
     const [isNewProduct, setIsNewProduct] = useState<boolean>(true);
@@ -327,11 +329,6 @@ const EditProject: React.FC = () => {
                                 projectDesignersList={projectDesignersList}
                                 salespersonList={salespersonList}
                             />
-                            <Form.Item>
-                                <Button type="primary" htmlType="submit">
-                                    Atualizar
-                                </Button>
-                            </Form.Item>
                         </Form>
                     </TabPane>
                     <TabPane tab="Ambientes" key="2">
@@ -371,7 +368,12 @@ const EditProject: React.FC = () => {
                             </Form.Item>
                         </Form>
                     </TabPane>
-                    <TabPane tab="Entregas" key="4">
+                    <TabPane tab="Entrega e Orçamento Final" key="4">
+                        <Form form={formDelivery} layout="vertical">
+                            <FormFieldsDelivery
+                                form={formDelivery}
+                            />
+                        </Form>
                         <Form.Item>
                             <Button type="primary" htmlType="submit">
                                 Salvar
