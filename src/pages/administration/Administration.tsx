@@ -17,22 +17,15 @@ const NewProject: React.FC = () => {
     }, []);
 
     function loadFormAdministration() {
-        api.get(`/administration/`)
-            .then((response) => {
-                if (response.status === 200) {
-                    const administration = response.data;
-
-                    const treatedData = {
-                        ...administration,
-                    };
-
-                    setAdministrationData(administration);
-                    form.setFieldsValue(administration);
-                }
-            })
-            .catch((error) => {
-                console.error("Erro ao carregar dados do projeto:", error);
-            });
+        api.get("/administration").then((response) => {
+            if (response.status === 200) {
+                const administration = response.data;
+                setAdministrationData(administration);
+                form.setFieldsValue(administration);
+            }
+        }).catch((err) => {
+            console.error("Erro ao carregar dados");
+        });
     }
 
     function handleSave(data: ValueForm) {
