@@ -62,3 +62,19 @@ export type ValueFormProduct = {
     projectDescription: string;
     productDescription: string;
 }
+
+export interface DataTypeFinancial {
+    key: React.Key;
+    id: string;
+    installmentsNumber: number;
+    firstPayment: string;
+    paymentType: string;
+    additionalExpenses: number;
+}
+
+export type ValueFormFinancial = {
+    installmentsNumber: number;
+    firstPayment: string;
+    paymentType: string;
+    additionalExpenses: number;
+}

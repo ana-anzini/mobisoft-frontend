@@ -33,7 +33,7 @@ const FormFields: React.FC<IFormFieldsFinancialProps> = ({ form }) => {
             </Col>
             <Col span={2}>
                 <Form.Item
-                    name="installmentNumber"
+                    name="installmentsNumber"
                     label="N. Parcelas"
                     rules={[
                         { required: true, message: "Campo obrigatório" },
@@ -79,7 +79,7 @@ const FormFields: React.FC<IFormFieldsFinancialProps> = ({ form }) => {
                 <Form.Item
                     name="additionalExpenses"
                     label="Despesas Extras R$"
-                    rules={[{ required: true, message: "Campo obrigatório" }]}
+                    rules={[{ required: false, message: "Campo obrigatório" }]}
                 >
                     <InputNumber
                         min={0}

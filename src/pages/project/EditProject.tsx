@@ -6,7 +6,7 @@ import FormFields from './components/FormFields';
 import FormFieldsFinancial from './components/FormFieldsFinancial';
 import { PlusOutlined } from '@ant-design/icons';
 import "./style.sass";
-import { DataTypeProduct, ValueForm, ValueFormProduct } from './IProject';
+import { DataTypeProduct, ValueForm, ValueFormFinancial, ValueFormProduct } from './IProject';
 import { Notification } from '../../components/notification/Notification';
 import { TableRowSelection } from 'antd/es/table/interface';
 import ProductsTable from './components/ProductsTable';
@@ -35,6 +35,7 @@ const EditProject: React.FC = () => {
     const [salespersonList, setSalespersonList] = useState([]);
     const [categoryList, setCategoryList] = useState([]);
     const [editingProductId, setEditingProductId] = useState<React.Key | null>(null);
+    const [editingFinancialId, setEditingFinancialId] = useState<React.Key | null>(null);
     const [financialData, setFinancialData] = useState<any>(null);
     const navigate = useNavigate();
 
@@ -82,8 +83,12 @@ const EditProject: React.FC = () => {
             .then((response) => {
                 if (response.status === 200) {
                     const financial = response.data;
-                    setFinancialData(financial);
-                    formFinancial.setFieldsValue(financial);
+                    const treatedData = {
+                        ...financial,
+                        firstPayment: moment(financial.firstPayment).format("YYYY-MM-DD"),
+                    }
+                    setFinancialData(treatedData);
+                    formFinancial.setFieldsValue(treatedData);
                 }
             })
             .catch((error) => {
@@ -206,6 +211,28 @@ const EditProject: React.FC = () => {
             .catch((error) => {
                 console.error("Erro ao atualizar o projeto:", error);
             });
+    }
+
+    function handleSaveFinancial(data: ValueFormFinancial) {
+        const dataToSave = {
+            projectId: id,
+            installmentsNumber: data.installmentsNumber,
+            firstPayment: data.firstPayment,
+            paymentType: data.paymentType,
+            additionalExpenses: data.additionalExpenses,
+        };
+
+        api.put(`/financial/${id}`, dataToSave)
+            .then((response) => {
+                onSave(response);
+            })
+            .catch((error) => {
+                console.error("Erro ao atualizar o produto:", error);
+            });
+
+        setSelectedRowKeys([]);
+        setSelectedRows([]);
+        setIsModalVisible(false);
     }
 
     function handleSave(data: ValueFormProduct) {
@@ -357,7 +384,7 @@ const EditProject: React.FC = () => {
                         </div>
                     </TabPane>
                     <TabPane tab="Financeiro" key="3">
-                        <Form form={formFinancial} layout="vertical">
+                        <Form form={formFinancial} onFinish={handleSaveFinancial} layout="vertical">
                             <FormFieldsFinancial
                                 form={formFinancial}
                             />
