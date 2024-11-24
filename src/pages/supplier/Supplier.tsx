@@ -124,8 +124,6 @@ const Supplier = () => {
             additional: data.additional,
         };
 
-        console.log(dataToSave);
-
         if (isNewRegistration) {
             api.post("/suppliers", dataToSave)
                 .then((response) => {
