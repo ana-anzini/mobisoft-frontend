@@ -13,6 +13,7 @@ import ProductsTable from './components/ProductsTable';
 import ProductModal from './components/ProductModal';
 import moment from 'moment';
 import FormFieldsDelivery from './components/FormFieldsDelivery';
+import FormFieldsTotalValues from './components/FormFieldsTotalValues';
 
 const { TabPane } = Tabs;
 
@@ -462,6 +463,11 @@ const EditProject: React.FC = () => {
                                     Atualizar
                                 </Button>
                             </Form.Item>
+                        </Form>
+                        <Form layout="vertical">
+                            <FormFieldsTotalValues
+                                form={form}
+                            />
                         </Form>
                     </TabPane>
                 </Tabs>
