@@ -25,7 +25,7 @@ const EditProject: React.FC = () => {
     const [projectData, setProjectData] = useState<any>(null);
     const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
     const [isNewProduct, setIsNewProduct] = useState<boolean>(true);
-    const [isNewDelivery, setIsNewDelivery] = useState<boolean>(true);
+    const [isNewDelivery, setIsNewDelivery] = useState<boolean>(false);
     const [tableData, setTableData] = useState<DataTypeProduct[]>([]);
     const [loadingTableData, setLoadingTableData] = useState(true);
     const [selectedRows, setSelectedRows] = useState<DataTypeProduct[]>([]);
@@ -38,6 +38,7 @@ const EditProject: React.FC = () => {
     const [editingProductId, setEditingProductId] = useState<React.Key | null>(null);
     const [editingDeliveryId, setEditingDeliveryId] = useState<React.Key | null>(null);
     const [financialData, setFinancialData] = useState<any>(null);
+    const [deliveryData, setDeliveryData] = useState<any>(null);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -49,6 +50,7 @@ const EditProject: React.FC = () => {
             loadCategories();
             loadTableData();
             loadFormFinancial(id);
+            loadFormDelivery(id);
         }
     }, [id]);
 
@@ -72,6 +74,28 @@ const EditProject: React.FC = () => {
 
                     setProjectData(treatedData);
                     form.setFieldsValue(treatedData);
+                }
+            })
+            .catch((error) => {
+                console.error("Erro ao carregar dados do projeto:", error);
+            });
+    }
+
+    function loadFormDelivery(projectId: string) {
+        api.get(`deliveries/find/${projectId}`)
+            .then((response) => {
+                if (response.status === 200) {
+                    const delivery = response.data;
+                    const treatedData = {
+                        ...delivery,
+                        deliveryDate: moment(delivery.deliveryDate).format("YYYY-MM-DD HH:mm"),
+                    }
+                    setDeliveryData(treatedData);
+                    formDelivery.setFieldsValue(treatedData);
+                }
+
+                if (response.data.length == 0) {
+                    setIsNewDelivery(true);
                 }
             })
             .catch((error) => {
@@ -277,7 +301,7 @@ const EditProject: React.FC = () => {
             number: data.number,
             neighborhood: data.neighborhood,
             additional: data.additional,
-            deliveryDate: data.deliveryDate,
+            deliveryDate: moment(data.deliveryDate),
             freight: data.freight,
         };
 
@@ -290,8 +314,7 @@ const EditProject: React.FC = () => {
                     console.error("Erro ao salvar o produto:", error);
                 });
         } else {
-            const delivery = dataToSave.id;
-            api.put(`/deliveries/${delivery}`, dataToSave)
+            api.put(`/deliveries/${id}`, dataToSave)
                 .then((response) => {
                     onSave(response);
                 })
