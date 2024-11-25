@@ -1,8 +1,6 @@
-import React from 'react';
-import { Form, Input, Select, Col, Row, Checkbox, InputNumber, Divider, Typography, Button } from 'antd';
-import { PaymentType, StatusType } from '../IProject';
-import { statusTypeLabels } from './ProjectTable';
-import ZipCodeSearch from '../../../components/CEPSearch';
+import React, { useEffect, useState } from 'react';
+import { Form, Row, Col, Divider, Typography, Spin, message } from 'antd';
+import { useParams } from 'react-router-dom';
 
 const { Text } = Typography;
 
@@ -11,52 +9,46 @@ interface IFormFieldsTotalProps {
 }
 
 const FormFieldsTotalValues: React.FC<IFormFieldsTotalProps> = ({ form }) => {
+    const { id } = useParams<{ id: string }>();
+    const [loading, setLoading] = useState(false);
+
     return (
         <Row gutter={16}>
             <Divider />
             <Col span={24}>
                 <h3>Valores Finais</h3>
             </Col>
-            <Col>
-                <Form.Item
-                    name="totalValue"
-                    label="Valor total a ser pago pelo cliente"
-                >
-                    <Text>R$ 1000</Text>
-                </Form.Item>
-            </Col>
-            <Col>
-                <Form.Item
-                    name="tax"
-                    label="Impostos"
-                >
-                    <Text>R$ 1000</Text>
-                </Form.Item>
-            </Col>
-            <Col>
-                <Form.Item
-                    name="totalProjectDesigner"
-                    label="Projetista"
-                >
-                    <Text>R$ 1000</Text>
-                </Form.Item>
-            </Col>
-            <Col>
-                <Form.Item
-                    name="totalSeller"
-                    label="Vendedor"
-                >
-                    <Text>R$ 1000</Text>
-                </Form.Item>
-            </Col>
-            <Col>
-                <Form.Item
-                    name="totalProfit"
-                    label="Lucro"
-                >
-                    <Text>R$ 1000</Text>
-                </Form.Item>
-            </Col>
+            {loading ? (
+                <Spin tip="Carregando valores..." />
+            ) : (
+                <>
+                    <Col span={24}>
+                        <Form.Item name="totalValue" label="Valor total a ser pago pelo cliente">
+                            <Text>R$ {form.getFieldValue('totalValue')?.toFixed(2) || '0.00'}</Text>
+                        </Form.Item>
+                    </Col>
+                    <Col span={24}>
+                        <Form.Item name="tax" label="Impostos">
+                            <Text>R$ {form.getFieldValue('totalTax')?.toFixed(2) || '0.00'}</Text>
+                        </Form.Item>
+                    </Col>
+                    <Col span={24}>
+                        <Form.Item name="totalProjectDesigner" label="Projetista">
+                            <Text>R$ {form.getFieldValue('totalProjectDesigner')?.toFixed(2) || '0.00'}</Text>
+                        </Form.Item>
+                    </Col>
+                    <Col span={24}>
+                        <Form.Item name="totalSeller" label="Vendedor">
+                            <Text>R$ {form.getFieldValue('totalSeller')?.toFixed(2) || '0.00'}</Text>
+                        </Form.Item>
+                    </Col>
+                    <Col span={24}>
+                        <Form.Item name="totalProfit" label="Lucro">
+                            <Text>R$ {form.getFieldValue('totalProfit')?.toFixed(2) || '0.00'}</Text>
+                        </Form.Item>
+                    </Col>
+                </>
+            )}
         </Row>
     );
 };

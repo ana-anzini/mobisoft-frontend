@@ -29,7 +29,6 @@ const NewProject: React.FC = () => {
     }
 
     function handleSave(data: ValueForm) {
-        form.resetFields();
         const dataToSave = {
             id: isNewRegistration ? null : editingAdministrationId,
             tax: data.tax,
@@ -39,28 +38,15 @@ const NewProject: React.FC = () => {
             additionalAssembler: data.additionalAssembler,
         };
 
-        if (isNewRegistration) {
-            api.post("/administration", dataToSave)
-                .then((response) => {
-                    if (response.status === 201) {
-                        Notification({ type: "success", message: "Informações salvas com sucesso!" });
-                    }
-                })
-                .catch((error) => {
-                    console.error("Erro ao salvar as informações:", error);
-                });
-        } else {
-            const administration = dataToSave.id;
-            api.put(`/administration/${administration}`, dataToSave)
-                .then((response) => {
-                    if (response.status === 200) {
-                        Notification({ type: "success", message: "Informações atualizadas com sucesso!" });
-                    }
-                })
-                .catch((error) => {
-                    console.error("Erro ao atualizar as informações:", error);
-                });
-        }
+        api.put(`/administration`, dataToSave)
+            .then((response) => {
+                if (response.status === 200) {
+                    Notification({ type: "success", message: "Informações atualizadas com sucesso!" });
+                }
+            })
+            .catch((error) => {
+                console.error("Erro ao atualizar as informações:", error);
+            });
     }
 
     return (

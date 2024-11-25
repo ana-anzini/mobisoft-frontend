@@ -23,6 +23,7 @@ const EditProject: React.FC = () => {
     const [formProduct] = Form.useForm();
     const [formFinancial] = Form.useForm();
     const [formDelivery] = Form.useForm();
+    const [formValues] = Form.useForm();
     const [projectData, setProjectData] = useState<any>(null);
     const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
     const [isNewProduct, setIsNewProduct] = useState<boolean>(true);
@@ -40,6 +41,7 @@ const EditProject: React.FC = () => {
     const [editingDeliveryId, setEditingDeliveryId] = useState<React.Key | null>(null);
     const [financialData, setFinancialData] = useState<any>(null);
     const [deliveryData, setDeliveryData] = useState<any>(null);
+    const [totalValuesData, setTotalValuesData] = useState<any>(null);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -52,6 +54,7 @@ const EditProject: React.FC = () => {
             loadTableData();
             loadFormFinancial(id);
             loadFormDelivery(id);
+            loadFormTotalValues(id);
         }
     }, [id]);
 
@@ -115,6 +118,23 @@ const EditProject: React.FC = () => {
                     }
                     setFinancialData(treatedData);
                     formFinancial.setFieldsValue(treatedData);
+                }
+            })
+            .catch((error) => {
+                console.error("Erro ao carregar dados do projeto:", error);
+            });
+    }
+
+    function loadFormTotalValues(projectId: string) {
+        api.get(`/financial/findTotalValues/${projectId}`)
+            .then((response) => {
+                if (response.status === 200) {
+                    const values = response.data;
+                    const treatedData = {
+                        ...values,
+                    }
+                    setTotalValuesData(treatedData);
+                    formValues.setFieldsValue(treatedData);
                 }
             })
             .catch((error) => {
@@ -466,7 +486,7 @@ const EditProject: React.FC = () => {
                         </Form>
                         <Form layout="vertical">
                             <FormFieldsTotalValues
-                                form={form}
+                                form={formValues}
                             />
                         </Form>
                     </TabPane>
