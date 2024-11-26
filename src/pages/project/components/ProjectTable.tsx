@@ -1,9 +1,11 @@
 import { Button, Table } from 'antd';
-import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { EditOutlined, DeleteOutlined, FilePdfOutlined } from '@ant-design/icons';
 import { DataType } from '../IProject';
 import { TableRowSelection } from 'antd/es/table/interface';
 import { StatusType } from '../../deliveries/IDeliveries';
 import { useNavigate } from 'react-router-dom';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 interface IProjectTable {
     loading: boolean;
@@ -36,6 +38,23 @@ const ProjectTable = ({
         }
         navigate(`/edit-project/${record.key}`);
     };
+
+    const generatePDF = (record: DataType) => {
+        const doc = new jsPDF();
+
+        doc.text('Detalhes do Projeto', 14, 16);
+
+        autoTable(doc, {
+            startY: 20,
+            head: [['Campo', 'Valor']],
+            body: [
+                ['Descrição', record.description],
+            ],
+        });
+
+        doc.save(`Projeto_${record.key}.pdf`);
+    };
+
     const columns = [
         {
             title: 'Descrição',
@@ -79,6 +98,13 @@ const ProjectTable = ({
                         onClick={() => onDelete(String(record.key))}
                         style={{
                             color: '#FF0000'
+                        }}
+                    />
+                    <Button
+                        icon={<FilePdfOutlined />}
+                        onClick={() => generatePDF(record)}
+                        style={{
+                            color: '#FFA700'
                         }}
                     />
                 </div>
