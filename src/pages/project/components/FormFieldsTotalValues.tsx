@@ -22,27 +22,27 @@ const FormFieldsTotalValues: React.FC<IFormFieldsTotalProps> = ({ form }) => {
                 <Spin tip="Carregando valores..." />
             ) : (
                 <>
-                    <Col span={24}>
+                    <Col span={4}>
                         <Form.Item name="totalValue" label="Valor total a ser pago pelo cliente">
                             <Text>R$ {form.getFieldValue('totalValue')?.toFixed(2) || '0.00'}</Text>
                         </Form.Item>
                     </Col>
-                    <Col span={24}>
+                    <Col span={4}>
                         <Form.Item name="tax" label="Impostos">
                             <Text>R$ {form.getFieldValue('totalTax')?.toFixed(2) || '0.00'}</Text>
                         </Form.Item>
                     </Col>
-                    <Col span={24}>
+                    <Col span={4}>
                         <Form.Item name="totalProjectDesigner" label="Projetista">
                             <Text>R$ {form.getFieldValue('totalProjectDesigner')?.toFixed(2) || '0.00'}</Text>
                         </Form.Item>
                     </Col>
-                    <Col span={24}>
+                    <Col span={4}>
                         <Form.Item name="totalSeller" label="Vendedor">
                             <Text>R$ {form.getFieldValue('totalSeller')?.toFixed(2) || '0.00'}</Text>
                         </Form.Item>
                     </Col>
-                    <Col span={24}>
+                    <Col span={4}>
                         <Form.Item name="totalProfit" label="Lucro">
                             <Text>R$ {form.getFieldValue('totalProfit')?.toFixed(2) || '0.00'}</Text>
                         </Form.Item>
