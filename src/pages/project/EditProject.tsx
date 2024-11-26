@@ -70,6 +70,7 @@ const EditProject: React.FC = () => {
 
                     const treatedData = {
                         costumerId: project.costumer.id,
+                        costumerName: project.costumer.name,
                         projectDesignerId: project.projectDesigner.id,
                         sellerId: project.seller.id,
                         ...project,

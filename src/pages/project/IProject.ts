@@ -18,6 +18,7 @@ export interface DataType {
     id: string;
     description: string;
     costumerId: number;
+    costumerName: string;
     projectDesignerId: number;
     sellerId: number;
     referenceDate: string;
@@ -32,6 +33,7 @@ export type ValueForm = {
     supplierId: number;
     description: string;
     costumerId: number;
+    costumerName: string;
     projectDesignerId: number;
     sellerId: number;
     referenceDate: string;

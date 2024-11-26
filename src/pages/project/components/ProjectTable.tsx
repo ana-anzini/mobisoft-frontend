@@ -6,6 +6,8 @@ import { StatusType } from '../../deliveries/IDeliveries';
 import { useNavigate } from 'react-router-dom';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import axios from 'axios';
+import api from '../../../service/api';
 
 interface IProjectTable {
     loading: boolean;
@@ -42,17 +44,41 @@ const ProjectTable = ({
     const generatePDF = (record: DataType) => {
         const doc = new jsPDF();
 
-        doc.text('Detalhes do Projeto', 14, 16);
+        doc.addImage('img/Mozini.png', 'PNG', 10, 10, 50, 20);
+        doc.setFontSize(10);
+        doc.text('MOZINI MOVEIS SOB MEDIDA E SERVIÇOS', 90, 20);
+        doc.text('Mozini Móveis Sob Medida LTDA', 90, 26);
+        doc.text('Rua Monsenhor Gercino 1021', 90, 32);
+        doc.text('(47) 9241-83503 | contato@facilitmoveis.com.br', 90, 38);
+        doc.text('Joinville - SC', 90, 44);
 
-        autoTable(doc, {
-            startY: 20,
-            head: [['Campo', 'Valor']],
-            body: [
-                ['Descrição', record.description],
-            ],
-        });
+        doc.text(`Cliente: ${record.costumerName}`, 14, 64);
+        doc.text(`Projeto: ${record.description}`, 14, 68);
 
-        doc.save(`Projeto_${record.key}.pdf`);
+        api.get(`/productProjects/findTotal/${record.key}`)
+            .then((response) => {
+                const { products: productArray, totalValue } = response.data;
+
+                const productRows = productArray.map((product: any) => [
+                    product.product.description,
+                ]);
+
+                autoTable(doc, {
+                    startY: 80,
+                    head: [['Produtos/Ambientes']],
+                    body: productRows,
+                });
+
+                const finalY = (doc as any).lastAutoTable.finalY;
+                doc.text(`Total:${totalValue}`, 14, finalY + 10);
+
+                doc.save(`Projeto_${record.key}.pdf`);
+            }).catch((err) => {
+                console.error('Erro ao buscar produtos:', err);
+                doc.text('Erro ao carregar os produtos.', 14, 80);
+
+                doc.save(`Projeto_${record.key}.pdf`);
+            });
     };
 
     const columns = [
