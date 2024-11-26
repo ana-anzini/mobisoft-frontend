@@ -8,6 +8,7 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import axios from 'axios';
 import api from '../../../service/api';
+import moment from 'moment';
 
 interface IProjectTable {
     loading: boolean;
@@ -33,6 +34,15 @@ const ProjectTable = ({
     handleEdit
 }: IProjectTable) => {
     const navigate = useNavigate();
+    const formatDate = () => {
+        const today = new Date();
+        const day = String(today.getDate()).padStart(2, '0');
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const year = today.getFullYear();
+        return `${day}/${month}/${year}`;
+    };
+
+    const today = formatDate();
 
     const onEdit = (record: DataType) => {
         if (handleEdit) {
@@ -70,7 +80,41 @@ const ProjectTable = ({
                 });
 
                 const finalY = (doc as any).lastAutoTable.finalY;
-                doc.text(`Total:${totalValue}`, 14, finalY + 10);
+                doc.text(`Total R$:${totalValue}`, 14, finalY + 10);
+
+                const formattedObservations = doc.splitTextToSize(
+                    `Observações: A venda acima fica condicionada à aprovação do crédito pela financeira, independentemente do cliente dar cheques referente a esta operação. O cancelamento voluntário deste pedido implicará em uma multa contratual de 30% do valor deste pedido.`,
+                    180 // Largura máxima permitida para o texto
+                );
+                doc.text(formattedObservations, 14, finalY + 20);
+
+                const formattedDeliveryTerms = doc.splitTextToSize(
+                    `O prazo para entrega dos móveis será de 60 dias a contar da data da assinatura na revisão dos projetos. Em caso de obra, o prazo passará a valer à partir da liberação para medição final com a obra concluída.`,
+                    180
+                );
+                doc.text(formattedDeliveryTerms, 14, finalY + 40);
+
+                const formattedContact = doc.splitTextToSize(
+                    `Entraremos em contato pelo menos 24 horas antes da entrega para efetuarmos o agendamento, confirmando a data e o local onde a mercadoria adquirida será entregue.`,
+                    180
+                );
+                doc.text(formattedContact, 14, finalY + 50);
+
+                const formattedCreditClause = doc.splitTextToSize(
+                    `O Cliente declara-se ciente de que a Empresa/Loja poderá ceder o crédito decorrente da operação de venda/prestação de serviços parcelada para qualquer Instituição Financeira, a qual ficará sub-rogada nos direitos do cedente para receber o valor das parcelas nas datas avençadas.`,
+                    180
+                );
+                doc.text(formattedCreditClause, 14, finalY + 60);
+
+                const formattedAgreement = doc.splitTextToSize(
+                    `Estou de acordo com os valores, formas de pagamento, prazo de entrega e descrição dos produtos.`,
+                    180
+                );
+                doc.text(formattedAgreement, 14, finalY + 100);
+
+                doc.text(`Joinville, ${today}`, 14, finalY + 120);
+                doc.text('_________________________________', 14, finalY + 130);
+                doc.text('Assinatura do Cliente', 14, finalY + 140);
 
                 doc.save(`Projeto_${record.key}.pdf`);
             }).catch((err) => {
