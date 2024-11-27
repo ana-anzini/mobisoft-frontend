@@ -1,0 +1,63 @@
+body, html
+    height: 100%
+
+    #main-container
+        width: 100%
+
+.login-page 
+    display: flex
+    height: 100vh
+
+    .login-column 
+        flex: 1
+        display: flex
+        justify-content: center
+        align-items: center
+        background-color: #ffffff
+        padding: 20px
+        height: 100%
+
+        .login-form 
+            width: 100%
+            max-width: 400px
+
+            .title 
+                font-weight: bold
+                margin-bottom: 10px
+            
+
+            .register-link 
+                display: block
+                margin-bottom: 20px
+
+                span 
+                    color: #1890ff
+
+            .login-button 
+                width: 100%
+                height: 40px
+                background-color: #1890ff
+                border: none
+                font-weight: bold
+                color: white
+            
+    .image-column 
+        flex: 1
+        background: url('img/image.png') no-repeat
+        background-size: cover
+        background-position: center
+        display: flex
+        flex-direction: column
+        justify-content: center
+        align-items: center
+        text-align: center
+        padding: 40px
+
+        .content 
+            max-width: 500px
+
+            h1 
+                font-size: 28px
+                font-weight: bold
+                margin-bottom: 10px
+                color: #333
