@@ -41,6 +41,7 @@ const AuthForm = () => {
     const onRegisterFinish = async (values: any) => {
         try {
             await api.post('/auth/register', {
+                name: values.name,
                 login: values.login,
                 password: values.password,
                 role: "1",
@@ -99,8 +100,14 @@ const AuthForm = () => {
                                 <span>Já tem uma conta? Faça login</span>
                             </Link>
                             <Form.Item
-                                name="login"
+                                name="name"
                                 rules={[{ required: true, message: 'Por favor, insira seu nome!' }]}
+                            >
+                                <Input placeholder="Nome" />
+                            </Form.Item>
+                            <Form.Item
+                                name="login"
+                                rules={[{ required: true, message: 'Por favor, insira seu e-mail!' }]}
                             >
                                 <Input placeholder="E-mail" />
                             </Form.Item>
