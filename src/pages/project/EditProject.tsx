@@ -54,7 +54,7 @@ const EditProject: React.FC = () => {
             loadTableData();
             loadFormFinancial(id);
             loadFormDelivery(id);
-            // loadFormTotalValues(id);
+            loadFormTotalValues();
         }
     }, [id]);
 
@@ -108,21 +108,16 @@ const EditProject: React.FC = () => {
             });
     }
 
-    function loadFormTotalValues(projectId: string) {
-        api.get(`projects/${projectId}`)
+    function loadFormTotalValues() {
+        api.get(`financial/projects/${id}`)
             .then((response) => {
                 if (response.status === 200) {
-                    const delivery = response.data;
+                    const values = response.data;
                     const treatedData = {
-                        ...delivery,
-                        deliveryDate: moment(delivery.deliveryDate).format("YYYY-MM-DD HH:mm"),
+                        ...values,
                     }
-                    setDeliveryData(treatedData);
-                    formDelivery.setFieldsValue(treatedData);
-                }
-
-                if (response.data.length == 0) {
-                    setIsNewDelivery(true);
+                    setTotalValuesData(treatedData);
+                    formValues.setFieldsValue(treatedData);
                 }
             })
             .catch((error) => {
@@ -149,13 +144,13 @@ const EditProject: React.FC = () => {
     }
 
     function calculateValues() {
-        api.get(`/financial/findTotalValues/${id}`)
+        api.post(`/financial/createFinancialValues/${id}`, {})
             .then((response) => {
                 if (response.status === 200) {
                     const values = response.data;
                     const treatedData = {
                         ...values,
-                    }
+                    };
                     setTotalValuesData(treatedData);
                     formValues.setFieldsValue(treatedData);
                 }
