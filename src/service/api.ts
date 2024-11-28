@@ -2,7 +2,7 @@ import axios from "axios";
 import { Notification } from "../components/notification/Notification";
 
 const api = axios.create({
-    baseURL: 'https://mobisoft.site/api',
+    baseURL: 'http://localhost:8081/',
     headers: {
         "Content-type": "application/json",
     },
