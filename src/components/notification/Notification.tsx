@@ -3,32 +3,29 @@ import { notification as NotificationAntd } from 'antd';
 import './style.sass';
 import { INotification } from './INotification';
 
-export const Notification = ({
-    type,
-    message,
-    ...args
-}: INotification) => {
-    const notificationTitle =
-        type === 'success' ? 'Sucesso!'
-            : type === 'error' ? 'Oh, não!'
-                : type === 'warning' ? 'Ops!'
-                    : type === 'info' ? 'Aviso!'
-                        : null;
+const getNotificationData = (type: string) => {
+    const notificationData: { [key: string]: { title: string, icon: JSX.Element } } = {
+        success: { title: 'Sucesso!', icon: <Icon icon="ant-design:check-circle-filled" /> },
+        error: { title: 'Oh, não!', icon: <Icon icon="fluent-mdl2:status-error-full" /> },
+        warning: { title: 'Ops!', icon: <Icon icon="ant-design:warning-filled" /> },
+        info: { title: 'Aviso!', icon: <Icon icon="ant-design:info-circle-filled" /> },
+    };
 
-    const icon =
-        type === 'success' ? <Icon icon="ant-design:check-circle-filled" />
-            : type === 'error' ? <Icon icon="fluent-mdl2:status-error-full" />
-                : type === 'warning' ? <Icon icon="ant-design:warning-filled" />
-                    : type === 'info' ? <Icon icon="ant-design:info-circle-filled" />
-                        : null;
+    return notificationData[type] || null;
+};
 
-    if (!notificationTitle || !icon) {
+export const Notification = ({ type, message, ...args }: INotification) => {
+    const notificationData = getNotificationData(type);
+
+    if (!notificationData) {
         console.warn(`Tipo de notificação inválido: ${type}`);
-        return; // Se o tipo não for válido, não faz nada.
+        return;
     }
 
+    const { title, icon } = notificationData;
+
     NotificationAntd[type]({
-        message: notificationTitle,
+        message: title,
         description: message,
         className: `notification-${type}`,
         icon,
