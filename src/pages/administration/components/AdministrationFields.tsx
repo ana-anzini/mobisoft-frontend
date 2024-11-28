@@ -7,7 +7,6 @@ interface IAdministrationFieldsProps {
 const AdministrationFields: React.FC<IAdministrationFieldsProps> = () => {
     return (
         <Row gutter={16}>
-            <h2>Teste</h2>
             <Col span={4}>
                 <Form.Item
                     name="additionalFinancial"

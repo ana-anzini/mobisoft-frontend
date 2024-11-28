@@ -11,8 +11,6 @@ describe("AdministrationFields", () => {
             </Form>
         );
 
-        expect(screen.getByText("Teste")).toBeInTheDocument();
-
         expect(screen.getByLabelText("% Lucro")).toBeInTheDocument();
         expect(screen.getByLabelText("% Imposto")).toBeInTheDocument();
         expect(screen.getByLabelText("% Projetista")).toBeInTheDocument();
