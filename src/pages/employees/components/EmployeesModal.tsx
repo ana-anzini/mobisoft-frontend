@@ -30,7 +30,7 @@ const EmployeesModal = ({ isModalVisible, handleSave, handleCancel, form }: IEmp
         <>
             <Modal
                 width={800}
-                title="Novo Cliente"
+                title="Novo Colaborador"
                 open={isModalVisible}
                 okButtonProps={{ htmlType: "submit", form: "new-form" }}
                 onCancel={handleCancel}

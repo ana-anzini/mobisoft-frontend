@@ -54,7 +54,7 @@ const EditProject: React.FC = () => {
             loadTableData();
             loadFormFinancial(id);
             loadFormDelivery(id);
-            loadFormTotalValues(id);
+            // loadFormTotalValues(id);
         }
     }, [id]);
 
@@ -108,6 +108,28 @@ const EditProject: React.FC = () => {
             });
     }
 
+    function loadFormTotalValues(projectId: string) {
+        api.get(`projects/${projectId}`)
+            .then((response) => {
+                if (response.status === 200) {
+                    const delivery = response.data;
+                    const treatedData = {
+                        ...delivery,
+                        deliveryDate: moment(delivery.deliveryDate).format("YYYY-MM-DD HH:mm"),
+                    }
+                    setDeliveryData(treatedData);
+                    formDelivery.setFieldsValue(treatedData);
+                }
+
+                if (response.data.length == 0) {
+                    setIsNewDelivery(true);
+                }
+            })
+            .catch((error) => {
+                console.error("Erro ao carregar dados do projeto:", error);
+            });
+    }
+
     function loadFormFinancial(projectId: string) {
         api.get(`/financial/projects/${projectId}`)
             .then((response) => {
@@ -126,8 +148,8 @@ const EditProject: React.FC = () => {
             });
     }
 
-    function loadFormTotalValues(projectId: string) {
-        api.get(`/financial/findTotalValues/${projectId}`)
+    function calculateValues() {
+        api.get(`/financial/findTotalValues/${id}`)
             .then((response) => {
                 if (response.status === 200) {
                     const values = response.data;
@@ -462,7 +484,7 @@ const EditProject: React.FC = () => {
                             />
                         </div>
                     </TabPane>
-                    <TabPane tab="Financeiro" key="3">
+                    <TabPane tab="Financeiro" key="3" disabled={!financialData}>
                         <Form form={formFinancial} onFinish={handleSaveFinancial} layout="vertical">
                             <FormFieldsFinancial
                                 form={formFinancial}
@@ -474,7 +496,7 @@ const EditProject: React.FC = () => {
                             </Form.Item>
                         </Form>
                     </TabPane>
-                    <TabPane tab="Entrega e Orçamento Final" key="4">
+                    <TabPane tab="Entrega e Orçamento Final" key="4" disabled={!deliveryData}>
                         <Form form={formDelivery} onFinish={handleSaveDelivery} layout="vertical">
                             <FormFieldsDelivery
                                 form={formDelivery}
@@ -485,7 +507,12 @@ const EditProject: React.FC = () => {
                                 </Button>
                             </Form.Item>
                         </Form>
-                        <Form layout="vertical">
+                        <Form onFinish={calculateValues} layout="vertical">
+                            <Form.Item>
+                                <Button type="primary" htmlType="submit">
+                                    Calcular valores
+                                </Button>
+                            </Form.Item>
                             <FormFieldsTotalValues
                                 form={formValues}
                             />

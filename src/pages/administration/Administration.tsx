@@ -55,7 +55,6 @@ const NewProject: React.FC = () => {
                 <h2>Administração</h2>
                 <Form form={form} onFinish={handleSave} layout="vertical">
                     <FormFields
-                        form={form}
                     />
                     <Form.Item>
                         <Button type="primary" htmlType="submit">

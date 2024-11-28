@@ -1,13 +1,13 @@
 import React from 'react';
 import { Form, Input, Select, Col, Row, Checkbox, InputNumber } from 'antd';
 
-interface IFormFieldsProps {
-    form: any;
+interface IAdministrationFieldsProps {
 }
 
-const FormFields: React.FC<IFormFieldsProps> = ({ form }) => {
+const AdministrationFields: React.FC<IAdministrationFieldsProps> = () => {
     return (
         <Row gutter={16}>
+            <h2>Teste</h2>
             <Col span={4}>
                 <Form.Item
                     name="additionalFinancial"
@@ -77,4 +77,4 @@ const FormFields: React.FC<IFormFieldsProps> = ({ form }) => {
     );
 };
 
-export default FormFields;
+export default AdministrationFields;
