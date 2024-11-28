@@ -30,4 +30,11 @@ export default {
   transform: {
     "^.+\\.(js|jsx|ts|tsx)$": "babel-jest",
   },
+  transformIgnorePatterns: [
+    'node_modules/(?!axios|@iconify/react)'
+  ],
+
+  moduleNameMapper: {
+    '\\.(css|less|sass|scss)$': '<rootDir>/__mocks__/styleMock.js',
+  },
 };
