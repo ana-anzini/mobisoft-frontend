@@ -7,6 +7,11 @@ export interface DataType {
     additionalSeller: number;
     additionalProjectDesigner: number;
     additionalAssembler: number;
+    companyName: string;
+    socialReason: string;
+    address: string;
+    phone: string;
+    email: string;
 }
 
 export type ValueForm = {
@@ -15,4 +20,9 @@ export type ValueForm = {
     additionalSeller: number;
     additionalProjectDesigner: number;
     additionalAssembler: number;
+    companyName: string;
+    socialReason: string;
+    address: string;
+    phone: string;
+    email: string;
 }

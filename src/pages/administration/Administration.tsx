@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Button, Tabs } from 'antd';
+import { Form, Button, Tabs, Divider } from 'antd';
 import FormFields from './components/AdministrationFields';
 import api from '../../service/api';
 import { DataType, ValueForm, } from './IAdministration';
@@ -36,6 +36,11 @@ const NewProject: React.FC = () => {
             additionalSeller: data.additionalSeller,
             additionalProjectDesigner: data.additionalProjectDesigner,
             additionalAssembler: data.additionalAssembler,
+            companyName: data.companyName,
+            socialReason: data.socialReason,
+            address: data.address,
+            phone: data.phone,
+            email: data.email,
         };
 
         api.put(`/administration`, dataToSave)
