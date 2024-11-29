@@ -38,12 +38,6 @@ const DeliveriesTable = ({
             key: 'deliveryDateFormat',
         },
         {
-            title: 'Status',
-            dataIndex: 'statusType',
-            key: 'statusType',
-            render: (type: StatusType) => statusTypeLabels[type] || type,
-        },
-        {
             title: 'Ações',
             key: 'actions',
             width: 300,
