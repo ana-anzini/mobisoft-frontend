@@ -42,6 +42,7 @@ const EditProject: React.FC = () => {
     const [financialData, setFinancialData] = useState<any>(null);
     const [deliveryData, setDeliveryData] = useState<any>(null);
     const [totalValuesData, setTotalValuesData] = useState<any>(null);
+    const [loadingFinancial, setLoadingFinancial] = useState<boolean>(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -61,6 +62,34 @@ const EditProject: React.FC = () => {
     useEffect(() => {
         setFilteredData(tableData);
     }, [tableData]);
+
+    const reloadFinancialForm = () => {
+        setLoadingFinancial(true);
+        api.get(`/financial/projects/${id}`)
+            .then((response) => {
+                if (response.status === 200) {
+                    const financial = response.data;
+                    const treatedData = {
+                        ...financial,
+                        firstPayment: moment(financial.firstPayment).format("YYYY-MM-DD"),
+                    }
+                    setFinancialData(treatedData);
+                    formFinancial.setFieldsValue(treatedData);
+                }
+            })
+            .catch((error) => {
+                console.error("Erro ao carregar dados financeiros:", error);
+            })
+            .finally(() => {
+                setLoadingFinancial(false);
+            });
+    }
+
+    const onTabClick = (key: string) => {
+        if (key === "3") {
+            reloadFinancialForm();
+        }
+    };
 
     function loadFormProject(projectId: string) {
         api.get(`/projects/${projectId}`)
@@ -94,6 +123,7 @@ const EditProject: React.FC = () => {
                     const treatedData = {
                         ...delivery,
                         deliveryDate: moment(delivery.deliveryDate).format("YYYY-MM-DD HH:mm"),
+                        freight: delivery.freight,
                     }
                     setDeliveryData(treatedData);
                     formDelivery.setFieldsValue(treatedData);
@@ -311,6 +341,7 @@ const EditProject: React.FC = () => {
             api.post("/productProjects", dataToSave)
                 .then((response) => {
                     onSave(response);
+                    updateTotalCusts();
                 })
                 .catch((error) => {
                     console.error("Erro ao salvar o produto:", error);
@@ -320,6 +351,7 @@ const EditProject: React.FC = () => {
             api.put(`/productProjects/${productId}`, dataToSave)
                 .then((response) => {
                     onSave(response);
+                    updateTotalCusts();
                 })
                 .catch((error) => {
                     console.error("Erro ao atualizar o produto:", error);
@@ -329,6 +361,11 @@ const EditProject: React.FC = () => {
         setSelectedRowKeys([]);
         setSelectedRows([]);
         setIsModalVisible(false);
+    }
+
+    function updateTotalCusts() {
+        const total = tableData.reduce((sum, item) => sum + (item.productValue || 0), 0);
+        formFinancial.setFieldsValue({ totalCusts: total });
     }
 
     function handleSaveDelivery(data: ValueFormDelivery) {
@@ -350,7 +387,7 @@ const EditProject: React.FC = () => {
                     onSave(response);
                 })
                 .catch((error) => {
-                    console.error("Erro ao salvar o produto:", error);
+                    console.error("Erro ao salvar a entrega:", error);
                 });
         } else {
             api.put(`/deliveries/${id}`, dataToSave)
@@ -358,7 +395,7 @@ const EditProject: React.FC = () => {
                     onSave(response);
                 })
                 .catch((error) => {
-                    console.error("Erro ao atualizar o produto:", error);
+                    console.error("Erro ao atualizar a entrega:", error);
                 });
         }
     }
@@ -443,7 +480,7 @@ const EditProject: React.FC = () => {
         <main id="main">
             <div className="edit-project-container">
                 <h2>Editar Projeto</h2>
-                <Tabs defaultActiveKey="1">
+                <Tabs defaultActiveKey="1" onTabClick={onTabClick}>
                     <TabPane tab="Informações" key="1">
                         <Form form={form} onFinish={handleSaveProject} layout="vertical">
                             <FormFields
@@ -452,6 +489,11 @@ const EditProject: React.FC = () => {
                                 projectDesignersList={projectDesignersList}
                                 salespersonList={salespersonList}
                             />
+                            <Form.Item>
+                                <Button type="primary" htmlType="submit">
+                                    Atualizar
+                                </Button>
+                            </Form.Item>
                         </Form>
                     </TabPane>
                     <TabPane tab="Ambientes" key="2">
