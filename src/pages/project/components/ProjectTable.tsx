@@ -52,75 +52,85 @@ const ProjectTable = ({
     };
 
     const generatePDF = (record: DataType) => {
-        const doc = new jsPDF();
-
-        doc.addImage('img/Mozini.png', 'PNG', 10, 10, 50, 20);
-        doc.setFontSize(10);
-        doc.text('MOZINI MOVEIS SOB MEDIDA E SERVIÇOS', 90, 20);
-        doc.text('Mozini Móveis Sob Medida LTDA', 90, 26);
-        doc.text('Rua Monsenhor Gercino 1021', 90, 32);
-        doc.text('(47) 9241-83503 | contato@facilitmoveis.com.br', 90, 38);
-        doc.text('Joinville - SC', 90, 44);
-
-        doc.text(`Cliente: ${record.costumerName}`, 14, 64);
-        doc.text(`Projeto: ${record.description}`, 14, 68);
-
-        api.get(`/productProjects/findTotal/${record.key}`)
+        api.get('/administration')
             .then((response) => {
-                const { products: productArray, totalValue } = response.data;
+                const adminData = response.data;
+                const doc = new jsPDF();
 
-                const productRows = productArray.map((product: any) => [
-                    product.product.description,
-                ]);
+                doc.setFontSize(10);
+                doc.text(adminData.companyName || 'MOZINI MOVEIS SOB MEDIDA E SERVIÇOS', 14, 20);
+                doc.text(adminData.socialReason || 'Mozini Móveis Sob Medida LTDA', 14, 26);
+                doc.text(adminData.address || 'Rua Monsenhor Gercino 1021', 14, 32);
+                doc.text(adminData.phone || '(47) 9241-83503 | contato@facilitmoveis.com.br', 14, 38);
+                doc.text(adminData.email || 'contato@facilitmoveis.com.br', 14, 44);
+                doc.text(adminData.city || 'Joinville - SC', 14, 50);
 
-                autoTable(doc, {
-                    startY: 80,
-                    head: [['Produtos/Ambientes']],
-                    body: productRows,
-                });
+                doc.text(`Cliente: ${record.costumerName}`, 14, 64);
+                doc.text(`Projeto: ${record.description}`, 14, 68);
 
-                const finalY = (doc as any).lastAutoTable.finalY;
-                doc.text(`Total R$:${totalValue}`, 14, finalY + 10);
+                api.get(`/productProjects/findTotal/${record.key}`)
+                    .then((response) => {
+                        const { products: productArray, totalValue } = response.data;
 
-                const formattedObservations = doc.splitTextToSize(
-                    `Observações: A venda acima fica condicionada à aprovação do crédito pela financeira, independentemente do cliente dar cheques referente a esta operação. O cancelamento voluntário deste pedido implicará em uma multa contratual de 30% do valor deste pedido.`,
-                    180 // Largura máxima permitida para o texto
-                );
-                doc.text(formattedObservations, 14, finalY + 20);
+                        const productRows = productArray.map((product: any) => [
+                            product.product.description,
+                        ]);
 
-                const formattedDeliveryTerms = doc.splitTextToSize(
-                    `O prazo para entrega dos móveis será de 60 dias a contar da data da assinatura na revisão dos projetos. Em caso de obra, o prazo passará a valer à partir da liberação para medição final com a obra concluída.`,
-                    180
-                );
-                doc.text(formattedDeliveryTerms, 14, finalY + 40);
+                        autoTable(doc, {
+                            startY: 80,
+                            head: [['Produtos/Ambientes']],
+                            body: productRows,
+                        });
 
-                const formattedContact = doc.splitTextToSize(
-                    `Entraremos em contato pelo menos 24 horas antes da entrega para efetuarmos o agendamento, confirmando a data e o local onde a mercadoria adquirida será entregue.`,
-                    180
-                );
-                doc.text(formattedContact, 14, finalY + 50);
+                        const finalY = (doc as any).lastAutoTable.finalY;
+                        doc.text(`Total R$:${totalValue}`, 14, finalY + 10);
 
-                const formattedCreditClause = doc.splitTextToSize(
-                    `O Cliente declara-se ciente de que a Empresa/Loja poderá ceder o crédito decorrente da operação de venda/prestação de serviços parcelada para qualquer Instituição Financeira, a qual ficará sub-rogada nos direitos do cedente para receber o valor das parcelas nas datas avençadas.`,
-                    180
-                );
-                doc.text(formattedCreditClause, 14, finalY + 60);
+                        const formattedObservations = doc.splitTextToSize(
+                            `Observações: A venda acima fica condicionada à aprovação do crédito pela financeira, independentemente do cliente dar cheques referente a esta operação. O cancelamento voluntário deste pedido implicará em uma multa contratual de 30% do valor deste pedido.`,
+                            180 // Largura máxima permitida para o texto
+                        );
+                        doc.text(formattedObservations, 14, finalY + 20);
 
-                const formattedAgreement = doc.splitTextToSize(
-                    `Estou de acordo com os valores, formas de pagamento, prazo de entrega e descrição dos produtos.`,
-                    180
-                );
-                doc.text(formattedAgreement, 14, finalY + 100);
+                        const formattedDeliveryTerms = doc.splitTextToSize(
+                            `O prazo para entrega dos móveis será de 60 dias a contar da data da assinatura na revisão dos projetos. Em caso de obra, o prazo passará a valer à partir da liberação para medição final com a obra concluída.`,
+                            180
+                        );
+                        doc.text(formattedDeliveryTerms, 14, finalY + 40);
 
-                doc.text(`Joinville, ${today}`, 14, finalY + 120);
-                doc.text('_________________________________', 14, finalY + 130);
-                doc.text('Assinatura do Cliente', 14, finalY + 140);
+                        const formattedContact = doc.splitTextToSize(
+                            `Entraremos em contato pelo menos 24 horas antes da entrega para efetuarmos o agendamento, confirmando a data e o local onde a mercadoria adquirida será entregue.`,
+                            180
+                        );
+                        doc.text(formattedContact, 14, finalY + 50);
 
-                doc.save(`Projeto_${record.key}.pdf`);
-            }).catch((err) => {
-                console.error('Erro ao buscar produtos:', err);
-                doc.text('Erro ao carregar os produtos.', 14, 80);
+                        const formattedCreditClause = doc.splitTextToSize(
+                            `O Cliente declara-se ciente de que a Empresa/Loja poderá ceder o crédito decorrente da operação de venda/prestação de serviços parcelada para qualquer Instituição Financeira, a qual ficará sub-rogada nos direitos do cedente para receber o valor das parcelas nas datas avençadas.`,
+                            180
+                        );
+                        doc.text(formattedCreditClause, 14, finalY + 60);
 
+                        const formattedAgreement = doc.splitTextToSize(
+                            `Estou de acordo com os valores, formas de pagamento, prazo de entrega e descrição dos produtos.`,
+                            180
+                        );
+                        doc.text(formattedAgreement, 14, finalY + 100);
+
+                        doc.text(`Joinville, ${today}`, 14, finalY + 120);
+                        doc.text('_________________________________', 14, finalY + 130);
+                        doc.text('Assinatura do Cliente', 14, finalY + 140);
+
+                        doc.save(`Projeto_${record.key}.pdf`);
+                    })
+                    .catch((err) => {
+                        console.error('Erro ao buscar produtos:', err);
+                        doc.text('Erro ao carregar os produtos.', 14, 80);
+                        doc.save(`Projeto_${record.key}.pdf`);
+                    });
+            })
+            .catch((err) => {
+                console.error('Erro ao buscar dados de administração:', err);
+                const doc = new jsPDF();
+                doc.text('Erro ao carregar dados de administração.', 14, 20);
                 doc.save(`Projeto_${record.key}.pdf`);
             });
     };
