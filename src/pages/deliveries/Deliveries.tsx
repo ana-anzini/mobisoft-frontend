@@ -154,19 +154,8 @@ const Supplier = () => {
                 api.delete(`/deliveries?ids=${idsToDelete}`)
                     .then((response) => {
                         const message = response.data;
-
-                        if (message === "Entrega(s) deletada(s) com sucesso.") {
-                            Notification({
-                                type: "success",
-                                message: message,
-                            });
-                            onDelete(response);
-                        } else {
-                            Notification({
-                                type: "error",
-                                message: message,
-                            });
-                        }
+                        onDelete(response);
+                        loadTableData();
                     })
                     .catch(() => {
                         Notification({
