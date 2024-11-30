@@ -17,6 +17,26 @@ export const employeesTypeLabels: { [key in EmployeesType]: string } = {
     [EmployeesType.ASSEMBLER]: 'Montador',
 };
 
+const renderActions = (
+    record: DataType,
+    onDelete: (id: string) => void,
+    handleEdit?: (record: DataType) => void
+) => (
+    <div style={{ display: 'flex', gap: '8px' }}>
+        <Button
+            icon={<EditOutlined />}
+            onClick={() => handleEdit && handleEdit(record)}
+        />
+        <Button
+            icon={<DeleteOutlined />}
+            onClick={() => onDelete(String(record.key))}
+            style={{
+                color: '#FF0000'
+            }}
+        />
+    </div>
+);
+
 const EmployeesTable = ({
     loading,
     tableData,
@@ -50,21 +70,7 @@ const EmployeesTable = ({
             title: 'Ações',
             key: 'actions',
             width: 300,
-            render: (_: string, record: DataType) => (
-                <div style={{ display: 'flex', gap: '8px' }}>
-                    <Button
-                        icon={<EditOutlined />}
-                        onClick={() => handleEdit && handleEdit(record)}
-                    />
-                    <Button
-                        icon={<DeleteOutlined />}
-                        onClick={() => onDelete(String(record.key))}
-                        style={{
-                            color: '#FF0000'
-                        }}
-                    />
-                </div>
-            ),
+            render: (_: string, record: DataType) => renderActions(record, onDelete, handleEdit),
         },
     ];
 
