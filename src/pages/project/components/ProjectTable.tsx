@@ -174,13 +174,6 @@ const ProjectTable = ({
                         onClick={() => onEdit(record)}
                     />
                     <Button
-                        icon={<DeleteOutlined />}
-                        onClick={() => onDelete(String(record.key))}
-                        style={{
-                            color: '#FF0000'
-                        }}
-                    />
-                    <Button
                         icon={<FilePdfOutlined />}
                         onClick={() => generatePDF(record)}
                         style={{
