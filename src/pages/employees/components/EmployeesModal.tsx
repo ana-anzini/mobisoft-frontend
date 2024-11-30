@@ -73,7 +73,7 @@ const EmployeesModal = ({ isModalVisible, handleSave, handleCancel, form }: IEmp
                                 label="Telefone"
                                 rules={[{ required: true, message: "Campo obrigatório" }]}
                             >
-                                <Input />
+                                <MaskedInput maskType="telefone" placeholder="Digite o telefone" />
                             </Form.Item>
                         </Col>
                         <Col span={8}>
@@ -154,7 +154,7 @@ const EmployeesModal = ({ isModalVisible, handleSave, handleCancel, form }: IEmp
                                 label="RG"
                                 rules={[{ required: true, message: "Campo obrigatório" }]}
                             >
-                                <Input />
+                                <Input maxLength={12} />
                             </Form.Item>
                         </Col>
                         <Col span={4}>
