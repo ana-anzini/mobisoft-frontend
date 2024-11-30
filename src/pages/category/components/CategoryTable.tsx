@@ -11,12 +11,24 @@ interface ICategoryTable {
     handleEdit?: (record: DataType) => void;
 }
 
+const ActionButton = ({
+    icon,
+    onClick,
+    style,
+}: {
+    icon: React.ReactNode;
+    onClick: () => void;
+    style?: React.CSSProperties;
+}) => (
+    <Button icon={icon} onClick={onClick} style={style} />
+);
+
 const CategoryTable = ({
     loading,
     tableData,
     rowSelection,
     onDelete,
-    handleEdit
+    handleEdit,
 }: ICategoryTable) => {
     const columns = [
         {
@@ -30,16 +42,14 @@ const CategoryTable = ({
             width: 300,
             render: (_: string, record: DataType) => (
                 <div style={{ display: 'flex', gap: '8px' }}>
-                    <Button
+                    <ActionButton
                         icon={<EditOutlined />}
                         onClick={() => handleEdit && handleEdit(record)}
                     />
-                    <Button
+                    <ActionButton
                         icon={<DeleteOutlined />}
                         onClick={() => onDelete(String(record.key))}
-                        style={{
-                            color: '#FF0000'
-                        }}
+                        style={{ color: '#FF0000' }}
                     />
                 </div>
             ),
