@@ -116,7 +116,7 @@ const EditProject: React.FC = () => {
     }
 
     function loadFormDelivery(projectId: string) {
-        api.get(`deliveries/find/${projectId}`)
+        api.get(`/deliveries/find/${projectId}`)
             .then((response) => {
                 if (response.status === 200) {
                     const delivery = response.data;
@@ -139,7 +139,7 @@ const EditProject: React.FC = () => {
     }
 
     function loadFormTotalValues() {
-        api.get(`financial/projects/${id}`)
+        api.get(`/financial/projects/${id}`)
             .then((response) => {
                 if (response.status === 200) {
                     const values = response.data;
