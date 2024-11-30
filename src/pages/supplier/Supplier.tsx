@@ -78,8 +78,8 @@ const Supplier = () => {
             if (response.status === 200) {
                 const dataTable = response.data.map((item: any) => ({
                     key: item.id,
-                    categoryId: item.categoryId,
-                    categoryDescription: item.categoryDescription,
+                    categoryId: item.category.id,
+                    categoryDescription: item.category.description,
                     name: item.name,
                     cpfOrCnpj: item.cpfOrCnpj,
                     phone: item.phone,
