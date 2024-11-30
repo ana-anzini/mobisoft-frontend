@@ -78,6 +78,7 @@ const Supplier = () => {
                     projectDescription: item.project.description,
                     deliveryDateFormat: moment(item.deliveryDate).format('DD/MM/YYYY'),
                     ...item,
+                    statusType: item.project.deliveryStatus,
                 }));
                 setTableData(dataTable);
                 setLoadingTableData(false);

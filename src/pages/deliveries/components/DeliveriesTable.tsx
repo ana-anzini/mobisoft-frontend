@@ -41,6 +41,7 @@ const DeliveriesTable = ({
             title: 'Status',
             dataIndex: 'statusType',
             key: 'statusType',
+            render: (type: StatusType) => statusTypeLabels[type] || type,
         },
         {
             title: 'Ações',
