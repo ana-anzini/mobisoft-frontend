@@ -68,8 +68,8 @@ const Employees = () => {
                 pis: employees.pis,
                 ctps: employees.ctps,
                 salary: employees.salary,
-                admission: moment(employees.admission),
-                dismissional: moment(employees.dismissional),
+                admission: moment(employees.admission).format("YYYY-MM-DD"),
+                dismissional: moment(employees.dismissional).format("YYYY-MM-DD"),
             });
             setIsNewRegistration(false);
         }
