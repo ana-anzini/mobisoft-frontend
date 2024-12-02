@@ -21,12 +21,16 @@ export const networkTypeLabels: { [key in NetworkType]: string } = {
     [NetworkType.STORE]: 'Loja',
 };
 
+const createActionButton = (icon: React.ReactNode, onClick: () => void, style?: React.CSSProperties) => (
+    <Button icon={icon} onClick={onClick} style={style} />
+);
+
 const CostumerTable = ({
     loading,
     tableData,
     rowSelection,
     onDelete,
-    handleEdit
+    handleEdit,
 }: ICostumerTable) => {
     const columns = [
         {
@@ -56,32 +60,25 @@ const CostumerTable = ({
             width: 300,
             render: (_: string, record: DataType) => (
                 <div style={{ display: 'flex', gap: '8px' }}>
-                    <Button
-                        icon={<EditOutlined />}
-                        onClick={() => handleEdit && handleEdit(record)}
-                    />
-                    <Button
-                        icon={<DeleteOutlined />}
-                        onClick={() => onDelete(String(record.key))}
-                        style={{
-                            color: '#FF0000'
-                        }}
-                    />
+                    {createActionButton(<EditOutlined />, () => handleEdit && handleEdit(record))}
+                    {createActionButton(
+                        <DeleteOutlined />,
+                        () => onDelete(String(record.key)),
+                        { color: '#FF0000' }
+                    )}
                 </div>
             ),
         },
     ];
 
     return (
-        <div>
-            <Table
-                dataSource={tableData}
-                rowSelection={rowSelection}
-                columns={columns}
-                loading={loading}
-                rowKey="key"
-            />
-        </div>
+        <Table
+            dataSource={tableData}
+            rowSelection={rowSelection}
+            columns={columns}
+            loading={loading}
+            rowKey="key"
+        />
     );
 };
 
