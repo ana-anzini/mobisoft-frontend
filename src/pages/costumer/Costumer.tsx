@@ -161,10 +161,26 @@ const Costumer = () => {
             onOk: () => {
                 api.delete(`/costumers?ids=${idsToDelete}`)
                     .then((response) => {
-                        onDelete(response);
+                        const message = response.data;
+
+                        if (message === "Cliente(s) deletada(s) com sucesso.") {
+                            Notification({
+                                type: "success",
+                                message: message,
+                            });
+                            loadTableData();
+                        } else {
+                            Notification({
+                                type: "error",
+                                message: message,
+                            });
+                        }
                     })
-                    .catch((error) => {
-                        console.error('Erro ao deletar cliente:', error);
+                    .catch(() => {
+                        Notification({
+                            type: "error",
+                            message: "Erro ao deletar",
+                        });
                     });
             }
         });
