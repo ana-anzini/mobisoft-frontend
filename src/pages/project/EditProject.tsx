@@ -129,7 +129,7 @@ const EditProject: React.FC = () => {
                     formDelivery.setFieldsValue(treatedData);
                 }
 
-                if (response.data.length == 0) {
+                if (response.data.userGroup == undefined) {
                     setIsNewDelivery(true);
                 }
             })
