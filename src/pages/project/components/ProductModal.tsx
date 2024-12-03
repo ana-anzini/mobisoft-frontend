@@ -58,7 +58,7 @@ const ProductModal = ({ isModalVisible, handleCancel, handleSave, form, category
 
     return (
         <Modal
-            width={800}
+            width={600}
             title="Novo produto"
             open={isModalVisible}
             okButtonProps={{ htmlType: "submit", form: "new-form" }}
@@ -77,7 +77,7 @@ const ProductModal = ({ isModalVisible, handleCancel, handleSave, form, category
                 }}
             >
                 <Row gutter={16}>
-                    <Col span={6}>
+                    <Col span={10}>
                         <Form.Item
                             name="categoryId"
                             label="Categoria"
@@ -90,7 +90,7 @@ const ProductModal = ({ isModalVisible, handleCancel, handleSave, form, category
                             />
                         </Form.Item>
                     </Col>
-                    <Col span={10}>
+                    <Col span={14}>
                         <Form.Item
                             name="productId"
                             label="Produto/Ambiente"
@@ -105,21 +105,6 @@ const ProductModal = ({ isModalVisible, handleCancel, handleSave, form, category
                                 placeholder="Selecione"
                                 disabled={!categoryId}
                                 options={productList}
-                            />
-                        </Form.Item>
-                    </Col>
-                    <Col span={8}>
-                        <Form.Item
-                            name="productValue"
-                            label="Valor de Custo (R$)"
-                            rules={[{ required: true, message: "Campo obrigatório" }]}
-                        >
-                            <InputNumber
-                                min={0}
-                                style={{ width: "100%" }}
-                                precision={2}
-                                step={0.01}
-                                placeholder="Digite o valor"
                             />
                         </Form.Item>
                     </Col>

@@ -26,7 +26,6 @@ const NewProject: React.FC = () => {
     const [salespersonList, setSalespersonList] = useState([]);
     const [isNewRegistration, setIsNewRegistration] = useState<boolean>(true);
     const [editingCategoryId, setEditingCategoryId] = useState<React.Key | null>(null);
-    const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
     const navigate = useNavigate();
 
     useEffect(() => {
