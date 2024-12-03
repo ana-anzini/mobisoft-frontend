@@ -334,7 +334,6 @@ const EditProject: React.FC = () => {
             id: isNewProduct ? null : editingProductId,
             projectId: id,
             productId: data.productId,
-            productValue: data.productValue,
         };
 
         if (isNewProduct) {
