@@ -61,6 +61,7 @@ const FormFieldsDelivery: React.FC<IFormFieldsDeliveryProps> = ({ form }) => {
                 <Form.Item
                     name="additional"
                     label="Complemento"
+                    rules={[{ required: true, message: "Campo obrigatório" }]}
                 >
                     <Input />
                 </Form.Item>
