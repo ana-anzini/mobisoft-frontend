@@ -8,20 +8,20 @@ const items = (handleLogout: () => void): MenuProps['items'] => [
         label: 'Cadastros',
         children: [
             {
-                key: '/suppliers',
-                label: (
-                    <Link to="/suppliers" className="rounded-item">
-                        <Icon icon="mingcute:box-3-fill" style={{ fontSize: '20px', marginRight: '8px' }} />
-                        Fornecedores
-                    </Link>
-                ),
-            },
-            {
                 key: '/categories',
                 label: (
                     <Link to="/categories" className="rounded-item">
                         <Icon icon="tabler:tags-filled" style={{ fontSize: '20px', marginRight: '8px' }} />
                         Categorias
+                    </Link>
+                ),
+            },
+            {
+                key: '/suppliers',
+                label: (
+                    <Link to="/suppliers" className="rounded-item">
+                        <Icon icon="mingcute:box-3-fill" style={{ fontSize: '20px', marginRight: '8px' }} />
+                        Fornecedores
                     </Link>
                 ),
             },
