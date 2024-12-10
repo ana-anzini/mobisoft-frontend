@@ -12,6 +12,57 @@ interface IEmployeesModal {
     form: any;
 }
 
+const validateCPF = (cpf: string): boolean => {
+    const onlyNumbers = cpf.replace(/\D/g, '');
+    if (onlyNumbers.length !== 11 || /^(\d)\1+$/.test(onlyNumbers)) {
+        return false;
+    }
+
+    const calculateDigit = (cpf: string, factor: number) => {
+        let sum = 0;
+        for (let i = 0; i < factor - 1; i++) {
+            sum += parseInt(cpf[i]) * (factor - i);
+        }
+        const remainder = sum % 11;
+        return remainder < 2 ? 0 : 11 - remainder;
+    };
+
+    const firstDigit = calculateDigit(onlyNumbers, 10);
+    const secondDigit = calculateDigit(onlyNumbers, 11);
+
+    return (
+        firstDigit === parseInt(onlyNumbers[9]) &&
+        secondDigit === parseInt(onlyNumbers[10])
+    );
+};
+
+const validateCNPJ = (cnpj: string): boolean => {
+    const onlyNumbers = cnpj.replace(/\D/g, '');
+    if (onlyNumbers.length !== 14 || /^(\d)\1+$/.test(onlyNumbers)) {
+        return false;
+    }
+
+    const calculateDigit = (cnpj: string, factor: number[]) => {
+        let sum = 0;
+        for (let i = 0; i < factor.length; i++) {
+            sum += parseInt(cnpj[i]) * factor[i];
+        }
+        const remainder = sum % 11;
+        return remainder < 2 ? 0 : 11 - remainder;
+    };
+
+    const firstFactor = [5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
+    const secondFactor = [6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
+
+    const firstDigit = calculateDigit(onlyNumbers, firstFactor);
+    const secondDigit = calculateDigit(onlyNumbers, secondFactor);
+
+    return (
+        firstDigit === parseInt(onlyNumbers[12]) &&
+        secondDigit === parseInt(onlyNumbers[13])
+    );
+};
+
 const EmployeesModal = ({ isModalVisible, handleSave, handleCancel, form }: IEmployeesModal) => {
     const [editDisabled, setEditDisabled] = useState(false);
     const [cep, setCep] = useState('');
@@ -61,7 +112,25 @@ const EmployeesModal = ({ isModalVisible, handleSave, handleCancel, form }: IEmp
                         <Form.Item
                             name="cpfOrCnpj"
                             label="CPF/CNPJ"
-                            rules={[{ required: true, message: "Campo obrigatório" }]}
+                            rules={[
+                                { required: true, message: "Campo obrigatório" },
+                                {
+                                    validator: (_, value) => {
+                                        const onlyNumbers = value?.replace(/\D/g, '') || '';
+                                        if (onlyNumbers.length === 11) {
+                                            return validateCPF(onlyNumbers)
+                                                ? Promise.resolve()
+                                                : Promise.reject(new Error('CPF inválido'));
+                                        } else if (onlyNumbers.length === 14) {
+                                            return validateCNPJ(onlyNumbers)
+                                                ? Promise.resolve()
+                                                : Promise.reject(new Error('CNPJ inválido'));
+                                        } else {
+                                            return Promise.reject(new Error('CPF ou CNPJ inválido'));
+                                        }
+                                    },
+                                },
+                            ]}
                         >
                             <MaskedInput maskType="cpfCnpj" placeholder="Digite o CPF ou CNPJ" />
                         </Form.Item>
