@@ -263,7 +263,7 @@ const EmployeesModal = ({ isModalVisible, handleSave, handleCancel, form }: IEmp
                     </Col>
                     <Col span={6}>
                         <Form.Item
-                            name="dismissional"
+                            name="dismissal"
                             label="Demissão"
                         >
                             <Input type="date" />

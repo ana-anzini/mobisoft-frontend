@@ -21,7 +21,7 @@ export interface DataType {
     ctps: string;
     salary: string;
     admission: string;
-    dismissional: string;
+    dismissal: string;
     employeesType: string;
 }
 
@@ -40,6 +40,6 @@ export type ValueForm = {
     ctps: string;
     salary: string;
     admission: string;
-    dismissional: string;
+    dismissal: string;
     employeesType: string;
 }

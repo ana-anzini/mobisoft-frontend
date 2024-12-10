@@ -69,7 +69,9 @@ const Employees = () => {
                 ctps: employees.ctps,
                 salary: employees.salary,
                 admission: moment(employees.admission).format("YYYY-MM-DD"),
-                dismissional: moment(employees.dismissional).format("YYYY-MM-DD"),
+                dismissal: employees.dismissal
+                    ? moment(employees.dismissal).format("YYYY-MM-DD")
+                    : "",
             });
             setIsNewRegistration(false);
         }
@@ -120,7 +122,7 @@ const Employees = () => {
             ctps: data.ctps,
             salary: data.salary,
             admission: moment(data.admission).format("YYYY-MM-DD"),
-            dismissional: data.dismissional ? moment(data.dismissional).format("YYYY-MM-DD") : null,
+            dismissal: data.dismissal ? moment(data.dismissal).format("YYYY-MM-DD") : null,
         };
 
         if (isNewRegistration) {
