@@ -265,10 +265,25 @@ const EmployeesModal = ({ isModalVisible, handleSave, handleCancel, form }: IEmp
                         <Form.Item
                             name="dismissal"
                             label="Demissão"
+                            rules={[
+                                {
+                                    validator: (_, value) => {
+                                        const admissionDate = form.getFieldValue('admission');
+                                        if (!value || !admissionDate) {
+                                            return Promise.resolve();
+                                        }
+                                        const isDismissalValid = new Date(value) >= new Date(admissionDate);
+                                        return isDismissalValid
+                                            ? Promise.resolve()
+                                            : Promise.reject(new Error('A data de demissão não pode ser anterior à admissão.'));
+                                    },
+                                },
+                            ]}
                         >
                             <Input type="date" />
                         </Form.Item>
                     </Col>
+
                 </Row>
             </Form>
         </Modal>
