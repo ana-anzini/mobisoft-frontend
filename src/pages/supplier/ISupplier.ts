@@ -14,6 +14,7 @@ export interface DataType {
     number: number;
     neighborhood: string;
     additional?: string;
+    code: string;
 }
 
 export type ValueForm = {
@@ -27,4 +28,5 @@ export type ValueForm = {
     number: number;
     neighborhood: string;
     additional?: string;
+    code: string;
 }

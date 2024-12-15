@@ -20,6 +20,11 @@ const SupplierTable = ({
 }: ISupplierTable) => {
     const columns = [
         {
+            title: 'Código',
+            dataIndex: 'code',
+            key: 'code',
+        },
+        {
             title: 'Nome',
             dataIndex: 'name',
             key: 'name',

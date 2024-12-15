@@ -66,7 +66,8 @@ const Supplier = () => {
                 address: supplier.address,
                 number: supplier.number,
                 neighborhood: supplier.neighborhood,
-                additional: supplier.additional
+                additional: supplier.additional,
+                code: supplier.code
             });
             setIsNewRegistration(false);
         }
@@ -88,7 +89,8 @@ const Supplier = () => {
                     address: item.address,
                     number: item.number,
                     neighborhood: item.neighborhood,
-                    additional: item.additional
+                    additional: item.additional,
+                    code: item.code
                 }));
                 setTableData(dataTable);
                 setLoadingTableData(false);
@@ -122,6 +124,7 @@ const Supplier = () => {
             number: data.number,
             neighborhood: data.neighborhood,
             additional: data.additional,
+            code: data.code,
         };
 
         if (isNewRegistration) {

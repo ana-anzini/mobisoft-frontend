@@ -32,6 +32,11 @@ const CategoryTable = ({
 }: ICategoryTable) => {
     const columns = [
         {
+            title: 'Código',
+            dataIndex: 'code',
+            key: 'code',
+        },
+        {
             title: 'Descrição',
             dataIndex: 'description',
             key: 'description',

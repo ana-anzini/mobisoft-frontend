@@ -33,8 +33,17 @@ const CategoryModal = ({ isModalVisible, handleSave, handleCancel, form }: ICate
                         handleSave(data);
                     }}
                 >
-                    <Row>
-                        <Col span={24}>
+                    <Row gutter={24}>
+                        <Col span={12}>
+                            <Form.Item
+                                name="code"
+                                label="Código"
+                                rules={[{ required: true, message: "Campo obrigatório" }]}
+                            >
+                                <Input />
+                            </Form.Item>
+                        </Col>
+                        <Col span={12}>
                             <Form.Item
                                 name="description"
                                 label="Descrição"

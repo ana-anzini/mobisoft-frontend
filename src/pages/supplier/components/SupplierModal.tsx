@@ -99,6 +99,15 @@ const SupplierModal = ({ isModalVisible, handleSave, handleCancel, form, categor
                     }}
                 >
                     <Row>
+                        <Col span={6} style={{ marginRight: 20 }}>
+                            <Form.Item
+                                name="code"
+                                label="Código"
+                                rules={[{ required: true, message: "Campo obrigatório" }]}
+                            >
+                                <Input />
+                            </Form.Item>
+                        </Col>
                         <Col span={7} style={{ marginRight: 20 }}>
                             <Form.Item
                                 name="cpfOrCnpj"
@@ -126,7 +135,7 @@ const SupplierModal = ({ isModalVisible, handleSave, handleCancel, form, categor
                                 <MaskedInput maskType="cpfCnpj" placeholder="Digite o CPF ou CNPJ" />
                             </Form.Item>
                         </Col>
-                        <Col span={8} style={{ marginRight: 20 }}>
+                        <Col span={9} style={{ marginRight: 20 }}>
                             <Form.Item
                                 name="name"
                                 label="Nome"
@@ -135,7 +144,9 @@ const SupplierModal = ({ isModalVisible, handleSave, handleCancel, form, categor
                                 <Input />
                             </Form.Item>
                         </Col>
-                        <Col span={7}>
+                    </Row>
+                    <Row>
+                        <Col span={7} style={{ marginRight: 20 }}>
                             <Form.Item
                                 name="phone"
                                 label="Telefone"
@@ -144,8 +155,6 @@ const SupplierModal = ({ isModalVisible, handleSave, handleCancel, form, categor
                                 <MaskedInput maskType="telefone" placeholder="Digite o telefone" />
                             </Form.Item>
                         </Col>
-                    </Row>
-                    <Row>
                         <Col span={7} style={{ marginRight: 20 }}>
                             <Form.Item
                                 name="categoryId"
@@ -155,7 +164,7 @@ const SupplierModal = ({ isModalVisible, handleSave, handleCancel, form, categor
                                 <Select placeholder="Selecione" options={categoryList} />
                             </Form.Item>
                         </Col>
-                        <Col span={9} style={{ marginRight: 20 }}>
+                        <Col span={8} style={{ marginRight: 20 }}>
                             <Form.Item
                                 name="email"
                                 label="E-mail"
@@ -164,7 +173,9 @@ const SupplierModal = ({ isModalVisible, handleSave, handleCancel, form, categor
                                 <Input />
                             </Form.Item>
                         </Col>
-                        <Col span={6}>
+                    </Row>
+                    <Row>
+                        <Col span={4} style={{ marginRight: 20 }}>
                             <Form.Item
                                 name="cep"
                                 label="CEP"
@@ -177,9 +188,7 @@ const SupplierModal = ({ isModalVisible, handleSave, handleCancel, form, categor
                                 />
                             </Form.Item>
                         </Col>
-                    </Row>
-                    <Row>
-                        <Col span={12} style={{ marginRight: 20 }}>
+                        <Col span={10} style={{ marginRight: 20 }}>
                             <Form.Item
                                 name="address"
                                 label="Endereço"
@@ -188,7 +197,7 @@ const SupplierModal = ({ isModalVisible, handleSave, handleCancel, form, categor
                                 <Input />
                             </Form.Item>
                         </Col>
-                        <Col span={5} style={{ marginRight: 20 }}>
+                        <Col span={2} style={{ marginRight: 20 }}>
                             <Form.Item
                                 name="number"
                                 label="Número"

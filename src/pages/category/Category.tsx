@@ -30,7 +30,7 @@ const Supplier = () => {
     const handleSearch = (value: string) => {
         const searchValue = value.toLowerCase();
         const filtered = tableData.filter(item =>
-            item.description.toLowerCase().includes(searchValue)
+            item.description.toLowerCase().includes(searchValue),
         );
         setFilteredData(filtered);
     };
@@ -53,6 +53,7 @@ const Supplier = () => {
         } else if (category) {
             setEditingCategoryId(category.key);
             form.setFieldsValue({
+                code: category.code,
                 description: category.description
             });
             setIsNewRegistration(false);
@@ -65,6 +66,7 @@ const Supplier = () => {
             if (response.status === 200) {
                 const dataTable = response.data.map((item: any) => ({
                     key: item.id,
+                    code: item.code,
                     description: item.description
                 }));
                 setTableData(dataTable);
@@ -89,6 +91,7 @@ const Supplier = () => {
         form.resetFields();
         const dataToSave = {
             id: isNewRegistration ? null : editingCategoryId,
+            code: data.code,
             description: data.description,
         };
 

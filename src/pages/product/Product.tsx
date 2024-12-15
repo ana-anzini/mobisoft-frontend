@@ -37,37 +37,47 @@ const Supplier = () => {
     }, [tableData]);
 
     const handleDownloadExample = () => {
-        const exampleCSV = "Código Produto,Código Fornecedor\n";
+        const exampleCSV = "Código Categoria,Código Fornecedor,Descrição,Valor\n";
         const blob = new Blob([exampleCSV], { type: "text/csv;charset=utf-8;" });
         saveAs(blob, "exemplo.csv");
     };
 
     const handleImportCSV = (file: File) => {
-        const reader = new FileReader();
+        if (!file) {
+            Notification({
+                type: "error",
+                message: "Nenhum arquivo foi selecionado.",
+            });
+            return;
+        }
 
-        reader.onload = (event) => {
-            const csvData = event.target?.result;
-            console.log("Conteúdo do CSV:", csvData);
+        const formData = new FormData();
+        formData.append("file", file);
 
-            api.post("/import-products", csvData, {
-                headers: { "Content-Type": "text/csv" },
-            })
-                .then(() => {
-                    Notification({
-                        type: "success",
-                        message: "Importação concluída com sucesso",
-                    });
-                    loadTableData();
-                })
-                .catch(() => {
-                    Notification({
-                        type: "error",
-                        message: "Erro ao importar CSV",
-                    });
+        const entries = formData.entries();
+        let pair;
+        while (!(pair = entries.next()).done) {
+            console.log(`${pair.value[0]}: ${pair.value[1]}`);
+        }
+
+        api.post("products/import", formData, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        })
+            .then(() => {
+                Notification({
+                    type: "success",
+                    message: "Arquivo enviado com sucesso!",
                 });
-        };
-
-        reader.readAsText(file);
+                loadTableData();
+            })
+            .catch((err) => {
+                Notification({
+                    type: "error",
+                    message: `Erro ao enviar o arquivo: ${err.message}`,
+                });
+            });
     };
 
     const handleSearch = (value: string) => {
@@ -135,7 +145,7 @@ const Supplier = () => {
                     const categorias = response.data.map((item: any) => ({
                         key: item.id,
                         value: item.id,
-                        label: item.description
+                        label: item.code + " - " + item.description
                     }));
                     setCategoryList(categorias);
                 }
@@ -151,7 +161,7 @@ const Supplier = () => {
                     const suppliers = response.data.map((item: any) => ({
                         key: item.id,
                         value: item.id,
-                        label: item.name
+                        label: item.code + " - " + item.name
                     }));
                     setSupplierList(suppliers);
                 }
