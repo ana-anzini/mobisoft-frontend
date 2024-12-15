@@ -7,6 +7,8 @@ import { TableRowSelection } from 'antd/es/table/interface';
 import { Form, Modal } from 'antd';
 import api from '../../service/api';
 import { Notification } from '../../components/notification/Notification';
+import { saveAs } from "file-saver";
+import ImportCSVModal from '../../components/topButtons/ImportCSVModal';
 
 const Supplier = () => {
     const [loadingTableData, setLoadingTableData] = useState(true);
@@ -19,6 +21,9 @@ const Supplier = () => {
     const [filteredData, setFilteredData] = useState<DataType[]>([]);
     const [categoryList, setCategoryList] = useState([]);
     const [supplierList, setSupplierList] = useState([]);
+    const [isImportModalVisible, setIsImportModalVisible] = useState<boolean>(false);
+    const handleOpenImportModal = () => setIsImportModalVisible(true);
+    const handleCloseImportModal = () => setIsImportModalVisible(false);
     const [form] = Form.useForm();
 
     useEffect(() => {
@@ -30,6 +35,40 @@ const Supplier = () => {
     useEffect(() => {
         setFilteredData(tableData);
     }, [tableData]);
+
+    const handleDownloadExample = () => {
+        const exampleCSV = "Código Produto,Código Fornecedor\n";
+        const blob = new Blob([exampleCSV], { type: "text/csv;charset=utf-8;" });
+        saveAs(blob, "exemplo.csv");
+    };
+
+    const handleImportCSV = (file: File) => {
+        const reader = new FileReader();
+
+        reader.onload = (event) => {
+            const csvData = event.target?.result;
+            console.log("Conteúdo do CSV:", csvData);
+
+            api.post("/import-products", csvData, {
+                headers: { "Content-Type": "text/csv" },
+            })
+                .then(() => {
+                    Notification({
+                        type: "success",
+                        message: "Importação concluída com sucesso",
+                    });
+                    loadTableData();
+                })
+                .catch(() => {
+                    Notification({
+                        type: "error",
+                        message: "Erro ao importar CSV",
+                    });
+                });
+        };
+
+        reader.readAsText(file);
+    };
 
     const handleSearch = (value: string) => {
         const searchValue = value.toLowerCase();
@@ -219,7 +258,7 @@ const Supplier = () => {
         <main id="main">
             <div className='main-container'>
                 <TopButtons
-                    pageTitle='Produtos'
+                    pageTitle="Produtos"
                     mainButtonTitle="Novo Produto"
                     handleNew={() => handleOpenModal(true)}
                     handleEdit={() => handleOpenModal(false)}
@@ -227,6 +266,13 @@ const Supplier = () => {
                     handleDelete={handleDelete}
                     onSearch={handleSearch}
                     showButton={true}
+                    onDownloadExample={handleDownloadExample}
+                    onUploadCSV={handleOpenImportModal}
+                />
+                <ImportCSVModal
+                    isVisible={isImportModalVisible}
+                    onClose={handleCloseImportModal}
+                    onImport={handleImportCSV}
                 />
                 <ProductModal
                     isModalVisible={isModalVisible}

@@ -7,4 +7,6 @@ export interface ITopButtons {
     hasSelection?: boolean;
     onSearch: (value: string) => void;
     showButton?: boolean;
+    onDownloadExample?: () => void;
+    onUploadCSV?: () => void;
 }
