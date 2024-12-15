@@ -54,12 +54,6 @@ const Supplier = () => {
         const formData = new FormData();
         formData.append("file", file);
 
-        const entries = formData.entries();
-        let pair;
-        while (!(pair = entries.next()).done) {
-            console.log(`${pair.value[0]}: ${pair.value[1]}`);
-        }
-
         api.post("products/import", formData, {
             headers: {
                 "Content-Type": "multipart/form-data",
@@ -73,9 +67,10 @@ const Supplier = () => {
                 loadTableData();
             })
             .catch((err) => {
+                const errorMessage = err.response?.data || "Erro ao enviar o arquivo.";
                 Notification({
                     type: "error",
-                    message: `Erro ao enviar o arquivo: ${err.message}`,
+                    message: errorMessage,
                 });
             });
     };
