@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Form, Input, Button, Typography, message } from 'antd';
+import { Form, Input, Button, Typography, Checkbox, message } from 'antd';
 import api from '../../service/api';
 import './login.sass';
 
@@ -21,6 +21,16 @@ const AuthForm = () => {
         };
     }, []);
 
+    useEffect(() => {
+        const rememberedEmail = localStorage.getItem('rememberedEmail');
+        const rememberedPassword = localStorage.getItem('rememberedPassword');
+        if (rememberedEmail && rememberedPassword) {
+            form.setFieldsValue({ email: rememberedEmail, password: rememberedPassword });
+        }
+    }, []);
+
+    const [form] = Form.useForm();
+
     const onLoginFinish = async (values: any) => {
         try {
             const response = await api.post('/auth/login', {
@@ -29,6 +39,14 @@ const AuthForm = () => {
             });
 
             sessionStorage.setItem('token', response.data.token);
+
+            if (values.remember) {
+                localStorage.setItem('rememberedEmail', values.email);
+                localStorage.setItem('rememberedPassword', values.password);
+            } else {
+                localStorage.removeItem('rememberedEmail');
+                localStorage.removeItem('rememberedPassword');
+            }
 
             message.success('Login realizado com sucesso!');
             window.location.href = '/projects';
@@ -60,6 +78,7 @@ const AuthForm = () => {
             <div className="login-column">
                 <Form
                     className="auth-form"
+                    form={form}
                     name={isLogin ? 'login' : 'register'}
                     initialValues={{ remember: true }}
                     onFinish={isLogin ? onLoginFinish : onRegisterFinish}
@@ -87,6 +106,9 @@ const AuthForm = () => {
                                 rules={[{ required: true, message: 'Por favor, insira sua senha!' }]}
                             >
                                 <Input.Password placeholder="Senha" />
+                            </Form.Item>
+                            <Form.Item name="remember" valuePropName="checked">
+                                <Checkbox>Lembrar e-mail e senha</Checkbox>
                             </Form.Item>
                             <Form.Item>
                                 <Button type="primary" htmlType="submit" className="login-button">
